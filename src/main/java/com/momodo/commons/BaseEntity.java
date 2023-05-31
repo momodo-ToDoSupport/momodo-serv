@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @Setter
 public class BaseEntity {
 
-    private String createBy;
-    private LocalDateTime createDate;
+    private String createdBy;
+    private LocalDateTime createdDate;
     private String lastModifiedBy;
     private LocalDateTime lastModifiedDate;
 
