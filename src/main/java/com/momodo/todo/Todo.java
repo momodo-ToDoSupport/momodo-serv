@@ -3,14 +3,15 @@ package com.momodo.todo;
 import com.momodo.commons.BaseEntity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Entity
+@Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Todo extends BaseEntity {
 
     @Id
@@ -24,15 +25,26 @@ public class Todo extends BaseEntity {
     @Column(nullable = false)
     private String title;
 
-    @Column(name = "is_completed", nullable=false)
-    private boolean isCompleted;
-
-    @Column(name = "repeat_days", nullable=false)
-    private String repeatDays;
-
     @Column(nullable = false)
     private String emoji;
 
     @Column(name = "due_date", nullable = false)
     private LocalDate dueDate;
+
+    @Column(name = "is_completed", nullable=false)
+    private boolean isCompleted;
+
+    @Column(name = "repeat_days")
+    private String repeatDays;
+
+    @Builder
+    public Todo(Long id, Long memberId, String title, String emoji, LocalDate dueDate, boolean isCompleted, String repeatDays) {
+        this.id = id;
+        this.memberId = memberId;
+        this.title = title;
+        this.emoji = emoji;
+        this.dueDate = dueDate;
+        this.isCompleted = isCompleted;
+        this.repeatDays = repeatDays;
+    }
 }

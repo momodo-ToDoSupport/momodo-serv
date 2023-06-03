@@ -27,6 +27,8 @@ dependencies {
 	//swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.3'
 
+	// java.time.LocalData 직렬화 에러가 발생할 때 필요
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
