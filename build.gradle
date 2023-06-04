@@ -30,11 +30,36 @@ dependencies {
 	// java.time.LocalData 직렬화 에러가 발생할 때 필요
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
+	// QueryDSL, springboot 3.0.0 버전 이후로는 javax -> jakarta
+	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly('org.springframework.boot:spring-boot-devtools')
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+def querydslSrcDir = "$projectDir/src/main/generated"
+
+// QueryDSL
+sourceSets {
+	main {
+		java {
+			srcDirs += [ querydslSrcDir ]
+		}
+	}
+}
+
+tasks.withType(JavaCompile) {
+	options.generatedSourceOutputDirectory = file(querydslSrcDir)
+}
+
+clean {
+	delete file(querydslSrcDir)
 }
 
 tasks.named('test') {
