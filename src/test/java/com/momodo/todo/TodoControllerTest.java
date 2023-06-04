@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -122,6 +123,20 @@ public class TodoControllerTest {
         // when & then
         mockMvc.perform(patch(url)
                         .content(mapper.writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Todo 삭제")
+    public void deleteById() throws Exception{
+        // given
+        String url = "/todos/1";
+        Long id = 1L;
+        doReturn(true).when(todoService).deleteById(id);
+
+        // when & then
+        mockMvc.perform(delete(url)
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk());
     }

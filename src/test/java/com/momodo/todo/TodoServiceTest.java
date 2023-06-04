@@ -113,6 +113,22 @@ public class TodoServiceTest {
         assertThat(savedTodo.getRepeatDays()).isEqualTo(updatedTodo .getRepeatDays());
     }
 
+    @Test
+    @Transactional
+    @DisplayName("Todo 삭제")
+    public void deleteById(){
+        // given
+        Todo savedTodo = createTodo();
+        Long id = 1L;
+
+        // when
+        when(todoRepository.findById(any(Long.class))).thenReturn(Optional.of(savedTodo));
+        boolean isDeleted = todoService.deleteById(id);
+
+        // then
+        assertThat(isDeleted).isTrue();
+    }
+
     private TodoRequestDto.Create todoRequestDto(){
         return TodoRequestDto.Create.builder()
                 .memberId(1L)

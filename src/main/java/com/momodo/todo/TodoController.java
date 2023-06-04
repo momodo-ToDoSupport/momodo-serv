@@ -74,4 +74,15 @@ public class TodoController {
 
         todoService.update(id, request);
     }
+
+    @Operation(summary = "Delete", description = "Todo 삭제")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "400", description = "실패")
+    })
+    @DeleteMapping("/todos/{id}")
+    public void deleteById(@PathVariable Long id){
+
+        todoService.deleteById(id);
+    }
 }

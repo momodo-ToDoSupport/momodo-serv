@@ -49,11 +49,11 @@ public class TodoRepositoryTest {
         Todo savedTodo = todoRepository.save(createTodo());
 
         // when
-        Todo findedTodo = todoRepository.findById(savedTodo.getId()).get();
+        Todo foundTodo = todoRepository.findById(savedTodo.getId()).get();
 
         // then
-        assertThat(findedTodo).isNotNull();
-        assertThat(findedTodo.getId()).isEqualTo(savedTodo.getId());
+        assertThat(foundTodo).isNotNull();
+        assertThat(foundTodo.getId()).isEqualTo(savedTodo.getId());
     }
 
     @Test
@@ -79,10 +79,10 @@ public class TodoRepositoryTest {
 
         // when
         savedTodo.updateCompleted(true);
-        Todo findedTodo = todoRepository.findById(savedTodo.getId()).get();
+        Todo foundTodo = todoRepository.findById(savedTodo.getId()).get();
 
         // then
-        assertThat(findedTodo.isCompleted()).isEqualTo(true);
+        assertThat(foundTodo.isCompleted()).isEqualTo(true);
     }
 
     @Test
@@ -97,12 +97,29 @@ public class TodoRepositoryTest {
 
         // when
         savedTodo.update(editTitle, editEmoji, editRepeatDays);
-        Todo findedTodo = todoRepository.findById(savedTodo.getId()).get();
+        Todo foundTodo = todoRepository.findById(savedTodo.getId()).get();
 
         // then
-        assertThat(findedTodo.getTitle()).isEqualTo(editTitle);
-        assertThat(findedTodo.getEmoji()).isEqualTo(editEmoji);
-        assertThat(findedTodo.getRepeatDays()).isEqualTo(editRepeatDays);
+        assertThat(foundTodo.getTitle()).isEqualTo(editTitle);
+        assertThat(foundTodo.getEmoji()).isEqualTo(editEmoji);
+        assertThat(foundTodo.getRepeatDays()).isEqualTo(editRepeatDays);
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Todo 삭제")
+    public void delete(){
+        // given
+        Todo savedTodo = todoRepository.save(createTodo());
+        Long id = 1L;
+
+        // when
+        todoRepository.delete(savedTodo);
+
+        boolean isFound= todoRepository.existsById(id);
+
+        // then
+        assertThat(isFound).isFalse();
     }
 
     private Todo createTodo(){

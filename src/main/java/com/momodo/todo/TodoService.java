@@ -55,4 +55,13 @@ public class TodoService {
         todo.update(request.getTitle(), request.getEmoji(), request.getRepeatDays());
         return todo;
     }
+
+    public boolean deleteById(Long id){
+
+        Todo todo = todoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException());
+
+        todoRepository.delete(todo);
+        return true;
+    }
 }

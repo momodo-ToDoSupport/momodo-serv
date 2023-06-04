@@ -52,7 +52,7 @@ public class TodoRequestDto {
     @Getter
     @NoArgsConstructor
     public static class EditCompleted{
-        
+
         private boolean isCompleted;
 
         @Builder
