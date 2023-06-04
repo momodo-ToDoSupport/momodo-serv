@@ -59,4 +59,14 @@ public class Todo extends BaseEntity {
                 .repeatDays(repeatDays)
                 .build();
     }
+
+    public void updateCompleted(boolean isCompleted){
+        this.isCompleted = isCompleted;
+    }
+
+    public void update(String title, String emoji, String repeatDays){
+        this.title = title;
+        this.emoji = emoji;
+        this.repeatDays = repeatDays;
+    }
 }

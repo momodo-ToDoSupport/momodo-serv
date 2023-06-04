@@ -16,9 +16,9 @@ public class TodoService {
 
     private final TodoRepository todoRepository;
 
-    public Todo createTodo(TodoRequestDto.Create todoRequest){
+    public Todo createTodo(TodoRequestDto.Create request){
 
-        Todo createTodo = todoRequest.toEntity();
+        Todo createTodo = request.toEntity();
 
         return todoRepository.save(createTodo);
     }
@@ -36,5 +36,23 @@ public class TodoService {
         List<TodoResponseDto.Info> todoInfoList = todoRepository.findAllByDueDate(dueDate);
 
         return todoInfoList;
+    }
+
+    public Todo updateCompleted(Long id, TodoRequestDto.EditCompleted request){
+
+        Todo todo = todoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException());
+
+        todo.updateCompleted(request.isCompleted());
+        return todo;
+    }
+
+    public Todo update(Long id, TodoRequestDto.Edit request){
+
+        Todo todo = todoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException());
+
+        todo.update(request.getTitle(), request.getEmoji(), request.getRepeatDays());
+        return todo;
     }
 }

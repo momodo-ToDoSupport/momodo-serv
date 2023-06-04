@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -69,11 +70,47 @@ public class TodoServiceTest {
 
         // when
         when(todoRepository.findAllByDueDate(any(LocalDate.class))).thenReturn(todoInfoList);
-        List<TodoResponseDto.Info> result = todoRepository.findAllByDueDate(date);
+        List<TodoResponseDto.Info> result = todoService.findAllByDueDate(date);
 
         // then
         assertThat(result.size()).isEqualTo(todoInfoList.size());
         assertThat(todoInfoList.get(0).getDueDate()).isEqualTo(date);
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Todo 성공 여부 수정")
+    public void updateCompleted(){
+        // given
+        Todo savedTodo = createTodo();
+        Long id = 1L;
+        TodoRequestDto.EditCompleted request = new TodoRequestDto.EditCompleted(true);
+
+        // when
+        when(todoRepository.findById(any(Long.class))).thenReturn(Optional.of(savedTodo));
+        Todo updatedTodo = todoService.updateCompleted(id, request);
+
+        // then
+        assertThat(savedTodo.isCompleted()).isEqualTo(updatedTodo.isCompleted());
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Todo 정보 수정")
+    public void update(){
+        // given
+        Todo savedTodo = createTodo();
+        Long id = 1L;
+        TodoRequestDto.Edit request = new TodoRequestDto.Edit("Edit Title", "Edit Emoji", "Edit RepeatDays");
+
+        // when
+        when(todoRepository.findById(any(Long.class))).thenReturn(Optional.of(savedTodo));
+        Todo updatedTodo = todoService.update(id, request);
+
+        // then
+        assertThat(savedTodo.getTitle()).isEqualTo(updatedTodo.getTitle());
+        assertThat(savedTodo.getEmoji()).isEqualTo(updatedTodo.getEmoji());
+        assertThat(savedTodo.getRepeatDays()).isEqualTo(updatedTodo .getRepeatDays());
     }
 
     private TodoRequestDto.Create todoRequestDto(){

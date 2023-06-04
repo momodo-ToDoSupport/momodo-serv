@@ -1,6 +1,7 @@
 package com.momodo.todo;
 
 import com.momodo.TestConfig;
+import com.momodo.todo.dto.TodoRequestDto;
 import com.momodo.todo.dto.TodoResponseDto;
 import com.momodo.todo.repository.TodoRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -66,6 +68,41 @@ public class TodoRepositoryTest {
         // then
         assertThat(todoInfoList.size()).isEqualTo(2);
         assertThat(todoInfoList.get(0).getDueDate()).isEqualTo(LocalDate.now());
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Todo 성공 여부 수정")
+    public void updateCompleted(){
+        // given
+        Todo savedTodo = todoRepository.save(createTodo());
+
+        // when
+        savedTodo.updateCompleted(true);
+        Todo findedTodo = todoRepository.findById(savedTodo.getId()).get();
+
+        // then
+        assertThat(findedTodo.isCompleted()).isEqualTo(true);
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Todo 정보 수정")
+    public void update(){
+        // given
+        Todo savedTodo = todoRepository.save(createTodo());
+        String editTitle = "Edit Title";
+        String editEmoji = "Edit Emoji";
+        String editRepeatDays = "Edit RepeatDays";
+
+        // when
+        savedTodo.update(editTitle, editEmoji, editRepeatDays);
+        Todo findedTodo = todoRepository.findById(savedTodo.getId()).get();
+
+        // then
+        assertThat(findedTodo.getTitle()).isEqualTo(editTitle);
+        assertThat(findedTodo.getEmoji()).isEqualTo(editEmoji);
+        assertThat(findedTodo.getRepeatDays()).isEqualTo(editRepeatDays);
     }
 
     private Todo createTodo(){

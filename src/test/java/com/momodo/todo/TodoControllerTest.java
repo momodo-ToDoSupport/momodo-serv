@@ -16,17 +16,16 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -89,6 +88,40 @@ public class TodoControllerTest {
         // when & then
         mockMvc.perform(get(url)
                         .param("dueDate", date.toString())
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Todo 성공 여부 수정")
+    public void updateCompleted() throws Exception{
+        // given
+        String url = "/todos/1/updateCompleted";
+        Long id = 1L;
+        TodoRequestDto.EditCompleted request = new TodoRequestDto.EditCompleted(true);
+        Todo todo = new Todo();
+        doReturn(todo).when(todoService).updateCompleted(id, request);
+
+        // when & then
+        mockMvc.perform(patch(url)
+                        .content(mapper.writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Todo 정보 수정")
+    public void update() throws Exception{
+        // given
+        String url = "/todos/1/update";
+        Long id = 1L;
+        TodoRequestDto.Edit request = new TodoRequestDto.Edit("Edit Title", "Edit Emoji", "Edit RepeatDays");
+        Todo todo = new Todo();
+        doReturn(todo).when(todoService).update(id, request);
+
+        // when & then
+        mockMvc.perform(patch(url)
+                        .content(mapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk());
     }

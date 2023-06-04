@@ -50,4 +50,28 @@ public class TodoController {
 
         return todoService.findAllByDueDate(dueDate);
     }
+
+    @Operation(summary = "Update Completed", description = "Todo 완료 여부 수정")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "400", description = "실패")
+    })
+    @PatchMapping("/todos/{id}/updateCompleted")
+    public void updateCompleted(@PathVariable Long id,
+                                                      @RequestBody TodoRequestDto.EditCompleted request){
+
+        todoService.updateCompleted(id, request);
+    }
+
+    @Operation(summary = "Update", description = "Todo 정보 수정")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "400", description = "실패")
+    })
+    @PatchMapping("/todos/{id}/update")
+    public void update(@PathVariable Long id,
+                                             @RequestBody TodoRequestDto.Edit request){
+
+        todoService.update(id, request);
+    }
 }
