@@ -29,16 +29,5 @@ public class TodoResponseDto {
             this.isCompleted = isCompleted;
             this.repeatDays = repeatDays;
         }
-
-        public Info toInfo(Todo todo){
-            return Info.builder()
-                    .id(id)
-                    .title(title)
-                    .emoji(emoji)
-                    .dueDate(dueDate)
-                    .isCompleted(isCompleted)
-                    .repeatDays(repeatDays)
-                    .build();
-        }
     }
 }

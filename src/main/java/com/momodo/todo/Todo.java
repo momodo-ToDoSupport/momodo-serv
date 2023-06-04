@@ -2,6 +2,7 @@ package com.momodo.todo;
 
 import com.momodo.commons.BaseEntity;
 
+import com.momodo.todo.dto.TodoResponseDto;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -46,5 +47,16 @@ public class Todo extends BaseEntity {
         this.dueDate = dueDate;
         this.isCompleted = isCompleted;
         this.repeatDays = repeatDays;
+    }
+
+    public TodoResponseDto.Info toInfo(){
+        return TodoResponseDto.Info.builder()
+                .id(id)
+                .title(title)
+                .emoji(emoji)
+                .dueDate(dueDate)
+                .isCompleted(isCompleted)
+                .repeatDays(repeatDays)
+                .build();
     }
 }
