@@ -51,18 +51,6 @@ public class TodoRequestDto {
 
     @Getter
     @NoArgsConstructor
-    public static class EditCompleted{
-
-        private boolean isCompleted;
-
-        @Builder
-        public EditCompleted(boolean isCompleted) {
-            this.isCompleted = isCompleted;
-        }
-    }
-
-    @Getter
-    @NoArgsConstructor
     public static class Edit{
 
         @NotBlank(message = "제목은 필수 입력 값입니다.")

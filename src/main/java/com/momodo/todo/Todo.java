@@ -60,8 +60,8 @@ public class Todo extends BaseEntity {
                 .build();
     }
 
-    public void updateCompleted(boolean isCompleted){
-        this.isCompleted = isCompleted;
+    public void updateCompleted(){
+        isCompleted = !isCompleted;
     }
 
     public void update(String title, String emoji, String repeatDays){
