@@ -78,7 +78,7 @@ public class TodoRepositoryTest {
         Todo savedTodo = todoRepository.save(createTodo());
 
         // when
-        savedTodo.updateCompleted(true);
+        savedTodo.updateCompleted();
         Todo foundTodo = todoRepository.findById(savedTodo.getId()).get();
 
         // then

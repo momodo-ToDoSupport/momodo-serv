@@ -80,10 +80,9 @@ public class TodoController {
             @Parameter(name = "isCompleted;", description = "Todo 완료 여부", example = "true")
     })
     @PatchMapping("/todos/{id}/updateCompleted")
-    public void updateCompleted(@PathVariable Long id,
-                                                      @RequestBody TodoRequestDto.EditCompleted request){
+    public void updateCompleted(@PathVariable Long id){
 
-        todoService.updateCompleted(id, request);
+        todoService.updateCompleted(id);
     }
 
     @Operation(summary = "Update", description = "Todo 정보 수정")

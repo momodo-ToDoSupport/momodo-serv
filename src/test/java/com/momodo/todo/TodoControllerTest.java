@@ -99,13 +99,10 @@ public class TodoControllerTest {
         // given
         String url = "/todos/1/updateCompleted";
         Long id = 1L;
-        TodoRequestDto.EditCompleted request = new TodoRequestDto.EditCompleted(true);
-        Todo todo = new Todo();
-        doReturn(todo).when(todoService).updateCompleted(id, request);
+        doNothing().when(todoService).updateCompleted(id);
 
         // when & then
         mockMvc.perform(patch(url)
-                        .content(mapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk());
     }
@@ -117,8 +114,7 @@ public class TodoControllerTest {
         String url = "/todos/1/update";
         Long id = 1L;
         TodoRequestDto.Edit request = new TodoRequestDto.Edit("Edit Title", "Edit Emoji", "Edit RepeatDays");
-        Todo todo = new Todo();
-        doReturn(todo).when(todoService).update(id, request);
+        doNothing().when(todoService).update(id, request);
 
         // when & then
         mockMvc.perform(patch(url)
@@ -133,7 +129,7 @@ public class TodoControllerTest {
         // given
         String url = "/todos/1";
         Long id = 1L;
-        doReturn(true).when(todoService).deleteById(id);
+        doNothing().when(todoService).deleteById(id);
 
         // when & then
         mockMvc.perform(delete(url)

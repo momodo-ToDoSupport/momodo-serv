@@ -84,14 +84,13 @@ public class TodoServiceTest {
         // given
         Todo savedTodo = createTodo();
         Long id = 1L;
-        TodoRequestDto.EditCompleted request = new TodoRequestDto.EditCompleted(true);
 
         // when
         when(todoRepository.findById(any(Long.class))).thenReturn(Optional.of(savedTodo));
-        todoService.updateCompleted(id, request);
+        todoService.updateCompleted(id);
 
         // then
-        assertThat(savedTodo.isCompleted()).isEqualTo(request.isCompleted());
+        assertThat(savedTodo.isCompleted()).isTrue();
     }
 
     @Test

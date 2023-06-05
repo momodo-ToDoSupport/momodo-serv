@@ -38,12 +38,12 @@ public class TodoService {
         return todoInfoList;
     }
 
-    public void updateCompleted(Long id, TodoRequestDto.EditCompleted request){
+    public void updateCompleted(Long id){
 
         Todo todo = todoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException());
 
-        todo.updateCompleted(request.isCompleted());
+        todo.updateCompleted();
     }
 
     public void update(Long id, TodoRequestDto.Edit request){
