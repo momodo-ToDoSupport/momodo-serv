@@ -20,7 +20,7 @@ public class Todo extends BaseEntity {
     @Column(name = "todo_id")
     private Long id;
 
-    @Column(name = "member_id", nullable=false)
+    @Column(name = "member_id", nullable = false)
     private Long memberId;
 
     @Column(nullable = false)
@@ -32,7 +32,7 @@ public class Todo extends BaseEntity {
     @Column(name = "due_date", nullable = false)
     private LocalDate dueDate;
 
-    @Column(name = "is_completed", nullable=false)
+    @Column(name = "is_completed", nullable = false)
     private boolean isCompleted;
 
     @Column(name = "repeat_days")
