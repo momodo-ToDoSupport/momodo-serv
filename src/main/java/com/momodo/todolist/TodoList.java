@@ -1,6 +1,7 @@
 package com.momodo.todolist;
 
 import com.momodo.commons.BaseEntity;
+import com.momodo.todolist.dto.TodoListResponseDto;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,5 +41,15 @@ public class TodoList extends BaseEntity {
         this.completedCount = completedCount;
         this.step = step;
         this.dueDate = dueDate;
+    }
+
+    public TodoListResponseDto.Info toInfo(){
+        return TodoListResponseDto.Info.builder()
+                .id(id)
+                .count(count)
+                .completedCount(completedCount)
+                .step(step)
+                .dueDate(dueDate)
+                .build();
     }
 }
