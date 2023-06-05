@@ -38,30 +38,27 @@ public class TodoService {
         return todoInfoList;
     }
 
-    public Todo updateCompleted(Long id, TodoRequestDto.EditCompleted request){
+    public void updateCompleted(Long id, TodoRequestDto.EditCompleted request){
 
         Todo todo = todoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException());
 
         todo.updateCompleted(request.isCompleted());
-        return todo;
     }
 
-    public Todo update(Long id, TodoRequestDto.Edit request){
+    public void update(Long id, TodoRequestDto.Edit request){
 
         Todo todo = todoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException());
 
         todo.update(request.getTitle(), request.getEmoji(), request.getRepeatDays());
-        return todo;
     }
 
-    public boolean deleteById(Long id){
+    public void deleteById(Long id){
 
         Todo todo = todoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException());
 
         todoRepository.delete(todo);
-        return true;
     }
 }

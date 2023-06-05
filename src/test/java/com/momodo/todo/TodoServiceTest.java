@@ -88,10 +88,10 @@ public class TodoServiceTest {
 
         // when
         when(todoRepository.findById(any(Long.class))).thenReturn(Optional.of(savedTodo));
-        Todo updatedTodo = todoService.updateCompleted(id, request);
+        todoService.updateCompleted(id, request);
 
         // then
-        assertThat(savedTodo.isCompleted()).isEqualTo(updatedTodo.isCompleted());
+        assertThat(savedTodo.isCompleted()).isEqualTo(request.isCompleted());
     }
 
     @Test
@@ -105,12 +105,12 @@ public class TodoServiceTest {
 
         // when
         when(todoRepository.findById(any(Long.class))).thenReturn(Optional.of(savedTodo));
-        Todo updatedTodo = todoService.update(id, request);
+        todoService.update(id, request);
 
         // then
-        assertThat(savedTodo.getTitle()).isEqualTo(updatedTodo.getTitle());
-        assertThat(savedTodo.getEmoji()).isEqualTo(updatedTodo.getEmoji());
-        assertThat(savedTodo.getRepeatDays()).isEqualTo(updatedTodo .getRepeatDays());
+        assertThat(savedTodo.getTitle()).isEqualTo(request.getTitle());
+        assertThat(savedTodo.getEmoji()).isEqualTo(request.getEmoji());
+        assertThat(savedTodo.getRepeatDays()).isEqualTo(request.getRepeatDays());
     }
 
     @Test
@@ -123,10 +123,10 @@ public class TodoServiceTest {
 
         // when
         when(todoRepository.findById(any(Long.class))).thenReturn(Optional.of(savedTodo));
-        boolean isDeleted = todoService.deleteById(id);
+        todoService.deleteById(id);
 
         // then
-        assertThat(isDeleted).isTrue();
+        verify(todoRepository, times(1)).delete(any(Todo.class));
     }
 
     private TodoRequestDto.Create todoRequestDto(){
