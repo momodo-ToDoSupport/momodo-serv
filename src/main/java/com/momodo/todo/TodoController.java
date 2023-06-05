@@ -5,8 +5,6 @@ import com.momodo.todo.dto.TodoResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
@@ -70,10 +68,16 @@ public class TodoController {
         return todoService.findAllByDueDate(dueDate);
     }
 
-    @Operation(summary = "Update Completed", description = "Todo 완료 여부 수정")
+    @Operation(summary = "Update Completed", description = "Todo 완료 여부 수정하기")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "성공"),
-            @ApiResponse(responseCode = "400", description = "실패")
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND"),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+    })
+    @Parameters({
+            @Parameter(name = "id", description = "Todo 아이디", example = "1"),
+            @Parameter(name = "isCompleted;", description = "Todo 완료 여부", example = "true")
     })
     @PatchMapping("/todos/{id}/updateCompleted")
     public void updateCompleted(@PathVariable Long id,
@@ -84,8 +88,17 @@ public class TodoController {
 
     @Operation(summary = "Update", description = "Todo 정보 수정")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "성공"),
-            @ApiResponse(responseCode = "400", description = "실패")
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND"),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+    })
+    @Parameters({
+            @Parameter(name = "id", description = "Todo 아이디", example = "1"),
+            @Parameter(name = "title", description = "Todo 제목", example = "운동하기"),
+            @Parameter(name = "emoji", description = "이모지", example = "\uD83D\uDE01"),
+            @Parameter(name = "repeatDays", description = "Todo 반복 요일", example = "0: 일, 1: 월, 2:화, 3:수, 4:목, 5:금, 6:토\n"
+                    + "1. 화요일 반복 -> 2\n" + "2. 목, 금요일 반복 -> 4,5\n" + "3. 매일 반복 -> 0-6" )
     })
     @PatchMapping("/todos/{id}/update")
     public void update(@PathVariable Long id,
@@ -96,9 +109,12 @@ public class TodoController {
 
     @Operation(summary = "Delete", description = "Todo 삭제")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "성공"),
-            @ApiResponse(responseCode = "400", description = "실패")
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND"),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     })
+    @Parameter(name = "id", description = "Todo 아이디", example = "1")
     @DeleteMapping("/todos/{id}")
     public void deleteById(@PathVariable Long id){
 
