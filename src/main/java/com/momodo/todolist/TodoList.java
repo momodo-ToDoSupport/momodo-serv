@@ -44,6 +44,7 @@ public class TodoList extends BaseEntity {
     }
 
     public TodoListResponseDto.Info toInfo(){
+
         return TodoListResponseDto.Info.builder()
                 .id(id)
                 .count(count)
@@ -51,5 +52,11 @@ public class TodoList extends BaseEntity {
                 .step(step)
                 .dueDate(dueDate)
                 .build();
+    }
+
+    public void update(Long count, Long completedCount, Integer step){
+        this.count = count;
+        this.completedCount = completedCount;
+        this.step = step;
     }
 }

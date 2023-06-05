@@ -71,7 +71,6 @@ public class TodoRepositoryTest {
     }
 
     @Test
-    @Transactional
     @DisplayName("Todo 성공 여부 수정")
     public void updateCompleted(){
         // given
@@ -79,14 +78,13 @@ public class TodoRepositoryTest {
 
         // when
         createdTodo.updateCompleted();
-        Todo foundTodo = todoRepository.findById(createdTodo.getId()).get();
 
         // then
+        Todo foundTodo = todoRepository.findById(createdTodo.getId()).get();
         assertThat(foundTodo.isCompleted()).isEqualTo(true);
     }
 
     @Test
-    @Transactional
     @DisplayName("Todo 정보 수정")
     public void update(){
         // given
@@ -97,27 +95,26 @@ public class TodoRepositoryTest {
 
         // when
         createdTodo.update(editTitle, editEmoji, editRepeatDays);
-        Todo foundTodo = todoRepository.findById(createdTodo.getId()).get();
 
         // then
+        Todo foundTodo = todoRepository.findById(createdTodo.getId()).get();
         assertThat(foundTodo.getTitle()).isEqualTo(editTitle);
         assertThat(foundTodo.getEmoji()).isEqualTo(editEmoji);
         assertThat(foundTodo.getRepeatDays()).isEqualTo(editRepeatDays);
     }
 
     @Test
-    @Transactional
     @DisplayName("Todo 삭제")
     public void delete(){
         // given
         Todo createdTodo = todoRepository.save(createTodo());
-        Long id = 1L;
+        Long id = createdTodo.getId();
 
         // when
         todoRepository.delete(createdTodo);
-        boolean isFound= todoRepository.existsById(id);
 
         // then
+        boolean isFound= todoRepository.existsById(id);
         assertThat(isFound).isFalse();
     }
 

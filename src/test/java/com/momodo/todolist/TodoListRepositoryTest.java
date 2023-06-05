@@ -1,6 +1,7 @@
 package com.momodo.todolist;
 
 import com.momodo.TestConfig;
+import com.momodo.todo.Todo;
 import com.momodo.todolist.dto.TodoListResponseDto;
 import com.momodo.todolist.repository.TodoListRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -47,11 +48,11 @@ public class TodoListRepositoryTest {
         TodoList createdTodoList = todoListRepository.save(createTodoList());
 
         // when
-        TodoListResponseDto.Info todoListInfo = todoListRepository.findByDueDate(createdTodoList.getMemberId(), createdTodoList.getDueDate());
+        TodoList foundTodoList = todoListRepository.findByDueDate(createdTodoList.getMemberId(), createdTodoList.getDueDate());
 
         // then
-        assertThat(todoListInfo.getId()).isEqualTo(createdTodoList.getId());
-        assertThat(todoListInfo.getDueDate()).isEqualTo(createdTodoList.getDueDate());
+        assertThat(foundTodoList.getId()).isEqualTo(createdTodoList.getId());
+        assertThat(foundTodoList.getDueDate()).isEqualTo(createdTodoList.getDueDate());
     }
 
     @Test
@@ -69,6 +70,40 @@ public class TodoListRepositoryTest {
         // then
         assertThat(result.size()).isEqualTo(1);
         assertThat(result.get(0).getDueDate().getMonthValue()).isEqualTo(date.getMonthValue());
+    }
+
+    @Test
+    @DisplayName("TodoList의 Todo 개수 수정")
+    public void updateTodoCount(){
+        // given
+        TodoList createdTodoList = todoListRepository.save(createTodoList());
+        Long editCount = 2L;
+        Long editCompletedCount = 1L;
+        Integer editStep = 1;
+
+        // when
+        createdTodoList.update(editCount, editCompletedCount, editStep);
+
+        // then
+        TodoList foundTodoList = todoListRepository.findById(createdTodoList.getId()).get();
+        assertThat(foundTodoList.getCount()).isEqualTo(editCount);
+        assertThat(foundTodoList.getCompletedCount()).isEqualTo(editCompletedCount);
+        assertThat(foundTodoList.getStep()).isEqualTo(editStep);
+    }
+
+    @Test
+    @DisplayName("TodoList 삭제")
+    public void delete(){
+        // given
+        TodoList createdTodoList = todoListRepository.save(createTodoList());
+        Long id = createdTodoList.getId();
+
+        // when
+        todoListRepository.delete(createdTodoList);
+
+        // then
+        boolean isFound= todoListRepository.existsById(id);
+        assertThat(isFound).isFalse(); // 데이터가 존재하지 않음
     }
 
     private TodoList createTodoList(){

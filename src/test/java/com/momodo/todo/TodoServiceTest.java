@@ -28,6 +28,7 @@ public class TodoServiceTest {
     private TodoRepository todoRepository;
 
     @Test
+    @Transactional
     @DisplayName("Todo 등록")
     public void create(){
         // given
@@ -36,11 +37,10 @@ public class TodoServiceTest {
 
         // when
         when(todoRepository.save(any(Todo.class))).thenReturn(todo);
-        Todo createdTodo = todoService.createTodo(todoRequest);
+        todoService.createTodo(todoRequest);
 
         // then
-        assertThat(todo.getId()).isEqualTo(createdTodo.getId());
-        assertThat(todo.getTitle()).isEqualTo(createdTodo.getTitle());
+        verify(todoRepository, times(1)).save(any(Todo.class));
     }
 
     @Test

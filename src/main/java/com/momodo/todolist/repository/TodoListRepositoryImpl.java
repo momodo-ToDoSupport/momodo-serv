@@ -1,5 +1,6 @@
 package com.momodo.todolist.repository;
 
+import com.momodo.todolist.TodoList;
 import com.momodo.todolist.dto.TodoListResponseDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -18,16 +19,9 @@ public class TodoListRepositoryImpl implements TodoListRepositoryCustom{
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public TodoListResponseDto.Info findByDueDate(Long memberId, LocalDate dueDate) {
+    public TodoList findByDueDate(Long memberId, LocalDate dueDate) {
         return queryFactory
-                .select(Projections.constructor(TodoListResponseDto.Info.class,
-                        todoList.id,
-                        todoList.count,
-                        todoList.completedCount,
-                        todoList.step,
-                        todoList.dueDate
-                ))
-                .from(todoList)
+                .selectFrom(todoList)
                 .where(todoList.memberId.eq(memberId)
                         .and(todoList.dueDate.eq(dueDate)))
                 .fetchOne();
