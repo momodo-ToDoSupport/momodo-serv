@@ -25,6 +25,7 @@ public class TodoRepositoryTest {
 
     @Autowired
     private JPAQueryFactory queryFactory;
+
     @Autowired
     private TodoRepository todoRepository;
 
@@ -46,21 +47,21 @@ public class TodoRepositoryTest {
     @DisplayName("Todo Id로 조회")
     public void findById(){
         // given
-        Todo savedTodo = todoRepository.save(createTodo());
+        Todo createdTodo = todoRepository.save(createTodo());
 
         // when
-        Todo foundTodo = todoRepository.findById(savedTodo.getId()).get();
+        Todo foundTodo = todoRepository.findById(createdTodo.getId()).get();
 
         // then
         assertThat(foundTodo).isNotNull();
-        assertThat(foundTodo.getId()).isEqualTo(savedTodo.getId());
+        assertThat(foundTodo.getId()).isEqualTo(createdTodo.getId());
     }
 
     @Test
     @DisplayName("Todo DueDate로 조회")
     public void findAllByDueDate(){
         // given
-        List<Todo> savedTodoList = todoRepository.saveAll(createTodoList());
+        List<Todo> createdTodoList = todoRepository.saveAll(createTodoList());
 
         // when
         List<TodoResponseDto.Info> todoInfoList = todoRepository.findAllByDueDate(LocalDate.now());
@@ -75,11 +76,11 @@ public class TodoRepositoryTest {
     @DisplayName("Todo 성공 여부 수정")
     public void updateCompleted(){
         // given
-        Todo savedTodo = todoRepository.save(createTodo());
+        Todo createdTodo = todoRepository.save(createTodo());
 
         // when
-        savedTodo.updateCompleted(true);
-        Todo foundTodo = todoRepository.findById(savedTodo.getId()).get();
+        createdTodo.updateCompleted(true);
+        Todo foundTodo = todoRepository.findById(createdTodo.getId()).get();
 
         // then
         assertThat(foundTodo.isCompleted()).isEqualTo(true);
@@ -90,14 +91,14 @@ public class TodoRepositoryTest {
     @DisplayName("Todo 정보 수정")
     public void update(){
         // given
-        Todo savedTodo = todoRepository.save(createTodo());
+        Todo createdTodo = todoRepository.save(createTodo());
         String editTitle = "Edit Title";
         String editEmoji = "Edit Emoji";
         String editRepeatDays = "Edit RepeatDays";
 
         // when
-        savedTodo.update(editTitle, editEmoji, editRepeatDays);
-        Todo foundTodo = todoRepository.findById(savedTodo.getId()).get();
+        createdTodo.update(editTitle, editEmoji, editRepeatDays);
+        Todo foundTodo = todoRepository.findById(createdTodo.getId()).get();
 
         // then
         assertThat(foundTodo.getTitle()).isEqualTo(editTitle);
@@ -110,11 +111,11 @@ public class TodoRepositoryTest {
     @DisplayName("Todo 삭제")
     public void delete(){
         // given
-        Todo savedTodo = todoRepository.save(createTodo());
+        Todo createdTodo = todoRepository.save(createTodo());
         Long id = 1L;
 
         // when
-        todoRepository.delete(savedTodo);
+        todoRepository.delete(createdTodo);
 
         boolean isFound= todoRepository.existsById(id);
 

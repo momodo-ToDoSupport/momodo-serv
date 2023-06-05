@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -28,12 +30,15 @@ public class TodoList extends BaseEntity {
     @Column(nullable = false)
     private Integer step;
 
+    @Column(name = "due_date", nullable = false)
+    private LocalDate dueDate;
+
     @Builder
-    public TodoList(Long id, Long memberId, Long count, Long completedCount, Integer step) {
-        this.id = id;
+    public TodoList(Long memberId, Long count, Long completedCount, Integer step, LocalDate dueDate) {
         this.memberId = memberId;
         this.count = count;
         this.completedCount = completedCount;
         this.step = step;
+        this.dueDate = dueDate;
     }
 }
