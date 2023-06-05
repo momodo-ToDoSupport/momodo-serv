@@ -1,7 +1,6 @@
 package com.momodo.todo;
 
 import com.momodo.TestConfig;
-import com.momodo.todo.dto.TodoRequestDto;
 import com.momodo.todo.dto.TodoResponseDto;
 import com.momodo.todo.repository.TodoRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -79,7 +78,7 @@ public class TodoRepositoryTest {
         Todo createdTodo = todoRepository.save(createTodo());
 
         // when
-        createdTodo.updateCompleted(true);
+        createdTodo.updateCompleted();
         Todo foundTodo = todoRepository.findById(createdTodo.getId()).get();
 
         // then
@@ -116,7 +115,6 @@ public class TodoRepositoryTest {
 
         // when
         todoRepository.delete(createdTodo);
-
         boolean isFound= todoRepository.existsById(id);
 
         // then

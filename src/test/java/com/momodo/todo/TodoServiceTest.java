@@ -48,15 +48,15 @@ public class TodoServiceTest {
     public void findById(){
         // given
         Long id = 1L;
-        Todo savedTodo = createTodo();
+        Todo foundTodo = createTodo();
 
         // when
-        when(todoRepository.findById(any(Long.class))).thenReturn(Optional.of(savedTodo));
+        when(todoRepository.findById(any(Long.class))).thenReturn(Optional.of(foundTodo));
         TodoResponseDto.Info todoInfo = todoService.findById(id);
 
         // then
-        assertThat(savedTodo.getId()).isEqualTo(todoInfo.getId());
-        assertThat(savedTodo.getTitle()).isEqualTo(todoInfo.getTitle());
+        assertThat(foundTodo.getId()).isEqualTo(todoInfo.getId());
+        assertThat(foundTodo.getTitle()).isEqualTo(todoInfo.getTitle());
     }
 
     @Test
@@ -82,15 +82,15 @@ public class TodoServiceTest {
     @DisplayName("Todo 성공 여부 수정")
     public void updateCompleted(){
         // given
-        Todo savedTodo = createTodo();
+        Todo foundTodo = createTodo();
         Long id = 1L;
 
         // when
-        when(todoRepository.findById(any(Long.class))).thenReturn(Optional.of(savedTodo));
+        when(todoRepository.findById(any(Long.class))).thenReturn(Optional.of(foundTodo));
         todoService.updateCompleted(id);
 
         // then
-        assertThat(savedTodo.isCompleted()).isTrue();
+        assertThat(foundTodo.isCompleted()).isTrue();
     }
 
     @Test
@@ -98,18 +98,18 @@ public class TodoServiceTest {
     @DisplayName("Todo 정보 수정")
     public void update(){
         // given
-        Todo savedTodo = createTodo();
+        Todo foundTodo = createTodo();
         Long id = 1L;
         TodoRequestDto.Edit request = new TodoRequestDto.Edit("Edit Title", "Edit Emoji", "Edit RepeatDays");
 
         // when
-        when(todoRepository.findById(any(Long.class))).thenReturn(Optional.of(savedTodo));
+        when(todoRepository.findById(any(Long.class))).thenReturn(Optional.of(foundTodo));
         todoService.update(id, request);
 
         // then
-        assertThat(savedTodo.getTitle()).isEqualTo(request.getTitle());
-        assertThat(savedTodo.getEmoji()).isEqualTo(request.getEmoji());
-        assertThat(savedTodo.getRepeatDays()).isEqualTo(request.getRepeatDays());
+        assertThat(foundTodo.getTitle()).isEqualTo(request.getTitle());
+        assertThat(foundTodo.getEmoji()).isEqualTo(request.getEmoji());
+        assertThat(foundTodo.getRepeatDays()).isEqualTo(request.getRepeatDays());
     }
 
     @Test
@@ -117,11 +117,11 @@ public class TodoServiceTest {
     @DisplayName("Todo 삭제")
     public void deleteById(){
         // given
-        Todo savedTodo = createTodo();
+        Todo foundTodo = createTodo();
         Long id = 1L;
 
         // when
-        when(todoRepository.findById(any(Long.class))).thenReturn(Optional.of(savedTodo));
+        when(todoRepository.findById(any(Long.class))).thenReturn(Optional.of(foundTodo));
         todoService.deleteById(id);
 
         // then
