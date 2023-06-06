@@ -48,4 +48,24 @@ public class TodoRequestDto {
                     .build();
         }
     }
+
+    @Getter
+    @NoArgsConstructor
+    public static class Edit{
+
+        @NotBlank(message = "제목은 필수 입력 값입니다.")
+        private String title;
+
+        @NotBlank(message = "이모지는 필수 입력 값입니다.")
+        private String emoji;
+
+        private String repeatDays;
+
+        @Builder
+        public Edit(String title, String emoji, String repeatDays) {
+            this.title = title;
+            this.emoji = emoji;
+            this.repeatDays = repeatDays;
+        }
+    }
 }
