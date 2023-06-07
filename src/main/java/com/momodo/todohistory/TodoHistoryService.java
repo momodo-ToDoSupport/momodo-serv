@@ -1,8 +1,8 @@
-package com.momodo.todolist;
+package com.momodo.todohistory;
 
 import com.momodo.todo.Todo;
-import com.momodo.todolist.dto.TodoListResponseDto;
-import com.momodo.todolist.repository.TodoListRepository;
+import com.momodo.todohistory.dto.TodoHistoryResponseDto;
+import com.momodo.todohistory.repository.TodoHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,16 +13,16 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class TodoListService {
+public class TodoHistoryService {
 
-    private final TodoListRepository todoListRepository;
+    private final TodoHistoryRepository todoHistoryRepository;
 
     private float[] stepRatios = {30.0f, 70.0f, 100.0f};
 
     @Transactional
     public void create(Long memberId, LocalDate dueDate){
 
-        TodoList todoList = TodoList.builder()
+        TodoHistory todoHistory = TodoHistory.builder()
                 .memberId(memberId)
                 .count(1L)
                 .completedCount(0L)
@@ -30,55 +30,55 @@ public class TodoListService {
                 .dueDate(dueDate)
                 .build();
 
-        todoListRepository.save(todoList);
+        todoHistoryRepository.save(todoHistory);
     }
 
-    public TodoListResponseDto.Info findByDueDate(Long memberId, LocalDate dueDate) {
+    public TodoHistoryResponseDto.Info findByDueDate(Long memberId, LocalDate dueDate) {
 
-        return todoListRepository.findByDueDate(memberId, dueDate).toInfo();
+        return todoHistoryRepository.findByDueDate(memberId, dueDate).toInfo();
     }
 
-    public List<TodoListResponseDto.Info> findAllByYearMonth(Long memberId, String yearMonth) {
+    public List<TodoHistoryResponseDto.Info> findAllByYearMonth(Long memberId, String yearMonth) {
 
         LocalDate firstDate = LocalDate.parse(yearMonth + "-01");
         LocalDate lastDate = firstDate.withDayOfMonth(firstDate.lengthOfMonth());
 
-        return todoListRepository.findAllByYearMonth(memberId, firstDate, lastDate);
+        return todoHistoryRepository.findAllByYearMonth(memberId, firstDate, lastDate);
     }
 
     @Transactional
-    public void updateTodoCount(Todo todo, boolean isCreated){ // TodoList의 Todo 개수 수정
+    public void updateTodoCount(Todo todo, boolean isCreated){ // TodoHistory의 Todo 개수 수정
 
-        TodoList todoList = todoListRepository.findByDueDate(todo.getMemberId(), todo.getDueDate());
+        TodoHistory todoHistory = todoHistoryRepository.findByDueDate(todo.getMemberId(), todo.getDueDate());
         long todoCount = 0;
         long todoCompletedCount = 0;
         int step = 0;
 
         if(isCreated){  // 새로운 Todo 생성
-            if(todoList == null){
+            if(todoHistory == null){
                 create(todo.getMemberId(), todo.getDueDate());
             }else{
-                todoCount = todoList.getCount() + 1;
-                todoCompletedCount = todoList.getCompletedCount();
+                todoCount = todoHistory.getCount() + 1;
+                todoCompletedCount = todoHistory.getCompletedCount();
                 step = calculateStep(todoCount, todoCompletedCount);
 
-                todoList.update(todoCount, todoCompletedCount, step);
+                todoHistory.update(todoCount, todoCompletedCount, step);
             }
         }else{  // Todo 삭제
             // 존재하지 않는 memberId일 경우를 체크해야 하나?
-            todoCount = todoList.getCount() - 1;
+            todoCount = todoHistory.getCount() - 1;
 
-            if(todoCount == 0){ // Todo 개수가 0개면 TodoList 삭제
+            if(todoCount == 0){ // Todo 개수가 0개면 TodoHistory 삭제
 
-                todoListRepository.delete(todoList);
+                todoHistoryRepository.delete(todoHistory);
                 return;
             }
             if(todo.isCompleted()){ // 삭제하려는 Todo가 완료한 Todo라면
-                todoCompletedCount = todoList.getCompletedCount() - 1;
+                todoCompletedCount = todoHistory.getCompletedCount() - 1;
             }
 
             step = calculateStep(todoCount, todoCompletedCount);
-            todoList.update(todoCount, todoCompletedCount, step);
+            todoHistory.update(todoCount, todoCompletedCount, step);
         }
     }
 
@@ -86,11 +86,11 @@ public class TodoListService {
     @Transactional
     public void updateTodoCompleted(Todo todo){
 
-        TodoList todoList = todoListRepository.findByDueDate(todo.getMemberId(), todo.getDueDate());
-        // 나중에 예외를 추가해야 할까? 어차피 TodoList가 존재하기 때문에 이 메서드가 실행 가능한데?
+        TodoHistory todoHistory = todoHistoryRepository.findByDueDate(todo.getMemberId(), todo.getDueDate());
+        // 나중에 예외를 추가해야 할까? 어차피 TodoHistory가 존재하기 때문에 이 메서드가 실행 가능한데?
 
-        long todoCount = todoList.getCount();
-        long todoCompletedCount = todoList.getCompletedCount();
+        long todoCount = todoHistory.getCount();
+        long todoCompletedCount = todoHistory.getCompletedCount();
         int step = 0;
         
         if(todo.isCompleted()){ // Todo 미완료 -> 완료
@@ -100,7 +100,7 @@ public class TodoListService {
         }
 
         step = calculateStep(todoCount, todoCompletedCount);
-        todoList.update(todoCount, todoCompletedCount, step);
+        todoHistory.update(todoCount, todoCompletedCount, step);
     }
 
     private int calculateStep(long todoCount, long todoCompletedCount){
