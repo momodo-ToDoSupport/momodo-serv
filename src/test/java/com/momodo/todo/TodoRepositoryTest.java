@@ -1,7 +1,6 @@
 package com.momodo.todo;
 
 import com.momodo.TestConfig;
-import com.momodo.todo.dto.TodoRequestDto;
 import com.momodo.todo.dto.TodoResponseDto;
 import com.momodo.todo.repository.TodoRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -25,6 +24,7 @@ public class TodoRepositoryTest {
 
     @Autowired
     private JPAQueryFactory queryFactory;
+
     @Autowired
     private TodoRepository todoRepository;
 
@@ -46,21 +46,21 @@ public class TodoRepositoryTest {
     @DisplayName("Todo Id로 조회")
     public void findById(){
         // given
-        Todo savedTodo = todoRepository.save(createTodo());
+        Todo createdTodo = todoRepository.save(createTodo());
 
         // when
-        Todo foundTodo = todoRepository.findById(savedTodo.getId()).get();
+        Todo foundTodo = todoRepository.findById(createdTodo.getId()).get();
 
         // then
         assertThat(foundTodo).isNotNull();
-        assertThat(foundTodo.getId()).isEqualTo(savedTodo.getId());
+        assertThat(foundTodo.getId()).isEqualTo(createdTodo.getId());
     }
 
     @Test
     @DisplayName("Todo DueDate로 조회")
     public void findAllByDueDate(){
         // given
-        List<Todo> savedTodoList = todoRepository.saveAll(createTodoList());
+        List<Todo> createdTodoList = todoRepository.saveAll(createTodoList());
 
         // when
         List<TodoResponseDto.Info> todoInfoList = todoRepository.findAllByDueDate(LocalDate.now());
@@ -71,54 +71,50 @@ public class TodoRepositoryTest {
     }
 
     @Test
-    @Transactional
     @DisplayName("Todo 성공 여부 수정")
     public void updateCompleted(){
         // given
-        Todo savedTodo = todoRepository.save(createTodo());
+        Todo createdTodo = todoRepository.save(createTodo());
 
         // when
-        savedTodo.updateCompleted();
-        Todo foundTodo = todoRepository.findById(savedTodo.getId()).get();
+        createdTodo.updateCompleted();
 
         // then
+        Todo foundTodo = todoRepository.findById(createdTodo.getId()).get();
         assertThat(foundTodo.isCompleted()).isEqualTo(true);
     }
 
     @Test
-    @Transactional
     @DisplayName("Todo 정보 수정")
     public void update(){
         // given
-        Todo savedTodo = todoRepository.save(createTodo());
+        Todo createdTodo = todoRepository.save(createTodo());
         String editTitle = "Edit Title";
         String editEmoji = "Edit Emoji";
         String editRepeatDays = "Edit RepeatDays";
 
         // when
-        savedTodo.update(editTitle, editEmoji, editRepeatDays);
-        Todo foundTodo = todoRepository.findById(savedTodo.getId()).get();
+        createdTodo.update(editTitle, editEmoji, editRepeatDays);
 
         // then
+        Todo foundTodo = todoRepository.findById(createdTodo.getId()).get();
         assertThat(foundTodo.getTitle()).isEqualTo(editTitle);
         assertThat(foundTodo.getEmoji()).isEqualTo(editEmoji);
         assertThat(foundTodo.getRepeatDays()).isEqualTo(editRepeatDays);
     }
 
     @Test
-    @Transactional
     @DisplayName("Todo 삭제")
     public void delete(){
         // given
-        Todo savedTodo = todoRepository.save(createTodo());
-        Long id = 1L;
+        Todo createdTodo = todoRepository.save(createTodo());
+        Long id = createdTodo.getId();
 
         // when
-        todoRepository.delete(savedTodo);
-
-        boolean isFound= todoRepository.existsById(id);
+        todoRepository.delete(createdTodo);
 
         // then
+        boolean isFound= todoRepository.existsById(id);
         assertThat(isFound).isFalse();
     }
 

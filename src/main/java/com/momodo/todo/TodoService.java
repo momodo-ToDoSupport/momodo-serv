@@ -6,21 +6,24 @@ import com.momodo.todo.dto.TodoResponseDto;
 import com.momodo.todo.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class TodoService {
 
     private final TodoRepository todoRepository;
 
-    public Todo createTodo(TodoRequestDto.Create request){
+    @Transactional
+    public void createTodo(TodoRequestDto.Create request){
 
         Todo createTodo = request.toEntity();
 
-        return todoRepository.save(createTodo);
+        todoRepository.save(createTodo);
     }
 
     public TodoResponseDto.Info findById(Long id){
@@ -38,6 +41,7 @@ public class TodoService {
         return todoInfoList;
     }
 
+    @Transactional
     public void updateCompleted(Long id){
 
         Todo todo = todoRepository.findById(id)
@@ -46,6 +50,7 @@ public class TodoService {
         todo.updateCompleted();
     }
 
+    @Transactional
     public void update(Long id, TodoRequestDto.Edit request){
 
         Todo todo = todoRepository.findById(id)
@@ -54,6 +59,7 @@ public class TodoService {
         todo.update(request.getTitle(), request.getEmoji(), request.getRepeatDays());
     }
 
+    @Transactional
     public void deleteById(Long id){
 
         Todo todo = todoRepository.findById(id)
