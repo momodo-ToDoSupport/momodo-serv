@@ -1,6 +1,8 @@
 package com.momodo.todohistory;
 
 import com.momodo.todo.Todo;
+import com.momodo.todo.dto.TodoRequestDto;
+import com.momodo.todohistory.dto.TodoHistoryRequestDto;
 import com.momodo.todohistory.dto.TodoHistoryResponseDto;
 import com.momodo.todohistory.repository.TodoHistoryRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -31,12 +33,18 @@ public class TodoHistoryServiceTest {
     public void create(){
         // given
         TodoHistory todoHistory = createTodoHistory();
+        TodoHistoryRequestDto.Create request = TodoHistoryRequestDto.Create.builder()
+                .memberId(todoHistory.getMemberId())
+                .count(todoHistory.getCount())
+                .completedCount(todoHistory.getCompletedCount())
+                .dueDate(todoHistory.getDueDate())
+                .build();
 
         // stub
         when(todoHistoryRepository.save(any(TodoHistory.class))).thenReturn(todoHistory);
 
         // when
-        todoHistoryService.create(todoHistory.getMemberId(), todoHistory.getDueDate());
+        todoHistoryService.create(request);
 
         // then
         verify(todoHistoryRepository, times(1)).save(any(TodoHistory.class));
@@ -76,133 +84,6 @@ public class TodoHistoryServiceTest {
         // then
         assertThat(result.size()).isEqualTo(infoList.size());
     }
-
-    //region TodoHistory의 Todo 개수 수정 테스트
-    @Test
-    @DisplayName("TodoHistory의 Todo 개수 수정 - Todo가 생성 됐을 때, DueDate 날짜의 TodoHistory 데이터가 없을 경우")
-    public void updateTodoCount_NotFoundTodoHistory(){
-        // given
-        Todo todo = createTodo();
-        boolean isCreated = true;
-        TodoHistory todoHistory = createTodoHistory();
-
-        // stub
-        when(todoHistoryRepository.findByDueDate(any(Long.class), any(LocalDate.class))).thenReturn(null);
-        when(todoHistoryRepository.save(any(TodoHistory.class))).thenReturn(todoHistory);
-
-        // when
-        todoHistoryService.updateTodoCount(todo, isCreated);
-
-        // then
-        verify(todoHistoryRepository, times(1)).save(any(TodoHistory.class));
-    }
-
-    @Test
-    @DisplayName("TodoHistory의 Todo 개수 수정 - Todo가 생성 됐을 때, DueDate 날짜의 TodoHistory 데이터가 존재할 경우")
-    public void updateTodoCount_ExistsTodoHistory(){
-        // given
-        Todo todo = createTodo();
-        boolean isCreated = true;
-
-        // 3개의 Todo가 존재하고 전부 완료한 상태
-        TodoHistory todoHistory = new TodoHistory(1L, 3L, 3L, 3, LocalDate.now());
-
-        // stub
-        when(todoHistoryRepository.findByDueDate(any(Long.class), any(LocalDate.class))).thenReturn(todoHistory);
-
-        // when
-        todoHistoryService.updateTodoCount(todo, isCreated);
-
-        // then
-        assertThat(todoHistory.getCount()).isEqualTo(4L); // Todo가 추가되었으니 4
-        assertThat(todoHistory.getCompletedCount()).isEqualTo(3L);
-        assertThat(todoHistory.getStep()).isEqualTo(2); // 4개 중에 3개가 완료됐으니 75%로 2단계
-    }
-
-    @Test
-    @DisplayName("TodoHistory의 Todo 개수 수정 - Todo가 삭제 됐을 때, DueDate 날짜의 Todo 데이터가 없을 경우")
-    public void updateTodoCount_TodoCountZero(){
-        // given
-        Todo todo = createTodo();
-        boolean isCreated = false; // 삭제할 것이기 때문에 false
-
-        // 1개의 Todo가 존재
-        TodoHistory todoHistory = new TodoHistory(1L, 1L, 0L, 0, LocalDate.now());
-
-        // stub
-        when(todoHistoryRepository.findByDueDate(any(Long.class), any(LocalDate.class))).thenReturn(todoHistory);
-
-        // when
-        todoHistoryService.updateTodoCount(todo, isCreated);
-
-        // then
-        // Todo의 개수가 0개가 되었기 때문에 TodoHistory를 삭제
-        verify(todoHistoryRepository, times(1)).delete(any(TodoHistory.class));
-    }
-
-    @Test
-    @DisplayName("TodoHistory의 Todo 개수 수정 - Todo가 삭제 됐을 때, DueDate 날짜의 Todo 데이터가 존재할 경우")
-    public void updateTodoCount_TodoExists(){
-        // given
-        Todo todo = createTodo();
-        boolean isCreated = false; // 삭제할 것이기 때문에 false
-
-        // 2개의 Todo가 존재
-        TodoHistory todoHistory = new TodoHistory(1L, 2L, 0L, 0, LocalDate.now());
-
-        // stub
-        when(todoHistoryRepository.findByDueDate(any(Long.class), any(LocalDate.class))).thenReturn(todoHistory);
-
-        // when
-        todoHistoryService.updateTodoCount(todo, isCreated);
-
-        // then
-        assertThat(todoHistory.getCount()).isEqualTo(1L); // Todo 1개가 삭제되었으니
-    }
-    //endregion
-
-    //region TodoHistory의 Todo 완료 개수 수정
-    @Test
-    @DisplayName("TodoHistory의 Todo 완료 개수 수정 - Todo가 미완료에서 완료로")
-    public void updateTodoCompleted_미완료에서완료로(){
-        // given
-        Todo todo = createTodo();
-        todo.updateCompleted(); // isCompleted - true로 변경
-
-        // 3개의 Todo가 존재하고 전부 완료한 상태
-        TodoHistory todoHistory = new TodoHistory(1L, 3L, 2L, 3, LocalDate.now());
-
-        // stub
-        when(todoHistoryRepository.findByDueDate(any(Long.class), any(LocalDate.class))).thenReturn(todoHistory);
-
-        // when
-        todoHistoryService.updateTodoCompleted(todo);
-
-        // then
-        assertThat(todoHistory.getCompletedCount()).isEqualTo(3L);
-        assertThat(todoHistory.getStep()).isEqualTo(3); // 3개 중에 3개가 완료됐으니 100%로 3단계
-    }
-
-    @Test
-    @DisplayName("TodoHistory의 Todo 완료 개수 수정 - Todo가 완료에서 미완료로")
-    public void updateTodoCompleted_완료에서미완료로(){
-        // given
-        Todo todo = createTodo();
-
-        // 3개의 Todo가 존재하고 전부 완료한 상태
-        TodoHistory todoHistory = new TodoHistory(1L, 3L, 3L, 3, LocalDate.now());
-
-        // stub
-        when(todoHistoryRepository.findByDueDate(any(Long.class), any(LocalDate.class))).thenReturn(todoHistory);
-
-        // when
-        todoHistoryService.updateTodoCompleted(todo);
-
-        // then
-        assertThat(todoHistory.getCompletedCount()).isEqualTo(2L);
-        assertThat(todoHistory.getStep()).isEqualTo(1); // 3개 중에 2개가 완료됐으니 66%로 1단계
-    }
-    //endregion
 
     private Todo createTodo(){
         return Todo.builder()
