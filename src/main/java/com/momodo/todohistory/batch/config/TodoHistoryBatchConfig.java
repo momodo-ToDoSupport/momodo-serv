@@ -1,7 +1,6 @@
-package com.momodo.todohistory.batch;
+package com.momodo.todohistory.batch.config;
 
-import com.momodo.todo.repository.TodoRepository;
-import com.momodo.todohistory.TodoHistoryService;
+import com.momodo.todohistory.batch.tasks.TodoHistoryTasklet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
