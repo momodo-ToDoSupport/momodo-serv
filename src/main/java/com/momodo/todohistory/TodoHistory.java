@@ -1,7 +1,7 @@
-package com.momodo.todolist;
+package com.momodo.todohistory;
 
 import com.momodo.commons.BaseEntity;
-import com.momodo.todolist.dto.TodoListResponseDto;
+import com.momodo.todohistory.dto.TodoHistoryResponseDto;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,11 +12,11 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @NoArgsConstructor
-public class TodoList extends BaseEntity {
+public class TodoHistory extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "todolist_id")
+    @Column(name = "todoHistory_id")
     private Long id;
 
     @Column(name = "member_id", nullable = false)
@@ -35,7 +35,7 @@ public class TodoList extends BaseEntity {
     private LocalDate dueDate;
 
     @Builder
-    public TodoList(Long memberId, Long count, Long completedCount, Integer step, LocalDate dueDate) {
+    public TodoHistory(Long memberId, Long count, Long completedCount, Integer step, LocalDate dueDate) {
         this.memberId = memberId;
         this.count = count;
         this.completedCount = completedCount;
@@ -43,9 +43,9 @@ public class TodoList extends BaseEntity {
         this.dueDate = dueDate;
     }
 
-    public TodoListResponseDto.Info toInfo(){
+    public TodoHistoryResponseDto.Info toInfo(){
 
-        return TodoListResponseDto.Info.builder()
+        return TodoHistoryResponseDto.Info.builder()
                 .id(id)
                 .count(count)
                 .completedCount(completedCount)
