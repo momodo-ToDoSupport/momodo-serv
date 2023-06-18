@@ -23,9 +23,10 @@ public class EmojiHistoryRepositoryImpl implements EmojiHistoryRepositoryCustom{
         return queryFactory
                 .select(Projections.fields(EmojiHistory.class,
                         emojiHistory.id,
-                        Expressions.asNumber(memberId),
-                        Expressions.asString(emoji)
+                        Expressions.asNumber(memberId).as("memberId"),
+                        Expressions.asString(emoji).as("emoji")
                 ))
+                .from(emojiHistory)
                 .where(emojiHistory.memberId.eq(memberId)
                         .and(emojiHistory.emoji.eq(emoji)))
                 .fetchOne();

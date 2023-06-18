@@ -1,5 +1,6 @@
 package com.momodo.todo;
 
+import com.momodo.emojihistory.EmojiHistoryService;
 import com.momodo.todo.Todo;
 import com.momodo.todo.dto.TodoRequestDto;
 import com.momodo.todo.dto.TodoResponseDto;
@@ -17,6 +18,7 @@ import java.util.List;
 public class TodoService {
 
     private final TodoRepository todoRepository;
+    private final EmojiHistoryService emojiHistoryService;
 
     @Transactional
     public void createTodo(TodoRequestDto.Create request){
@@ -24,6 +26,7 @@ public class TodoService {
         Todo createTodo = request.toEntity();
 
         todoRepository.save(createTodo);
+        emojiHistoryService.create(createTodo.getMemberId(), createTodo.getEmoji());
     }
 
     public TodoResponseDto.Info findById(Long id){
@@ -55,6 +58,10 @@ public class TodoService {
 
         Todo todo = todoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException());
+
+        if(request.getEmoji() != todo.getEmoji()){
+            emojiHistoryService.create(todo.getMemberId(), request.getEmoji());
+        }
 
         todo.update(request.getTitle(), request.getEmoji(), request.getRepeatDays());
     }
