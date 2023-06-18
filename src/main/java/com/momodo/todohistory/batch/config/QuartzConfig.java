@@ -47,7 +47,7 @@ public class QuartzConfig {
     public Trigger todoHistoryJobTrigger(){
         SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder
                 .simpleSchedule()
-                .withIntervalInSeconds(10)
+                .withIntervalInHours(1)
                 .repeatForever();
 
         return TriggerBuilder

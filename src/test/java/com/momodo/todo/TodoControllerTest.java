@@ -67,8 +67,8 @@ public class TodoControllerTest {
 
         // when & then
         mockMvc.perform(get(url)
-                        .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isOk());
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -82,9 +82,9 @@ public class TodoControllerTest {
 
         // when & then
         mockMvc.perform(get(url)
-                        .param("dueDate", date.toString())
-                        .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isOk());
+                .param("dueDate", date.toString())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -97,8 +97,8 @@ public class TodoControllerTest {
 
         // when & then
         mockMvc.perform(patch(url)
-                        .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isOk());
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -112,9 +112,9 @@ public class TodoControllerTest {
 
         // when & then
         mockMvc.perform(patch(url)
-                        .content(mapper.writeValueAsString(request))
-                        .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isOk());
+                .content(mapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -127,8 +127,8 @@ public class TodoControllerTest {
 
         // when & then
         mockMvc.perform(delete(url)
-                        .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isOk());
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     private TodoRequestDto.Create todoRequestDto(){

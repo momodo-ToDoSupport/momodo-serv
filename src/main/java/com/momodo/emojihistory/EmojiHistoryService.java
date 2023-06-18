@@ -1,11 +1,13 @@
 package com.momodo.emojihistory;
 
+import com.momodo.emojihistory.dto.EmojiHistoryResponseDto;
 import com.momodo.emojihistory.repository.EmojiHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -39,5 +41,10 @@ public class EmojiHistoryService {
                 .build();
 
         emojiHistoryRepository.save(emojiHistory);
+    }
+
+    public List<EmojiHistoryResponseDto.Info> findAllByMember(Long memberId){
+
+        return emojiHistoryRepository.findAllByMember(memberId);
     }
 }

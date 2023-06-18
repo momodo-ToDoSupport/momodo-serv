@@ -30,7 +30,7 @@ public class EmojiHistoryRepositoryTest {
     @Autowired
     private EmojiHistoryRepository emojiHistoryRepository;
 
-    private Long mamberId = 1L;
+    private Long memberId = 1L;
     private String emoji = "\uD83D\uDE01";
 
     @Test
@@ -53,7 +53,7 @@ public class EmojiHistoryRepositoryTest {
         EmojiHistory createdEmojiHistory = emojiHistoryRepository.save(createEmojiHistory());
 
         // when
-        EmojiHistory foundEmojiHistory = emojiHistoryRepository.findByEmoji(mamberId, emoji);
+        EmojiHistory foundEmojiHistory = emojiHistoryRepository.findByEmoji(memberId, emoji);
 
         // then
         assertThat(foundEmojiHistory.getId()).isEqualTo(createdEmojiHistory.getId());
@@ -66,7 +66,7 @@ public class EmojiHistoryRepositoryTest {
         List<EmojiHistory> createdEmojiHistories = emojiHistoryRepository.saveAll(createEmojiHistories());
 
         // when
-        List<EmojiHistoryResponseDto.Info> foundEmojiHistories = emojiHistoryRepository.findAllByMember(mamberId);
+        List<EmojiHistoryResponseDto.Info> foundEmojiHistories = emojiHistoryRepository.findAllByMember(memberId);
 
         // then
         assertThat(foundEmojiHistories.size()).isEqualTo(createdEmojiHistories.size());
@@ -79,7 +79,7 @@ public class EmojiHistoryRepositoryTest {
         emojiHistoryRepository.save(createEmojiHistory());
 
         // when
-        boolean isExist = emojiHistoryRepository.existsByMemberIdAndEmoji(mamberId, emoji);
+        boolean isExist = emojiHistoryRepository.existsByMemberIdAndEmoji(memberId, emoji);
 
         // then
         assertThat(isExist).isTrue();
@@ -92,7 +92,7 @@ public class EmojiHistoryRepositoryTest {
         List<EmojiHistory> createdEmojiHistories = emojiHistoryRepository.saveAll(createEmojiHistories());
 
         // when
-        Long count = emojiHistoryRepository.countByMemberId(mamberId);
+        Long count = emojiHistoryRepository.countByMemberId(memberId);
 
         // then
         assertThat(count).isEqualTo(createdEmojiHistories.size());
@@ -108,8 +108,8 @@ public class EmojiHistoryRepositoryTest {
         emojiHistoryRepository.saveAll(emojiHistories);
 
         // when
-        emojiHistoryRepository.deleteOldest(mamberId);
-        List<EmojiHistoryResponseDto.Info> foundEmojiHistories = emojiHistoryRepository.findAllByMember(mamberId);
+        emojiHistoryRepository.deleteOldest(memberId);
+        List<EmojiHistoryResponseDto.Info> foundEmojiHistories = emojiHistoryRepository.findAllByMember(memberId);
 
         // then
         assertThat(foundEmojiHistories.size()).isEqualTo(emojiHistories.size() - 1);
@@ -124,9 +124,8 @@ public class EmojiHistoryRepositoryTest {
     }
 
     private List<EmojiHistory> createEmojiHistories(){
-
-        EmojiHistory e1 = new EmojiHistory(mamberId, "\uD83D\uDE01");
-        EmojiHistory e2 = new EmojiHistory(mamberId, "\uD83D\uDE02");
+        EmojiHistory e1 = new EmojiHistory(memberId, "\uD83D\uDE01");
+        EmojiHistory e2 = new EmojiHistory(memberId, "\uD83D\uDE02");
 
         List<EmojiHistory> list = List.of(
                 e1, e2

@@ -40,12 +40,12 @@ public class TodoHistoryControllerTest {
 
         // when & then
         mockMvc.perform(get(url)
-                        .param("memberId", memberId.toString())
-                        .param("dueDate", dueDate.toString())
-                        .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.id").value(info.getId()))
-                        .andExpect(jsonPath("$.dueDate").value(info.getDueDate().toString()));
+                .param("memberId", memberId.toString())
+                .param("dueDate", dueDate.toString())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(info.getId()))
+                .andExpect(jsonPath("$.dueDate").value(info.getDueDate().toString()));
     }
 
     @Test
@@ -61,10 +61,10 @@ public class TodoHistoryControllerTest {
 
         // when & then
         mockMvc.perform(get(url)
-                        .param("memberId", memberId.toString())
-                        .param("yearMonth", yearMonth)
-                        .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isOk());
+                .param("memberId", memberId.toString())
+                .param("yearMonth", yearMonth)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     private TodoHistoryResponseDto.Info createTodoHistoryInfo(LocalDate date){
