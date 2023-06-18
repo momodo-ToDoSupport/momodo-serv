@@ -1,4 +1,4 @@
-package com.momodo.todolist;
+package com.momodo.todohistory;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -10,14 +10,14 @@ import com.querydsl.core.types.Path;
 
 
 /**
- * QTodoList is a Querydsl query type for TodoList
+ * QTodoHistory is a Querydsl query type for TodoHistory
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QTodoList extends EntityPathBase<TodoList> {
+public class QTodoHistory extends EntityPathBase<TodoHistory> {
 
-    private static final long serialVersionUID = -820677412L;
+    private static final long serialVersionUID = -957402020L;
 
-    public static final QTodoList todoList = new QTodoList("todoList");
+    public static final QTodoHistory todoHistory = new QTodoHistory("todoHistory");
 
     public final com.momodo.commons.QBaseEntity _super = new com.momodo.commons.QBaseEntity(this);
 
@@ -45,16 +45,16 @@ public class QTodoList extends EntityPathBase<TodoList> {
 
     public final NumberPath<Integer> step = createNumber("step", Integer.class);
 
-    public QTodoList(String variable) {
-        super(TodoList.class, forVariable(variable));
+    public QTodoHistory(String variable) {
+        super(TodoHistory.class, forVariable(variable));
     }
 
-    public QTodoList(Path<? extends TodoList> path) {
+    public QTodoHistory(Path<? extends TodoHistory> path) {
         super(path.getType(), path.getMetadata());
     }
 
-    public QTodoList(PathMetadata metadata) {
-        super(TodoList.class, metadata);
+    public QTodoHistory(PathMetadata metadata) {
+        super(TodoHistory.class, metadata);
     }
 
 }

@@ -1,6 +1,6 @@
-package com.momodo.todolist;
+package com.momodo.todohistory;
 
-import com.momodo.todolist.dto.TodoListResponseDto;
+import com.momodo.todohistory.dto.TodoHistoryResponseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,25 +18,25 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(TodoListController.class)
-public class TodoListControllerTest {
+@WebMvcTest(TodoHistoryController.class)
+public class TodoHistoryControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private TodoListService todoListService;
+    private TodoHistoryService todoHistoryService;
 
     @Test
-    @DisplayName("TodoList DueDate로 조회")
+    @DisplayName("TodoHistory DueDate로 조회")
     public void findByDueDate() throws Exception{
         // given
         Long memberId = 1L;
         LocalDate dueDate = LocalDate.now();
-        String url = "/todolists/dueDate";
+        String url = "/todoHistories/dueDate";
 
-        TodoListResponseDto.Info info = createTodoListInfo(dueDate);
-        doReturn(info).when(todoListService).findByDueDate(memberId, dueDate);
+        TodoHistoryResponseDto.Info info = createTodoHistoryInfo(dueDate);
+        doReturn(info).when(todoHistoryService).findByDueDate(memberId, dueDate);
 
         // when & then
         mockMvc.perform(get(url)
@@ -50,15 +49,15 @@ public class TodoListControllerTest {
     }
 
     @Test
-    @DisplayName("TodoList 년월로 조회")
+    @DisplayName("TodoHistory 년월로 조회")
     public void findAllByYearMonth() throws Exception{
         // given
         Long memberId = 1L;
         String yearMonth = "2023-06";
-        String url = "/todolists/yearMonth";
+        String url = "/todoHistories/yearMonth";
 
-        List<TodoListResponseDto.Info> infoList = Collections.emptyList();
-        doReturn(infoList).when(todoListService).findAllByYearMonth(memberId, yearMonth);
+        List<TodoHistoryResponseDto.Info> infoList = Collections.emptyList();
+        doReturn(infoList).when(todoHistoryService).findAllByYearMonth(memberId, yearMonth);
 
         // when & then
         mockMvc.perform(get(url)
@@ -68,8 +67,8 @@ public class TodoListControllerTest {
                         .andExpect(status().isOk());
     }
 
-    private TodoListResponseDto.Info createTodoListInfo(LocalDate date){
-        return TodoListResponseDto.Info.builder()
+    private TodoHistoryResponseDto.Info createTodoHistoryInfo(LocalDate date){
+        return TodoHistoryResponseDto.Info.builder()
                 .id(1L)
                 .count(1L)
                 .completedCount(0L)

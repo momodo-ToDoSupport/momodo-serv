@@ -1,6 +1,6 @@
-package com.momodo.todolist;
+package com.momodo.todohistory;
 
-import com.momodo.todolist.dto.TodoListResponseDto;
+import com.momodo.todohistory.dto.TodoHistoryResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -16,11 +16,11 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class TodoListController {
+public class TodoHistoryController {
 
-    private final TodoListService todoListService;
+    private final TodoHistoryService todoHistoryService;
 
-    @Operation(summary = "Find By DueDate", description = "마감 날짜로 TodoList 정보 가져오기")
+    @Operation(summary = "Find By DueDate", description = "마감 날짜로 TodoHistory 정보 가져오기")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
@@ -31,13 +31,13 @@ public class TodoListController {
             @Parameter(name = "memberId", description = "사용자 아이디", example = "1"),
             @Parameter(name = "dueDate", description = "Todo 마감 날짜", example = "2023-06-05"),
     })
-    @GetMapping("/todolists/dueDate")
-    public TodoListResponseDto.Info findByDueDate(@RequestParam Long memberId, @RequestParam LocalDate dueDate){
+    @GetMapping("/todoHistories/dueDate")
+    public TodoHistoryResponseDto.Info findByDueDate(@RequestParam Long memberId, @RequestParam LocalDate dueDate){
 
-        return todoListService.findByDueDate(memberId, dueDate);
+        return todoHistoryService.findByDueDate(memberId, dueDate);
     }
 
-    @Operation(summary = "FindAll By YearMonth", description = "년월에 해당하는 TodoList들 정보 가져오기")
+    @Operation(summary = "FindAll By YearMonth", description = "년월에 해당하는 TodoHistory들 정보 가져오기")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
@@ -46,11 +46,11 @@ public class TodoListController {
     })
     @Parameters({
             @Parameter(name = "memberId", description = "사용자 아이디", example = "1"),
-            @Parameter(name = "yearMonth", description = "가져올 TodoList들의 년월", example = "2023-06 or 2023-09"),
+            @Parameter(name = "yearMonth", description = "가져올 TodoHistory들의 년월", example = "2023-06 or 2023-09"),
     })
-    @GetMapping("/todolists/yearMonth")
-    public List<TodoListResponseDto.Info> findAllByYearMonth(@RequestParam Long memberId, @RequestParam String yearMonth){
+    @GetMapping("/todoHistories/yearMonth")
+    public List<TodoHistoryResponseDto.Info> findAllByYearMonth(@RequestParam Long memberId, @RequestParam String yearMonth){
 
-        return todoListService.findAllByYearMonth(memberId, yearMonth);
+        return todoHistoryService.findAllByYearMonth(memberId, yearMonth);
     }
 }
