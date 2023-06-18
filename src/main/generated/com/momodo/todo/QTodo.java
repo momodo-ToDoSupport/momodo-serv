@@ -22,7 +22,7 @@ public class QTodo extends EntityPathBase<Todo> {
     public final com.momodo.commons.QBaseEntity _super = new com.momodo.commons.QBaseEntity(this);
 
     //inherited
-    public final StringPath createdBy = _super.createdBy;
+    public final NumberPath<Long> createdBy = _super.createdBy;
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
@@ -36,7 +36,7 @@ public class QTodo extends EntityPathBase<Todo> {
     public final BooleanPath isCompleted = createBoolean("isCompleted");
 
     //inherited
-    public final StringPath lastModifiedBy = _super.lastModifiedBy;
+    public final NumberPath<Long> lastModifiedBy = _super.lastModifiedBy;
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
