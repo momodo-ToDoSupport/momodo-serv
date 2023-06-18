@@ -1,7 +1,6 @@
 package com.momodo.todo;
 
 import com.momodo.commons.BaseEntity;
-
 import com.momodo.todo.dto.TodoResponseDto;
 import jakarta.persistence.*;
 import lombok.Builder;

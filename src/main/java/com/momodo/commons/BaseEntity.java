@@ -1,20 +1,23 @@
 package com.momodo.commons;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
 
-import java.time.LocalDateTime;
-
+//@EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
 @Getter
 @Setter
-public class BaseEntity {
+public class BaseEntity extends BaseTimeEntity{
 
-    private String createdBy;
-    private LocalDateTime createdDate;
-    private String lastModifiedBy;
-    private LocalDateTime lastModifiedDate;
+    @CreatedBy
+    @Column(updatable = false)
+    private Long createdBy;
 
+    @LastModifiedBy
+    private Long lastModifiedBy;
 
 }
