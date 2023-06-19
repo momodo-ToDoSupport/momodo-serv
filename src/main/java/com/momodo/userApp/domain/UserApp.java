@@ -1,6 +1,5 @@
 package com.momodo.userApp.domain;
 
-
 import com.momodo.commons.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
