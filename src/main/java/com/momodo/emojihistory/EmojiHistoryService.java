@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class EmojiHistoryService {
 
@@ -20,7 +19,6 @@ public class EmojiHistoryService {
 
     @Transactional
     public void create(Long memberId, String emoji){
-
         // 이미 저장되어 있는 이모지라면 날짜 최신화
         if(emojiHistoryRepository.existsByMemberIdAndEmoji(memberId, emoji)){
             EmojiHistory foundEmojiHistory = emojiHistoryRepository.findByEmoji(memberId, emoji);
@@ -43,8 +41,8 @@ public class EmojiHistoryService {
         emojiHistoryRepository.save(emojiHistory);
     }
 
+    @Transactional(readOnly = true)
     public List<EmojiHistoryResponseDto.Info> findAllByMember(Long memberId){
-
         return emojiHistoryRepository.findAllByMember(memberId);
     }
 }

@@ -22,6 +22,4 @@ public class MomodoServApplication {
 	public AuditorAware<String> auditorProvider() {
 		return () -> Optional.of(UUID.randomUUID().toString());
 	}
-
-
 }
