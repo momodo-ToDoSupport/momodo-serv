@@ -7,7 +7,9 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,6 +18,8 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('MEMBER')")
+@RequestMapping("/api/v1/todo-histories")
 public class TodoHistoryController {
 
     private final TodoHistoryService todoHistoryService;
@@ -29,9 +33,10 @@ public class TodoHistoryController {
     })
     @Parameters({
             @Parameter(name = "memberId", description = "사용자 아이디", example = "1"),
-            @Parameter(name = "dueDate", description = "Todo 마감 날짜", example = "2023-06-05"),
+            @Parameter(name = "dueDate", description = "Todo 마감 날짜", example = "2023-06-05")
     })
-    @GetMapping("/todoHistories/dueDate")
+    @PreAuthorize("hasAnyRole('MEMBER')")
+    @GetMapping("/dueDate")
     public TodoHistoryResponseDto.Info findByDueDate(@RequestParam Long memberId, @RequestParam LocalDate dueDate){
 
         return todoHistoryService.findByDueDate(memberId, dueDate);
@@ -46,9 +51,10 @@ public class TodoHistoryController {
     })
     @Parameters({
             @Parameter(name = "memberId", description = "사용자 아이디", example = "1"),
-            @Parameter(name = "yearMonth", description = "가져올 TodoHistory들의 년월", example = "2023-06 or 2023-09"),
+            @Parameter(name = "yearMonth", description = "가져올 TodoHistory들의 년월", example = "2023-06 or 2023-09")
     })
-    @GetMapping("/todoHistories/yearMonth")
+    @PreAuthorize("hasAnyRole('MEMBER')")
+    @GetMapping("/yearMonth")
     public List<TodoHistoryResponseDto.Info> findAllByYearMonth(@RequestParam Long memberId, @RequestParam String yearMonth){
 
         return todoHistoryService.findAllByYearMonth(memberId, yearMonth);

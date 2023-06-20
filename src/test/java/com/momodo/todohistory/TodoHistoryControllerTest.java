@@ -6,7 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
@@ -19,6 +21,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(TodoHistoryController.class)
+@MockBean(JpaMetamodelMappingContext.class)
+@WithMockUser(roles = {"MEMBER"})
 public class TodoHistoryControllerTest {
 
     @Autowired
@@ -33,7 +37,7 @@ public class TodoHistoryControllerTest {
         // given
         Long memberId = 1L;
         LocalDate dueDate = LocalDate.now();
-        String url = "/todoHistories/dueDate";
+        String url = "/api/v1/todo-histories/dueDate";
 
         TodoHistoryResponseDto.Info info = createTodoHistoryInfo(dueDate);
         doReturn(info).when(todoHistoryService).findByDueDate(memberId, dueDate);
@@ -54,7 +58,7 @@ public class TodoHistoryControllerTest {
         // given
         Long memberId = 1L;
         String yearMonth = "2023-06";
-        String url = "/todoHistories/yearMonth";
+        String url = "/api/v1/todo-histories/yearMonth";
 
         List<TodoHistoryResponseDto.Info> infoList = Collections.emptyList();
         doReturn(infoList).when(todoHistoryService).findAllByYearMonth(memberId, yearMonth);

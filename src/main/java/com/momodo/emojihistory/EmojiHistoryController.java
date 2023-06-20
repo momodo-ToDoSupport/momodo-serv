@@ -8,15 +8,17 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/emoji-histories")
 public class EmojiHistoryController {
 
     private final EmojiHistoryService emojiHistoryService;
@@ -29,9 +31,10 @@ public class EmojiHistoryController {
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     })
     @Parameters({
-            @Parameter(name = "memberId", description = "사용자 아이디", example = "1"),
+            @Parameter(name = "memberId", description = "사용자 아이디", example = "1")
     })
-    @GetMapping("/emojiHistories")
+    @GetMapping
+    @PreAuthorize("hasAnyRole('MEMBER')")
     public List<EmojiHistoryResponseDto.Info> findAllByMember(@RequestParam Long memberId){
 
         return emojiHistoryService.findAllByMember(memberId);

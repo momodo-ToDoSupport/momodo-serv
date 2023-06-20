@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/todos")
 public class TodoController {
 
     private final TodoService todoService;
@@ -33,9 +35,10 @@ public class TodoController {
             @Parameter(name = "emoji", description = "이모지", example = "\uD83D\uDE01"),
             @Parameter(name = "dueDate", description = "Todo 마감 날짜", example = "2023-06-05"),
             @Parameter(name = "repeatDays", description = "Todo 반복 요일", example = "0: 일, 1: 월, 2:화, 3:수, 4:목, 5:금, 6:토\n"
-            + "1. 화요일 반복 -> 2\n" + "2. 목, 금요일 반복 -> 4,5\n" + "3. 매일 반복 -> 0-6" )
+            + "월,화,수 반복 -> 123" )
     })
-    @PostMapping("/todos")
+    @PreAuthorize("hasAnyRole('MEMBER')")
+    @PostMapping
     public void createTodo(@RequestBody @Valid TodoRequestDto.Create requestDto){
 
         todoService.createTodo(requestDto);
@@ -49,7 +52,8 @@ public class TodoController {
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     })
     @Parameter(name = "id", description = "Todo 아이디", example = "1")
-    @GetMapping("/todos/{id}")
+    @PreAuthorize("hasAnyRole('MEMBER')")
+    @GetMapping("/{id}")
     public TodoResponseDto.Info findById(@PathVariable Long id){
 
         return todoService.findById(id);
@@ -63,7 +67,8 @@ public class TodoController {
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     })
     @Parameter(name = "dueDate", description = "Todo 마감 날짜", example = "2023-06-05")
-    @GetMapping("/todos")
+    @PreAuthorize("hasAnyRole('MEMBER')")
+    @GetMapping
     public List<TodoResponseDto.Info> findAllByDueDate(@RequestParam LocalDate dueDate){
 
         return todoService.findAllByDueDate(dueDate);
@@ -77,10 +82,10 @@ public class TodoController {
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     })
     @Parameters({
-            @Parameter(name = "id", description = "Todo 아이디", example = "1"),
-            @Parameter(name = "isCompleted;", description = "Todo 완료 여부", example = "true")
+            @Parameter(name = "id", description = "Todo 아이디", example = "1")
     })
-    @PatchMapping("/todos/{id}/updateCompleted")
+    @PreAuthorize("hasAnyRole('MEMBER')")
+    @PatchMapping("/{id}/updateCompleted")
     public void updateCompleted(@PathVariable Long id){
 
         todoService.updateCompleted(id);
@@ -98,9 +103,10 @@ public class TodoController {
             @Parameter(name = "title", description = "Todo 제목", example = "운동하기"),
             @Parameter(name = "emoji", description = "이모지", example = "\uD83D\uDE01"),
             @Parameter(name = "repeatDays", description = "Todo 반복 요일", example = "0: 일, 1: 월, 2:화, 3:수, 4:목, 5:금, 6:토\n"
-                    + "1. 화요일 반복 -> 2\n" + "2. 목, 금요일 반복 -> 4,5\n" + "3. 매일 반복 -> 0-6" )
+                    + "월,화,수 반복 -> 123" )
     })
-    @PatchMapping("/todos/{id}/update")
+    @PreAuthorize("hasAnyRole('MEMBER')")
+    @PatchMapping("/{id}")
     public void update(@PathVariable Long id,
                                              @RequestBody TodoRequestDto.Edit request){
 
@@ -115,7 +121,8 @@ public class TodoController {
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     })
     @Parameter(name = "id", description = "Todo 아이디", example = "1")
-    @DeleteMapping("/todos/{id}")
+    @PreAuthorize("hasAnyRole('MEMBER')")
+    @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id){
 
         todoService.deleteById(id);

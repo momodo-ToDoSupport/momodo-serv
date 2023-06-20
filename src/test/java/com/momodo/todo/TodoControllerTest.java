@@ -11,13 +11,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 import java.util.*;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -25,6 +28,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(TodoController.class)
+@MockBean(JpaMetamodelMappingContext.class)
+@WithMockUser(roles = {"MEMBER"})
 public class TodoControllerTest {
 
     @Autowired
@@ -46,12 +51,13 @@ public class TodoControllerTest {
     @DisplayName("Todo 등록")
     public void create() throws Exception{
         // given
-        String url = "/todos";
+        String url = "/api/v1/todos";
         TodoRequestDto.Create todoRequest = todoRequestDto();
-        doReturn(todoRequestDto().toEntity()).when(todoService).createTodo(todoRequest);
+        doNothing().when(todoService).createTodo(todoRequest);
 
         // when & then
         mockMvc.perform(post(url)
+                .with(csrf())
                 .content(mapper.writeValueAsString(todoRequest))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -61,7 +67,7 @@ public class TodoControllerTest {
     @DisplayName("Todo Id로 조회")
     public void findById() throws Exception{
         // given
-        String url = "/todos/1";
+        String url = "/api/v1/todos/1";
         TodoResponseDto.Info todoInfo = todoResponseDto();
         doReturn(todoInfo).when(todoService).findById(todoInfo.getId());
 
@@ -76,7 +82,7 @@ public class TodoControllerTest {
     public void findAllByDueDate() throws Exception{
         // given
         LocalDate date = LocalDate.now();
-        String url = "/todos";
+        String url = "/api/v1/todos";
         List<TodoResponseDto.Info> todoInfoList = Collections.emptyList();
         doReturn(todoInfoList).when(todoService).findAllByDueDate(date);
 
@@ -91,12 +97,13 @@ public class TodoControllerTest {
     @DisplayName("Todo 성공 여부 수정")
     public void updateCompleted() throws Exception{
         // given
-        String url = "/todos/1/updateCompleted";
+        String url = "/api/v1/todos/1/updateCompleted";
         Long id = 1L;
         doNothing().when(todoService).updateCompleted(id);
 
         // when & then
         mockMvc.perform(patch(url)
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -105,13 +112,14 @@ public class TodoControllerTest {
     @DisplayName("Todo 정보 수정")
     public void update() throws Exception{
         // given
-        String url = "/todos/1/update";
+        String url = "/api/v1/todos/1";
         Long id = 1L;
         TodoRequestDto.Edit request = new TodoRequestDto.Edit("Edit Title", "Edit Emoji", "Edit RepeatDays");
         doNothing().when(todoService).update(id, request);
 
         // when & then
         mockMvc.perform(patch(url)
+                .with(csrf())
                 .content(mapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -121,12 +129,13 @@ public class TodoControllerTest {
     @DisplayName("Todo 삭제")
     public void deleteById() throws Exception{
         // given
-        String url = "/todos/1";
+        String url = "/api/v1/todos/1";
         Long id = 1L;
         doNothing().when(todoService).deleteById(id);
 
         // when & then
         mockMvc.perform(delete(url)
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
