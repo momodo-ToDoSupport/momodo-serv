@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,13 +32,10 @@ public class EmojiHistoryController {
             @ApiResponse(responseCode = "404", description = "NOT FOUND"),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     })
-    @Parameters({
-            @Parameter(name = "memberId", description = "사용자 아이디", example = "1")
-    })
     @GetMapping
     @PreAuthorize("hasAnyRole('MEMBER')")
-    public List<EmojiHistoryResponseDto.Info> findAllByMember(@RequestParam Long memberId){
-
+    public List<EmojiHistoryResponseDto.Info> findAllByMember(@AuthenticationPrincipal User user){
+        String memberId = user.getUsername();
         return emojiHistoryService.findAllByMember(memberId);
     }
 }

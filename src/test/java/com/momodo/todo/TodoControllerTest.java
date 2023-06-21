@@ -40,6 +40,8 @@ public class TodoControllerTest {
 
     private ObjectMapper mapper;
 
+    private String memberId = "Test";
+
     @BeforeEach
     public void init(){
         mapper = new ObjectMapper();
@@ -53,7 +55,7 @@ public class TodoControllerTest {
         // given
         String url = "/api/v1/todos";
         TodoRequestDto.Create todoRequest = todoRequestDto();
-        doNothing().when(todoService).createTodo(todoRequest);
+        doNothing().when(todoService).createTodo(todoRequest, memberId);
 
         // when & then
         mockMvc.perform(post(url)
@@ -142,7 +144,6 @@ public class TodoControllerTest {
 
     private TodoRequestDto.Create todoRequestDto(){
         return TodoRequestDto.Create.builder()
-                .memberId(1L)
                 .title("Test Todo")
                 .emoji("Test Emoji")
                 .dueDate(LocalDate.now())

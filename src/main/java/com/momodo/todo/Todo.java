@@ -20,7 +20,7 @@ public class Todo extends BaseEntity {
     private Long id;
 
     @Column(name = "member_id", nullable = false)
-    private Long memberId;
+    private String memberId;
 
     @Column(nullable = false)
     private String title;
@@ -38,7 +38,7 @@ public class Todo extends BaseEntity {
     private String repeatDays;
 
     @Builder
-    public Todo(Long id, Long memberId, String title, String emoji, LocalDate dueDate, boolean isCompleted, String repeatDays) {
+    public Todo(Long id, String memberId, String title, String emoji, LocalDate dueDate, boolean isCompleted, String repeatDays) {
         this.id = id;
         this.memberId = memberId;
         this.title = title;
@@ -57,6 +57,10 @@ public class Todo extends BaseEntity {
                 .isCompleted(isCompleted)
                 .repeatDays(repeatDays)
                 .build();
+    }
+
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
     }
 
     public void updateCompleted(){

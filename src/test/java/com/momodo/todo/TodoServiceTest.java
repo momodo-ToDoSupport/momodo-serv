@@ -2,6 +2,7 @@ package com.momodo.todo;
 
 import com.momodo.todo.dto.TodoRequestDto;
 import com.momodo.todo.dto.TodoResponseDto;
+import com.momodo.todo.event.TodoCreatedEvent;
 import com.momodo.todo.repository.TodoRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.test.context.event.ApplicationEvents;
+import org.springframework.test.context.event.RecordApplicationEvents;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -19,6 +24,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@RecordApplicationEvents
 public class TodoServiceTest {
 
     @InjectMocks
@@ -26,6 +32,14 @@ public class TodoServiceTest {
 
     @Mock
     private TodoRepository todoRepository;
+
+    @Mock
+    private ApplicationEventPublisher publisher;
+
+    @Mock
+    private ApplicationEvents events;
+
+    private String memberId = "Test";
 
     @Test
     @Transactional
@@ -37,10 +51,12 @@ public class TodoServiceTest {
 
         // when
         when(todoRepository.save(any(Todo.class))).thenReturn(todo);
-        todoService.createTodo(todoRequest);
+        todoService.createTodo(todoRequest, memberId);
 
         // then
         verify(todoRepository, times(1)).save(any(Todo.class));
+        long count = (int)events.stream(TodoCreatedEvent.class).count();
+        assertThat(count).isEqualTo(1L);
     }
 
     @Test
@@ -130,7 +146,6 @@ public class TodoServiceTest {
 
     private TodoRequestDto.Create todoRequestDto(){
         return TodoRequestDto.Create.builder()
-                .memberId(1L)
                 .title("Test Todo")
                 .emoji("Test Emoji")
                 .dueDate(LocalDate.now())
@@ -140,7 +155,7 @@ public class TodoServiceTest {
 
     private Todo createTodo(){
         return Todo.builder()
-                .memberId(1L)
+                .memberId(memberId)
                 .title("Test Todo")
                 .emoji("Test Emoji")
                 .dueDate(LocalDate.now())

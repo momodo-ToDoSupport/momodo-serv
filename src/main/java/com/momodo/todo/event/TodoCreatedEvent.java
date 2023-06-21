@@ -2,15 +2,15 @@ package com.momodo.todo.event;
 
 public class TodoCreatedEvent {
 
-    private Long memberId;
+    private String memberId;
     private String emoji;
 
-    public TodoCreatedEvent(Long memberId, String emoji){
+    public TodoCreatedEvent(String memberId, String emoji){
         this.memberId = memberId;
         this.emoji = emoji;
     }
 
-    public Long getMemberId() {
+    public String getMemberId() {
         return memberId;
     }
 

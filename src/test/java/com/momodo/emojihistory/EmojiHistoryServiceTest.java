@@ -27,7 +27,7 @@ public class EmojiHistoryServiceTest {
     private EmojiHistoryRepository emojiHistoryRepository;
 
     private final int SAVE_MAX_SIZE = 10;
-    private Long memberId = 1L;
+    private String memberId = "test";
     private String emoji = "\uD83D\uDE01";
 
     @Test
@@ -78,7 +78,7 @@ public class EmojiHistoryServiceTest {
         emojiHistoryService.create(emojiHistory.getMemberId(), emojiHistory.getEmoji());
 
         // then
-        verify(emojiHistoryRepository, times(1)).deleteOldest(any(Long.class));
+        verify(emojiHistoryRepository, times(1)).deleteOldest(any(String.class));
         verify(emojiHistoryRepository, times(1)).save(any(EmojiHistory.class));
     }
 

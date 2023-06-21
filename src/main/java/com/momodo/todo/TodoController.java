@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -39,9 +41,11 @@ public class TodoController {
     })
     @PreAuthorize("hasAnyRole('MEMBER')")
     @PostMapping
-    public void createTodo(@RequestBody @Valid TodoRequestDto.Create requestDto){
+    public void createTodo(@RequestBody @Valid TodoRequestDto.Create requestDto
+            , @AuthenticationPrincipal User user){
 
-        todoService.createTodo(requestDto);
+        String memberId = user.getUsername();
+        todoService.createTodo(requestDto, memberId);
     }
 
     @Operation(summary = "Find By Id", description = "Id로 Todo 정보 가져오기")
@@ -81,9 +85,7 @@ public class TodoController {
             @ApiResponse(responseCode = "404", description = "NOT FOUND"),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     })
-    @Parameters({
-            @Parameter(name = "id", description = "Todo 아이디", example = "1")
-    })
+    @Parameter(name = "id", description = "Todo 아이디", example = "1")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @PatchMapping("/{id}/updateCompleted")
     public void updateCompleted(@PathVariable Long id){

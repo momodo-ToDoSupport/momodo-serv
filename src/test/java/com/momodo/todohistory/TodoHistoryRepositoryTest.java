@@ -27,6 +27,8 @@ public class TodoHistoryRepositoryTest {
     @Autowired
     private TodoHistoryRepository todoHistoryRepository;
 
+    private String memberId = "Test";
+
     @Test
     @DisplayName("TodoHistory 등록")
     public void create(){
@@ -107,7 +109,7 @@ public class TodoHistoryRepositoryTest {
 
     private TodoHistory createTodoHistory(){
         return TodoHistory.builder()
-                .memberId(1L)
+                .memberId(memberId)
                 .count(1L)
                 .completedCount(0L)
                 .step(0)

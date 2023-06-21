@@ -31,11 +31,12 @@ public class TodoHistoryControllerTest {
     @MockBean
     private TodoHistoryService todoHistoryService;
 
+    private String memberId = "Test";
+
     @Test
     @DisplayName("TodoHistory DueDate로 조회")
     public void findByDueDate() throws Exception{
         // given
-        Long memberId = 1L;
         LocalDate dueDate = LocalDate.now();
         String url = "/api/v1/todo-histories/dueDate";
 
@@ -56,7 +57,6 @@ public class TodoHistoryControllerTest {
     @DisplayName("TodoHistory 년월로 조회")
     public void findAllByYearMonth() throws Exception{
         // given
-        Long memberId = 1L;
         String yearMonth = "2023-06";
         String url = "/api/v1/todo-histories/yearMonth";
 
@@ -65,7 +65,7 @@ public class TodoHistoryControllerTest {
 
         // when & then
         mockMvc.perform(get(url)
-                .param("memberId", memberId.toString())
+                .param("memberId", memberId)
                 .param("yearMonth", yearMonth)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());

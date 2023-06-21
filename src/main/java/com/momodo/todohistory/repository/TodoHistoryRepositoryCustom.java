@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface TodoHistoryRepositoryCustom {
 
-    TodoHistory findByDueDate(Long memberId, LocalDate dueDate);
+    TodoHistory findByDueDate(String memberId, LocalDate dueDate);
 
-    List<TodoHistoryResponseDto.Info> findAllByYearMonth(Long memberId, LocalDate from, LocalDate to);
+    List<TodoHistoryResponseDto.Info> findAllByYearMonth(String memberId, LocalDate from, LocalDate to);
 }

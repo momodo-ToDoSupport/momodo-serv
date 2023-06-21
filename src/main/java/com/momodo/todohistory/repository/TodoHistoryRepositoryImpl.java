@@ -19,7 +19,7 @@ public class TodoHistoryRepositoryImpl implements TodoHistoryRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public TodoHistory findByDueDate(Long memberId, LocalDate dueDate) {
+    public TodoHistory findByDueDate(String memberId, LocalDate dueDate) {
         return queryFactory
                 .selectFrom(todoHistory)
                 .where(todoHistory.memberId.eq(memberId)
@@ -28,7 +28,7 @@ public class TodoHistoryRepositoryImpl implements TodoHistoryRepositoryCustom {
     }
 
     @Override
-    public List<TodoHistoryResponseDto.Info> findAllByYearMonth(Long memberId, LocalDate from, LocalDate to) {
+    public List<TodoHistoryResponseDto.Info> findAllByYearMonth(String memberId, LocalDate from, LocalDate to) {
         return queryFactory
                 .select(Projections.constructor(TodoHistoryResponseDto.Info.class,
                         todoHistory.id,

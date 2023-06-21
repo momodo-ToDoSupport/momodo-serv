@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,14 +33,13 @@ public class TodoHistoryController {
             @ApiResponse(responseCode = "404", description = "NOT FOUND"),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     })
-    @Parameters({
-            @Parameter(name = "memberId", description = "사용자 아이디", example = "1"),
-            @Parameter(name = "dueDate", description = "Todo 마감 날짜", example = "2023-06-05")
-    })
+    @Parameter(name = "dueDate", description = "Todo 마감 날짜", example = "2023-06-05")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @GetMapping("/dueDate")
-    public TodoHistoryResponseDto.Info findByDueDate(@RequestParam Long memberId, @RequestParam LocalDate dueDate){
+    public TodoHistoryResponseDto.Info findByDueDate(@RequestParam LocalDate dueDate
+            , @AuthenticationPrincipal User user){
 
+        String memberId = user.getUsername();
         return todoHistoryService.findByDueDate(memberId, dueDate);
     }
 
@@ -49,14 +50,13 @@ public class TodoHistoryController {
             @ApiResponse(responseCode = "404", description = "NOT FOUND"),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     })
-    @Parameters({
-            @Parameter(name = "memberId", description = "사용자 아이디", example = "1"),
-            @Parameter(name = "yearMonth", description = "가져올 TodoHistory들의 년월", example = "2023-06 or 2023-09")
-    })
+    @Parameter(name = "yearMonth", description = "가져올 TodoHistory들의 년월", example = "2023-06 or 2023-09")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @GetMapping("/yearMonth")
-    public List<TodoHistoryResponseDto.Info> findAllByYearMonth(@RequestParam Long memberId, @RequestParam String yearMonth){
+    public List<TodoHistoryResponseDto.Info> findAllByYearMonth(@RequestParam String yearMonth
+            , @AuthenticationPrincipal User user){
 
+        String memberId = user.getUsername();
         return todoHistoryService.findAllByYearMonth(memberId, yearMonth);
     }
 }

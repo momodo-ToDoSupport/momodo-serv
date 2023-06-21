@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EmojiHistoryRepository extends JpaRepository<EmojiHistory, Long>, EmojiHistoryRepositoryCustom {
 
-    boolean existsByMemberIdAndEmoji(Long memberId, String emoji);
+    boolean existsByMemberIdAndEmoji(String memberId, String emoji);
 
-    Long countByMemberId(Long memberId);
+    Long countByMemberId(String memberId);
 }

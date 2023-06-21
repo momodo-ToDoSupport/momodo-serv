@@ -28,6 +28,8 @@ public class TodoHistoryServiceTest {
     @Mock
     private TodoHistoryRepository todoHistoryRepository;
 
+    private String memberId = "Test";
+
     @Test
     @DisplayName("Todo 등록")
     public void create(){
@@ -71,12 +73,11 @@ public class TodoHistoryServiceTest {
     @DisplayName("TodoHistory 년월로 조회")
     public void findAllByYearAndMonth(){
         // given
-        Long memberId = 1L;
         String yearMonth = "2023-06";
         List<TodoHistoryResponseDto.Info> infoList = createTodoHistorys();
 
         // stub
-        when(todoHistoryRepository.findAllByYearMonth(any(Long.class), any(LocalDate.class), any(LocalDate.class))).thenReturn(infoList);
+        when(todoHistoryRepository.findAllByYearMonth(any(String.class), any(LocalDate.class), any(LocalDate.class))).thenReturn(infoList);
 
         // when
         List<TodoHistoryResponseDto.Info> result = todoHistoryService.findAllByYearMonth(memberId, yearMonth);
@@ -87,7 +88,7 @@ public class TodoHistoryServiceTest {
 
     private Todo createTodo(){
         return Todo.builder()
-                .memberId(1L)
+                .memberId(memberId)
                 .title("Test Todo")
                 .emoji("Test Emoji")
                 .dueDate(LocalDate.now())
@@ -98,7 +99,7 @@ public class TodoHistoryServiceTest {
 
     private TodoHistory createTodoHistory(){
         return TodoHistory.builder()
-                .memberId(1L)
+                .memberId(memberId)
                 .count(1L)
                 .completedCount(0L)
                 .step(0)

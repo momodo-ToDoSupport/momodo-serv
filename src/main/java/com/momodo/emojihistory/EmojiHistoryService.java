@@ -18,7 +18,7 @@ public class EmojiHistoryService {
     private final int SAVE_MAX_SIZE = 10;
 
     @Transactional
-    public void create(Long memberId, String emoji){
+    public void create(String memberId, String emoji){
         // 이미 저장되어 있는 이모지라면 날짜 최신화
         if(emojiHistoryRepository.existsByMemberIdAndEmoji(memberId, emoji)){
             EmojiHistory foundEmojiHistory = emojiHistoryRepository.findByEmoji(memberId, emoji);
@@ -42,7 +42,7 @@ public class EmojiHistoryService {
     }
 
     @Transactional(readOnly = true)
-    public List<EmojiHistoryResponseDto.Info> findAllByMember(Long memberId){
+    public List<EmojiHistoryResponseDto.Info> findAllByMember(String memberId){
         return emojiHistoryRepository.findAllByMember(memberId);
     }
 }
