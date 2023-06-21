@@ -15,9 +15,6 @@ public class TodoRequestDto {
     @NoArgsConstructor
     public static class Create{
 
-        @NotNull(message = "사용자 아이디는 필수 입력 값입니다.")
-        private Long memberId;
-
         @NotBlank(message = "제목은 필수 입력 값입니다.")
         private String title;
 
@@ -29,8 +26,7 @@ public class TodoRequestDto {
         private String repeatDays;
 
         @Builder
-        public Create(Long memberId, String title, String emoji, LocalDate dueDate, String repeatDays) {
-            this.memberId = memberId;
+        public Create(String title, String emoji, LocalDate dueDate, String repeatDays) {
             this.title = title;
             this.emoji = emoji;
             this.dueDate = dueDate;
@@ -39,7 +35,6 @@ public class TodoRequestDto {
 
         public Todo toEntity(){
             return Todo.builder()
-                    .memberId(memberId)
                     .title(title)
                     .emoji(emoji)
                     .dueDate(dueDate)

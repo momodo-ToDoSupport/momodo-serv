@@ -19,13 +19,13 @@ public class EmojiHistory extends BaseEntity {
     private Long id;
 
     @Column(name = "member_id", nullable = false)
-    private Long memberId;
+    private String memberId;
 
     @Column(nullable = false)
     private String emoji;
 
     @Builder
-    public EmojiHistory(Long memberId, String emoji) {
+    public EmojiHistory(String memberId, String emoji) {
         this.memberId = memberId;
         this.emoji = emoji;
     }

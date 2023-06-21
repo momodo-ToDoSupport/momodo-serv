@@ -31,7 +31,7 @@ public class EmojiHistoryControllerTest {
     @MockBean
     private EmojiHistoryService emojiHistoryService;
 
-    private Long memberId = 1L;
+    private String memberId = "Test";
 
     @Test
     @DisplayName("EmojiHistories MemberId로 조회")

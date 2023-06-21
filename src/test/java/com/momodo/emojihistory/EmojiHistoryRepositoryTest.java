@@ -30,7 +30,7 @@ public class EmojiHistoryRepositoryTest {
     @Autowired
     private EmojiHistoryRepository emojiHistoryRepository;
 
-    private Long memberId = 1L;
+    private String memberId = "Test";
     private String emoji = "\uD83D\uDE01";
 
     @Test
@@ -113,12 +113,12 @@ public class EmojiHistoryRepositoryTest {
 
         // then
         assertThat(foundEmojiHistories.size()).isEqualTo(emojiHistories.size() - 1);
-        assertThat(foundEmojiHistories.get(0).getEmoji()).isEqualTo(emoji);
+        assertThat(foundEmojiHistories.get(0).getEmoji()).isEqualTo(emojiHistories.get(0).getEmoji());
     }
 
     private EmojiHistory createEmojiHistory(){
         return EmojiHistory.builder()
-                .memberId(1L)
+                .memberId(memberId)
                 .emoji(emoji)
                 .build();
     }

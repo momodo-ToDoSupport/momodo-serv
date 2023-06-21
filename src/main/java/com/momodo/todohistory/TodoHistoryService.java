@@ -36,12 +36,12 @@ public class TodoHistoryService {
         todoHistoryRepository.save(todoHistory);
     }
 
-    public TodoHistoryResponseDto.Info findByDueDate(Long memberId, LocalDate dueDate) {
+    public TodoHistoryResponseDto.Info findByDueDate(String memberId, LocalDate dueDate) {
 
         return todoHistoryRepository.findByDueDate(memberId, dueDate).toInfo();
     }
 
-    public List<TodoHistoryResponseDto.Info> findAllByYearMonth(Long memberId, String yearMonth) {
+    public List<TodoHistoryResponseDto.Info> findAllByYearMonth(String memberId, String yearMonth) {
 
         LocalDate firstDate = LocalDate.parse(yearMonth + "-01");
         LocalDate lastDate = firstDate.withDayOfMonth(firstDate.lengthOfMonth());

@@ -19,11 +19,11 @@ public class EmojiHistoryRepositoryImpl implements EmojiHistoryRepositoryCustom{
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public EmojiHistory findByEmoji(Long memberId, String emoji) {
+    public EmojiHistory findByEmoji(String memberId, String emoji) {
         return queryFactory
                 .select(Projections.fields(EmojiHistory.class,
                         emojiHistory.id,
-                        Expressions.asNumber(memberId).as("memberId"),
+                        Expressions.asString(memberId).as("memberId"),
                         Expressions.asString(emoji).as("emoji")
                 ))
                 .from(emojiHistory)
@@ -33,7 +33,7 @@ public class EmojiHistoryRepositoryImpl implements EmojiHistoryRepositoryCustom{
     }
 
     @Override
-    public List<EmojiHistoryResponseDto.Info> findAllByMember(Long memberId) {
+    public List<EmojiHistoryResponseDto.Info> findAllByMember(String memberId) {
         return queryFactory
                 .select(Projections.constructor(EmojiHistoryResponseDto.Info.class,
                         emojiHistory.id,
@@ -45,7 +45,7 @@ public class EmojiHistoryRepositoryImpl implements EmojiHistoryRepositoryCustom{
     }
 
     @Override
-    public void deleteOldest(Long memberId) {
+    public void deleteOldest(String memberId) {
         long id = queryFactory
                 .select(emojiHistory.id)
                 .from(emojiHistory)

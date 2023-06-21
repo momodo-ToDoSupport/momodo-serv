@@ -22,12 +22,13 @@ public class TodoService {
     private final ApplicationEventPublisher publisher;
 
     @Transactional
-    public void createTodo(TodoRequestDto.Create request){
-        Todo createTodo = request.toEntity();
+    public void createTodo(TodoRequestDto.Create request, String memberId){
+        Todo todo = request.toEntity();
+        todo.setMemberId(memberId);
 
-        todoRepository.save(createTodo);
+        todoRepository.save(todo);
 
-        publisher.publishEvent(new TodoCreatedEvent(request.getMemberId(), request.getEmoji()));
+        publisher.publishEvent(new TodoCreatedEvent(todo.getMemberId(), request.getEmoji()));
     }
 
     @Transactional(readOnly = true)

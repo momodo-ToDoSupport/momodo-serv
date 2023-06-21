@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface EmojiHistoryRepositoryCustom {
 
-    EmojiHistory findByEmoji(Long memberId, String emoji);
+    EmojiHistory findByEmoji(String memberId, String emoji);
 
-    List<EmojiHistoryResponseDto.Info> findAllByMember(Long memberId);
+    List<EmojiHistoryResponseDto.Info> findAllByMember(String memberId);
 
-    void deleteOldest(Long memberId);
+    void deleteOldest(String memberId);
 }
