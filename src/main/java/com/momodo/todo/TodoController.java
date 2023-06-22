@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
+@Tag(name="Todo", description = "Todo에 관한 API 입니다.")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/todos")
@@ -25,20 +27,6 @@ public class TodoController {
     private final TodoService todoService;
 
     @Operation(summary = "Create Todo", description = "Todo 생성하기")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND"),
-            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-    })
-    @Parameters({
-            @Parameter(name = "memberId", description = "사용자 아이디", example = "1"),
-            @Parameter(name = "title", description = "Todo 제목", example = "운동하기"),
-            @Parameter(name = "emoji", description = "이모지", example = "\uD83D\uDE01"),
-            @Parameter(name = "dueDate", description = "Todo 마감 날짜", example = "2023-06-05"),
-            @Parameter(name = "repeatDays", description = "Todo 반복 요일", example = "0: 일, 1: 월, 2:화, 3:수, 4:목, 5:금, 6:토\n"
-            + "월,화,수 반복 -> 123" )
-    })
     @PreAuthorize("hasAnyRole('MEMBER')")
     @PostMapping
     public void createTodo(@RequestBody @Valid TodoRequestDto.Create requestDto
@@ -49,13 +37,6 @@ public class TodoController {
     }
 
     @Operation(summary = "Find By Id", description = "Id로 Todo 정보 가져오기")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND"),
-            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-    })
-    @Parameter(name = "id", description = "Todo 아이디", example = "1")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @GetMapping("/{id}")
     public TodoResponseDto.Info findById(@PathVariable Long id){
@@ -64,13 +45,6 @@ public class TodoController {
     }
 
     @Operation(summary = "FindAll By DueDate", description = "DueDate로 날짜에 해당하는 Todo들의 정보 가져오기")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND"),
-            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-    })
-    @Parameter(name = "dueDate", description = "Todo 마감 날짜", example = "2023-06-05")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @GetMapping
     public List<TodoResponseDto.Info> findAllByDueDate(@RequestParam LocalDate dueDate){
@@ -79,13 +53,6 @@ public class TodoController {
     }
 
     @Operation(summary = "Update Completed", description = "Todo 완료 여부 수정하기")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND"),
-            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-    })
-    @Parameter(name = "id", description = "Todo 아이디", example = "1")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @PatchMapping("/{id}/updateCompleted")
     public void updateCompleted(@PathVariable Long id){
@@ -94,19 +61,6 @@ public class TodoController {
     }
 
     @Operation(summary = "Update", description = "Todo 정보 수정")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND"),
-            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-    })
-    @Parameters({
-            @Parameter(name = "id", description = "Todo 아이디", example = "1"),
-            @Parameter(name = "title", description = "Todo 제목", example = "운동하기"),
-            @Parameter(name = "emoji", description = "이모지", example = "\uD83D\uDE01"),
-            @Parameter(name = "repeatDays", description = "Todo 반복 요일", example = "0: 일, 1: 월, 2:화, 3:수, 4:목, 5:금, 6:토\n"
-                    + "월,화,수 반복 -> 123" )
-    })
     @PreAuthorize("hasAnyRole('MEMBER')")
     @PatchMapping("/{id}")
     public void update(@PathVariable Long id,
@@ -116,13 +70,6 @@ public class TodoController {
     }
 
     @Operation(summary = "Delete", description = "Todo 삭제")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND"),
-            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-    })
-    @Parameter(name = "id", description = "Todo 아이디", example = "1")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id){
