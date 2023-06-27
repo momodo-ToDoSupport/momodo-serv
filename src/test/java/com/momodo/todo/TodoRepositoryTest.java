@@ -28,6 +28,7 @@ public class TodoRepositoryTest {
     @Autowired
     private TodoRepository todoRepository;
 
+    private String memberId = "Test";
     @Test
     @DisplayName("Todo 등록")
     public void create(){
@@ -120,7 +121,7 @@ public class TodoRepositoryTest {
 
     private Todo createTodo(){
         return Todo.builder()
-                .memberId(1L)
+                .memberId(memberId)
                 .title("Test Todo")
                 .emoji("Test Emoji")
                 .dueDate(LocalDate.now())
@@ -130,10 +131,10 @@ public class TodoRepositoryTest {
     }
 
     private List<Todo> createTodoList(){
-        Todo todo1 = new Todo(1L, 1L, "todo1", "emoji1", LocalDate.of(2023,6,2),false,null);
-        Todo todo2 = new Todo(2L, 1L, "todo2", "emoji2", LocalDate.of(2023,6,3),false,null);
-        Todo todo3 = new Todo(3L, 1L, "todo3", "emoji3", LocalDate.now(),false,null);
-        Todo todo4 = new Todo(4L, 1L, "todo4", "emoji4", LocalDate.now(),false,null);
+        Todo todo1 = new Todo(1L, memberId, "todo1", "emoji1", LocalDate.of(2023,6,2),false,null);
+        Todo todo2 = new Todo(2L, memberId, "todo2", "emoji2", LocalDate.of(2023,6,3),false,null);
+        Todo todo3 = new Todo(3L, memberId, "todo3", "emoji3", LocalDate.now(),false,null);
+        Todo todo4 = new Todo(4L, memberId, "todo4", "emoji4", LocalDate.now(),false,null);
         List<Todo> todos = List.of(
                 todo1, todo2, todo3, todo4
         );

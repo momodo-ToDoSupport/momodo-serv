@@ -15,7 +15,7 @@ public class TodoHistoryRequestDto {
     public static class Create{
 
         @NotNull(message = "사용자 아이디는 필수 입력 값입니다.")
-        private Long memberId;
+        private String memberId;
 
         @NotNull
         private Long count;
@@ -26,7 +26,7 @@ public class TodoHistoryRequestDto {
         private LocalDate dueDate;
 
         @Builder
-        public Create(Long memberId, Long count, Long completedCount, LocalDate dueDate) {
+        public Create(String memberId, Long count, Long completedCount, LocalDate dueDate) {
             this.memberId = memberId;
             this.count = count;
             this.completedCount = completedCount;

@@ -1,4 +1,4 @@
-package com.momodo.todohistory;
+package com.momodo.emojihistory;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -10,20 +10,16 @@ import com.querydsl.core.types.Path;
 
 
 /**
- * QTodoHistory is a Querydsl query type for TodoHistory
+ * QEmojiHistory is a Querydsl query type for EmojiHistory
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QTodoHistory extends EntityPathBase<TodoHistory> {
+public class QEmojiHistory extends EntityPathBase<EmojiHistory> {
 
-    private static final long serialVersionUID = -957402020L;
+    private static final long serialVersionUID = -347797028L;
 
-    public static final QTodoHistory todoHistory = new QTodoHistory("todoHistory");
+    public static final QEmojiHistory emojiHistory = new QEmojiHistory("emojiHistory");
 
     public final com.momodo.commons.QBaseEntity _super = new com.momodo.commons.QBaseEntity(this);
-
-    public final NumberPath<Long> completedCount = createNumber("completedCount", Long.class);
-
-    public final NumberPath<Long> count = createNumber("count", Long.class);
 
     //inherited
     public final NumberPath<Long> createdBy = _super.createdBy;
@@ -31,7 +27,7 @@ public class QTodoHistory extends EntityPathBase<TodoHistory> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
-    public final DatePath<java.time.LocalDate> dueDate = createDate("dueDate", java.time.LocalDate.class);
+    public final StringPath emoji = createString("emoji");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
@@ -43,18 +39,16 @@ public class QTodoHistory extends EntityPathBase<TodoHistory> {
 
     public final StringPath memberId = createString("memberId");
 
-    public final NumberPath<Integer> step = createNumber("step", Integer.class);
-
-    public QTodoHistory(String variable) {
-        super(TodoHistory.class, forVariable(variable));
+    public QEmojiHistory(String variable) {
+        super(EmojiHistory.class, forVariable(variable));
     }
 
-    public QTodoHistory(Path<? extends TodoHistory> path) {
+    public QEmojiHistory(Path<? extends EmojiHistory> path) {
         super(path.getType(), path.getMetadata());
     }
 
-    public QTodoHistory(PathMetadata metadata) {
-        super(TodoHistory.class, metadata);
+    public QEmojiHistory(PathMetadata metadata) {
+        super(EmojiHistory.class, metadata);
     }
 
 }

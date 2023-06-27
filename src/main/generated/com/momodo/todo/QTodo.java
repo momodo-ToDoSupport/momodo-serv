@@ -41,7 +41,7 @@ public class QTodo extends EntityPathBase<Todo> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
-    public final NumberPath<Long> memberId = createNumber("memberId", Long.class);
+    public final StringPath memberId = createString("memberId");
 
     public final StringPath repeatDays = createString("repeatDays");
 

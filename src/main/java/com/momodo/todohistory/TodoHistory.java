@@ -20,7 +20,7 @@ public class TodoHistory extends BaseEntity {
     private Long id;
 
     @Column(name = "member_id", nullable = false)
-    private Long memberId;
+    private String memberId;
 
     @Column(nullable = false)
     private Long count;
@@ -35,7 +35,7 @@ public class TodoHistory extends BaseEntity {
     private LocalDate dueDate;
 
     @Builder
-    public TodoHistory(Long memberId, Long count, Long completedCount, Integer step, LocalDate dueDate) {
+    public TodoHistory(String memberId, Long count, Long completedCount, Integer step, LocalDate dueDate) {
         this.memberId = memberId;
         this.count = count;
         this.completedCount = completedCount;

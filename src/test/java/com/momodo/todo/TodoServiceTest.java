@@ -2,13 +2,19 @@ package com.momodo.todo;
 
 import com.momodo.todo.dto.TodoRequestDto;
 import com.momodo.todo.dto.TodoResponseDto;
+import com.momodo.todo.event.TodoCreatedEvent;
 import com.momodo.todo.repository.TodoRepository;
+import com.momodo.todohistory.dto.TodoHistoryResponseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.test.context.event.ApplicationEvents;
+import org.springframework.test.context.event.RecordApplicationEvents;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -27,6 +33,8 @@ public class TodoServiceTest {
     @Mock
     private TodoRepository todoRepository;
 
+    private String memberId = "Test";
+
     @Test
     @Transactional
     @DisplayName("Todo 등록")
@@ -37,7 +45,7 @@ public class TodoServiceTest {
 
         // when
         when(todoRepository.save(any(Todo.class))).thenReturn(todo);
-        todoService.createTodo(todoRequest);
+        todoService.createTodo(todoRequest, memberId);
 
         // then
         verify(todoRepository, times(1)).save(any(Todo.class));
@@ -64,17 +72,15 @@ public class TodoServiceTest {
     public void findAllByDueDate(){
         // given
         LocalDate date = LocalDate.now();
-        TodoResponseDto.Info todoInfo1 = new TodoResponseDto.Info(1L, "todo1", "emoji1", date, false, null);
-        TodoResponseDto.Info todoInfo2 = new TodoResponseDto.Info(2L, "todo2", "emoji2", date, false, null);
-        List<TodoResponseDto.Info> todoInfoList = List.of(todoInfo1, todoInfo2);
+        List<TodoResponseDto.Info> infoList = createInfoList();
 
         // when
-        when(todoRepository.findAllByDueDate(any(LocalDate.class))).thenReturn(todoInfoList);
+        when(todoRepository.findAllByDueDate(any(LocalDate.class))).thenReturn(infoList);
         List<TodoResponseDto.Info> result = todoService.findAllByDueDate(date);
 
         // then
-        assertThat(result.size()).isEqualTo(todoInfoList.size());
-        assertThat(todoInfoList.get(0).getDueDate()).isEqualTo(date);
+        assertThat(result.size()).isEqualTo(infoList.size());
+        assertThat(infoList.get(0).getDueDate()).isEqualTo(date);
     }
 
     @Test
@@ -130,7 +136,6 @@ public class TodoServiceTest {
 
     private TodoRequestDto.Create todoRequestDto(){
         return TodoRequestDto.Create.builder()
-                .memberId(1L)
                 .title("Test Todo")
                 .emoji("Test Emoji")
                 .dueDate(LocalDate.now())
@@ -140,12 +145,38 @@ public class TodoServiceTest {
 
     private Todo createTodo(){
         return Todo.builder()
-                .memberId(1L)
+                .memberId(memberId)
                 .title("Test Todo")
                 .emoji("Test Emoji")
                 .dueDate(LocalDate.now())
                 .isCompleted(false)
                 .repeatDays(null)
                 .build();
+    }
+
+    private List<TodoResponseDto.Info> createInfoList() {
+
+        TodoResponseDto.Info info1 = TodoResponseDto.Info.builder()
+                .id(1L)
+                .title("todo1")
+                .emoji("emoji1")
+                .dueDate(LocalDate.now())
+                .isCompleted(false)
+                .repeatDays(null)
+                .build();
+        TodoResponseDto.Info info2 = TodoResponseDto.Info.builder()
+                .id(2L)
+                .title("todo2")
+                .emoji("emoji2")
+                .dueDate(LocalDate.now())
+                .isCompleted(false)
+                .repeatDays(null)
+                .build();
+
+        List<TodoResponseDto.Info> infoList = List.of(
+                info1, info2
+        );
+
+        return infoList;
     }
 }

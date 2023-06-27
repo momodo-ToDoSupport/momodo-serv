@@ -28,6 +28,8 @@ public class TodoHistoryServiceTest {
     @Mock
     private TodoHistoryRepository todoHistoryRepository;
 
+    private String memberId = "Test";
+
     @Test
     @DisplayName("Todo 등록")
     public void create(){
@@ -71,12 +73,11 @@ public class TodoHistoryServiceTest {
     @DisplayName("TodoHistory 년월로 조회")
     public void findAllByYearAndMonth(){
         // given
-        Long memberId = 1L;
         String yearMonth = "2023-06";
-        List<TodoHistoryResponseDto.Info> infoList = createTodoHistorys();
+        List<TodoHistoryResponseDto.Info> infoList = createInfoList();
 
         // stub
-        when(todoHistoryRepository.findAllByYearMonth(any(Long.class), any(LocalDate.class), any(LocalDate.class))).thenReturn(infoList);
+        when(todoHistoryRepository.findAllByYearMonth(any(String.class), any(LocalDate.class), any(LocalDate.class))).thenReturn(infoList);
 
         // when
         List<TodoHistoryResponseDto.Info> result = todoHistoryService.findAllByYearMonth(memberId, yearMonth);
@@ -87,7 +88,7 @@ public class TodoHistoryServiceTest {
 
     private Todo createTodo(){
         return Todo.builder()
-                .memberId(1L)
+                .memberId(memberId)
                 .title("Test Todo")
                 .emoji("Test Emoji")
                 .dueDate(LocalDate.now())
@@ -98,7 +99,7 @@ public class TodoHistoryServiceTest {
 
     private TodoHistory createTodoHistory(){
         return TodoHistory.builder()
-                .memberId(1L)
+                .memberId(memberId)
                 .count(1L)
                 .completedCount(0L)
                 .step(0)
@@ -106,10 +107,28 @@ public class TodoHistoryServiceTest {
                 .build();
     }
 
-    private List<TodoHistoryResponseDto.Info> createTodoHistorys(){
-        TodoHistoryResponseDto.Info info1 = new TodoHistoryResponseDto.Info(1L, 1L, 0L, 0, LocalDate.parse("2023-06-02"));
-        TodoHistoryResponseDto.Info info2 = new TodoHistoryResponseDto.Info(2L, 2L, 0L, 0, LocalDate.parse("2023-06-03"));
-        TodoHistoryResponseDto.Info info3 = new TodoHistoryResponseDto.Info(3L, 3L, 0L, 0, LocalDate.parse("2023-06-04"));
+    private List<TodoHistoryResponseDto.Info> createInfoList(){
+        TodoHistoryResponseDto.Info info1 = TodoHistoryResponseDto.Info.builder()
+                .id(1L)
+                .count(1L)
+                .completedCount(0L)
+                .step(0)
+                .dueDate(LocalDate.parse("2023-06-02"))
+                .build();
+        TodoHistoryResponseDto.Info info2 = TodoHistoryResponseDto.Info.builder()
+                .id(2L)
+                .count(2L)
+                .completedCount(0L)
+                .step(0)
+                .dueDate(LocalDate.parse("2023-06-03"))
+                .build();
+        TodoHistoryResponseDto.Info info3 = TodoHistoryResponseDto.Info.builder()
+                .id(3L)
+                .count(3L)
+                .completedCount(0L)
+                .step(0)
+                .dueDate(LocalDate.parse("2023-06-04"))
+                .build();
 
         List<TodoHistoryResponseDto.Info> infoList = List.of(
                 info1, info2, info3

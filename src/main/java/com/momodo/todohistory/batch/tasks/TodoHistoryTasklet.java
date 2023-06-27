@@ -47,7 +47,7 @@ public class TodoHistoryTasklet implements Tasklet, StepExecutionListener {
         }
 
         TodoHistoryRequestDto.Create create = TodoHistoryRequestDto.Create.builder()
-                .memberId(1L)
+                .memberId("Test")
                 .count(count)
                 .completedCount(completedCount)
                 .dueDate(todos.get(0).getDueDate())
