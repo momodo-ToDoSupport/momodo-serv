@@ -1,9 +1,9 @@
 package com.momodo.todohistory.batch.tasks;
 
-import com.momodo.todo.dto.TodoResponseDto;
+import com.momodo.todo.Todo;
 import com.momodo.todo.repository.TodoRepository;
+import com.momodo.todohistory.TodoHistory;
 import com.momodo.todohistory.TodoHistoryService;
-import com.momodo.todohistory.dto.TodoHistoryRequestDto;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.StepExecution;
@@ -14,7 +14,10 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class TodoHistoryTasklet implements Tasklet, StepExecutionListener {
 
@@ -23,12 +26,26 @@ public class TodoHistoryTasklet implements Tasklet, StepExecutionListener {
     @Autowired
     private TodoHistoryService todoHistoryService;
 
-    private List<TodoResponseDto.Info> todos;
+    private LocalDate dueDate;
+    private List<Todo> todos;
+    private Map<String, List<Todo>> groupingByMember;
 
     @Override
     public void beforeStep(StepExecution stepExecution) {
-        LocalDate dueDate = LocalDate.now().minusDays(1);
+        Todo todo1 = new Todo(1L, "Test", "todo1", "emoji1", LocalDate.now().minusDays(1),true,null);
+        Todo todo2 = new Todo(2L, "Test", "todo2", "emoji2", LocalDate.now().minusDays(1),true,null);
+        Todo todo3 = new Todo(3L, "Test", "todo3", "emoji3", LocalDate.now().minusDays(1),false,null);
+
+        List<Todo> createTodos = List.of(todo1, todo2, todo3);
+        todoRepository.saveAll(createTodos);
+
+        // 이전 날에 해당하는 Todo들을 모두 조회하여 사용자마다 TodoHistory를 생성
+        dueDate = LocalDate.now().minusDays(1);
         todos = todoRepository.findAllByDueDate(dueDate);
+
+        // memberId를 기준으로 그룹화
+        groupingByMember = todos.stream()
+                .collect(Collectors.groupingBy(t -> t.getMemberId()));
         System.out.println("beforeStep");
     }
 
@@ -38,22 +55,32 @@ public class TodoHistoryTasklet implements Tasklet, StepExecutionListener {
             return RepeatStatus.FINISHED;
         }
 
-        Long count = (long)todos.size();
-        Long completedCount = 0L;
+        List<TodoHistory> saveList = new ArrayList<>();
 
-        for(TodoResponseDto.Info t : todos){
-            if(t.isCompleted())
-                completedCount += 1;
-        }
+        // member 별로 TodoHistory를 생성하여 saveList에 추가
+        groupingByMember.forEach((key, todos) -> {
+            Long count = (long)todos.size();
+            Long completedCount = 0L;
 
-        TodoHistoryRequestDto.Create create = TodoHistoryRequestDto.Create.builder()
-                .memberId("Test")
-                .count(count)
-                .completedCount(completedCount)
-                .dueDate(todos.get(0).getDueDate())
-                .build();
+            for(Todo t : todos){
+                if(t.isCompleted())
+                    completedCount += 1;
+            }
 
-        todoHistoryService.create(create);
+            Integer step = todoHistoryService.calculateStep(count, completedCount);
+
+            TodoHistory todoHistory = TodoHistory.builder()
+                    .memberId(key)
+                    .count(count)
+                    .completedCount(completedCount)
+                    .step(step)
+                    .dueDate(dueDate)
+                    .build();
+
+            saveList.add(todoHistory);
+        });
+
+        todoHistoryService.createAll(saveList);
 
         return RepeatStatus.FINISHED;
     }

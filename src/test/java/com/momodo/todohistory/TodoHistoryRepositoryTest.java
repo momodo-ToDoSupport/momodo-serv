@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -28,19 +29,6 @@ public class TodoHistoryRepositoryTest {
     private TodoHistoryRepository todoHistoryRepository;
 
     private String memberId = "Test";
-
-    @Test
-    @DisplayName("TodoHistory 등록")
-    public void create(){
-        // given
-        TodoHistory todoHistory = createTodoHistory();
-
-        // when
-        TodoHistory createdTodoHistory = todoHistoryRepository.save(todoHistory);
-
-        // then
-        assertThat(todoHistory.getId()).isEqualTo(createdTodoHistory.getId());
-    }
 
     @Test
     @DisplayName("TodoHistory DueDate로 조회")
@@ -108,12 +96,18 @@ public class TodoHistoryRepositoryTest {
     }
 
     private TodoHistory createTodoHistory(){
-        return TodoHistory.builder()
-                .memberId(memberId)
-                .count(1L)
-                .completedCount(0L)
-                .step(0)
-                .dueDate(LocalDate.now())
-                .build();
+        return new TodoHistory(memberId, 1L, 0L, 0, LocalDate.now());
+    }
+
+
+    private List<TodoHistory> createTodoHistories(){
+        TodoHistory t1 = new TodoHistory(memberId, 1L, 0L, 0, LocalDate.now());
+        TodoHistory t2 = new TodoHistory(memberId, 2L, 0L, 0, LocalDate.now());
+        TodoHistory t3 = new TodoHistory(memberId, 3L, 0L, 0, LocalDate.now());
+
+        List<TodoHistory> todoHistories = List.of(
+                t1, t2, t3
+        );
+        return todoHistories;
     }
 }

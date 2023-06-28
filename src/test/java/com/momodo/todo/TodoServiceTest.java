@@ -72,15 +72,15 @@ public class TodoServiceTest {
     public void findAllByDueDate(){
         // given
         LocalDate date = LocalDate.now();
-        List<TodoResponseDto.Info> infoList = createInfoList();
+        List<Todo> todoList = createInfoList();
 
         // when
-        when(todoRepository.findAllByDueDate(any(LocalDate.class))).thenReturn(infoList);
-        List<TodoResponseDto.Info> result = todoService.findAllByDueDate(date);
+        when(todoRepository.findAllByDueDate(any(LocalDate.class))).thenReturn(todoList);
+        List<Todo> result = todoService.findAllByDueDate(date);
 
         // then
-        assertThat(result.size()).isEqualTo(infoList.size());
-        assertThat(infoList.get(0).getDueDate()).isEqualTo(date);
+        assertThat(result.size()).isEqualTo(todoList.size());
+        assertThat(todoList.get(0).getDueDate()).isEqualTo(date);
     }
 
     @Test
@@ -154,29 +154,31 @@ public class TodoServiceTest {
                 .build();
     }
 
-    private List<TodoResponseDto.Info> createInfoList() {
+    private List<Todo> createInfoList() {
 
-        TodoResponseDto.Info info1 = TodoResponseDto.Info.builder()
+        Todo todo1 = Todo.builder()
                 .id(1L)
                 .title("todo1")
                 .emoji("emoji1")
+                .memberId(memberId)
                 .dueDate(LocalDate.now())
                 .isCompleted(false)
                 .repeatDays(null)
                 .build();
-        TodoResponseDto.Info info2 = TodoResponseDto.Info.builder()
-                .id(2L)
+        Todo todo2 = Todo.builder()
+                .id(1L)
                 .title("todo2")
                 .emoji("emoji2")
+                .memberId(memberId)
                 .dueDate(LocalDate.now())
                 .isCompleted(false)
                 .repeatDays(null)
                 .build();
 
-        List<TodoResponseDto.Info> infoList = List.of(
-                info1, info2
+        List<Todo> todoList = List.of(
+                todo1, todo2
         );
 
-        return infoList;
+        return todoList;
     }
 }
