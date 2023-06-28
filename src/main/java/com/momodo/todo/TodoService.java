@@ -40,10 +40,10 @@ public class TodoService {
     }
 
     @Transactional(readOnly = true)
-    public List<TodoResponseDto.Info> findAllByDueDate(LocalDate dueDate){
-        List<TodoResponseDto.Info> todoInfoList = todoRepository.findAllByDueDate(dueDate);
+    public List<Todo> findAllByDueDate(LocalDate dueDate){
+        List<Todo> todoList = todoRepository.findAllByDueDate(dueDate);
 
-        return todoInfoList;
+        return todoList;
     }
 
     @Transactional

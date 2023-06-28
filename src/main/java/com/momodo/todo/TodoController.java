@@ -44,14 +44,6 @@ public class TodoController {
         return todoService.findById(id);
     }
 
-    @Operation(summary = "FindAll By DueDate", description = "DueDate로 날짜에 해당하는 Todo들의 정보 가져오기")
-    @PreAuthorize("hasAnyRole('MEMBER')")
-    @GetMapping
-    public List<TodoResponseDto.Info> findAllByDueDate(@RequestParam LocalDate dueDate){
-
-        return todoService.findAllByDueDate(dueDate);
-    }
-
     @Operation(summary = "Update Completed", description = "Todo 완료 여부 수정하기")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @PatchMapping("/{id}/updateCompleted")

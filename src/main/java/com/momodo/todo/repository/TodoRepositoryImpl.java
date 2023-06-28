@@ -1,5 +1,6 @@
 package com.momodo.todo.repository;
 
+import com.momodo.todo.Todo;
 import com.momodo.todo.dto.TodoResponseDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -18,18 +19,9 @@ public class TodoRepositoryImpl implements TodoRepositoryCustom{
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<TodoResponseDto.Info> findAllByDueDate(LocalDate dueDate) {
-
+    public List<Todo> findAllByDueDate(LocalDate dueDate) {
         return queryFactory
-                .select(Projections.constructor(TodoResponseDto.Info.class,
-                        todo.id,
-                        todo.title,
-                        todo.emoji,
-                        todo.dueDate,
-                        todo.isCompleted,
-                        todo.repeatDays
-                ))
-                .from(todo)
+                .selectFrom(todo)
                 .where(todo.dueDate.eq(dueDate))
                 .fetch();
     }
