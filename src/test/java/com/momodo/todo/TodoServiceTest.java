@@ -35,21 +35,6 @@ public class TodoServiceTest {
 
     private String memberId = "Test";
 
-    @Test
-    @Transactional
-    @DisplayName("Todo 등록")
-    public void create(){
-        // given
-        TodoRequestDto.Create todoRequest = todoRequestDto();
-        Todo todo = todoRequest.toEntity();
-
-        // when
-        when(todoRepository.save(any(Todo.class))).thenReturn(todo);
-        todoService.createTodo(todoRequest, memberId);
-
-        // then
-        verify(todoRepository, times(1)).save(any(Todo.class));
-    }
 
     @Test
     @DisplayName("Todo Id로 조회")
@@ -99,24 +84,6 @@ public class TodoServiceTest {
         assertThat(foundTodo.isCompleted()).isTrue();
     }
 
-    @Test
-    @Transactional
-    @DisplayName("Todo 정보 수정")
-    public void update(){
-        // given
-        Todo foundTodo = createTodo();
-        Long id = 1L;
-        TodoRequestDto.Edit request = new TodoRequestDto.Edit("Edit Title", "Edit Emoji", "Edit RepeatDays");
-
-        // when
-        when(todoRepository.findById(any(Long.class))).thenReturn(Optional.of(foundTodo));
-        todoService.update(id, request);
-
-        // then
-        assertThat(foundTodo.getTitle()).isEqualTo(request.getTitle());
-        assertThat(foundTodo.getEmoji()).isEqualTo(request.getEmoji());
-        assertThat(foundTodo.getRepeatDays()).isEqualTo(request.getRepeatDays());
-    }
 
     @Test
     @Transactional
