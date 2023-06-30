@@ -32,13 +32,6 @@ public class TodoHistoryTasklet implements Tasklet, StepExecutionListener {
 
     @Override
     public void beforeStep(StepExecution stepExecution) {
-        Todo todo1 = new Todo(1L, "Test", "todo1", "emoji1", LocalDate.now().minusDays(1),true,null);
-        Todo todo2 = new Todo(2L, "Test", "todo2", "emoji2", LocalDate.now().minusDays(1),true,null);
-        Todo todo3 = new Todo(3L, "Test", "todo3", "emoji3", LocalDate.now().minusDays(1),false,null);
-
-        List<Todo> createTodos = List.of(todo1, todo2, todo3);
-        todoRepository.saveAll(createTodos);
-
         // 이전 날에 해당하는 Todo들을 모두 조회하여 사용자마다 TodoHistory를 생성
         dueDate = LocalDate.now().minusDays(1);
         todos = todoRepository.findAllByDueDate(dueDate);
