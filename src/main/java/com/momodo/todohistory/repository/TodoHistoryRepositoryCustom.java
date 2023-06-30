@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface TodoHistoryRepositoryCustom {
 
+    void createAll(List<TodoHistory> todoHistories);
+
     TodoHistory findByDueDate(String memberId, LocalDate dueDate);
 
     List<TodoHistoryResponseDto.Info> findAllByYearMonth(String memberId, LocalDate from, LocalDate to);

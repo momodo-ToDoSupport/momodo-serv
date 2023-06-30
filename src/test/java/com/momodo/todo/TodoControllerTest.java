@@ -80,22 +80,6 @@ public class TodoControllerTest {
     }
 
     @Test
-    @DisplayName("Todo DueDate로 조회")
-    public void findAllByDueDate() throws Exception{
-        // given
-        LocalDate date = LocalDate.now();
-        String url = "/api/v1/todos";
-        List<TodoResponseDto.Info> todoInfoList = Collections.emptyList();
-        doReturn(todoInfoList).when(todoService).findAllByDueDate(date);
-
-        // when & then
-        mockMvc.perform(get(url)
-                .param("dueDate", date.toString())
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-    }
-
-    @Test
     @DisplayName("Todo 성공 여부 수정")
     public void updateCompleted() throws Exception{
         // given

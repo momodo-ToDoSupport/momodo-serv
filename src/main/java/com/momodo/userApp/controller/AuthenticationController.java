@@ -28,7 +28,7 @@ public class AuthenticationController {
     @PostMapping("/token")  // UserAdmin 인증 API
     public ResponseEntity<CommonResponse> authorize(@Valid @RequestBody RequestUserApp.Login loginDto) {
 
-        ResponseAuthentication.Token token = authenticationService.authenticate(loginDto.getUserId(), loginDto.getPassword());
+        ResponseAuthentication.Token token = authenticationService.authenticateMomodo(loginDto.getUserId(), loginDto.getPassword());
 
         // response header 에도 넣고 응답 객체에도 넣는다.
         HttpHeaders httpHeaders = new HttpHeaders();

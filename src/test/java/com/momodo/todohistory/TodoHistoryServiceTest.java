@@ -1,8 +1,5 @@
 package com.momodo.todohistory;
 
-import com.momodo.todo.Todo;
-import com.momodo.todo.dto.TodoRequestDto;
-import com.momodo.todohistory.dto.TodoHistoryRequestDto;
 import com.momodo.todohistory.dto.TodoHistoryResponseDto;
 import com.momodo.todohistory.repository.TodoHistoryRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +10,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,25 +30,16 @@ public class TodoHistoryServiceTest {
     private String memberId = "Test";
 
     @Test
-    @DisplayName("Todo 등록")
-    public void create(){
+    @DisplayName("TodoHistory Bulk Save")
+    public void createAll(){
         // given
-        TodoHistory todoHistory = createTodoHistory();
-        TodoHistoryRequestDto.Create request = TodoHistoryRequestDto.Create.builder()
-                .memberId(todoHistory.getMemberId())
-                .count(todoHistory.getCount())
-                .completedCount(todoHistory.getCompletedCount())
-                .dueDate(todoHistory.getDueDate())
-                .build();
-
-        // stub
-        when(todoHistoryRepository.save(any(TodoHistory.class))).thenReturn(todoHistory);
+        List<TodoHistory> todoHistories = Collections.EMPTY_LIST;
 
         // when
-        todoHistoryService.create(request);
+        todoHistoryService.createAll(todoHistories);
 
         // then
-        verify(todoHistoryRepository, times(1)).save(any(TodoHistory.class));
+        verify(todoHistoryRepository, times(1)).saveAll(any(List.class));
     }
 
     @Test
@@ -84,17 +74,6 @@ public class TodoHistoryServiceTest {
 
         // then
         assertThat(result.size()).isEqualTo(infoList.size());
-    }
-
-    private Todo createTodo(){
-        return Todo.builder()
-                .memberId(memberId)
-                .title("Test Todo")
-                .emoji("Test Emoji")
-                .dueDate(LocalDate.now())
-                .isCompleted(false)
-                .repeatDays(null)
-                .build();
     }
 
     private TodoHistory createTodoHistory(){

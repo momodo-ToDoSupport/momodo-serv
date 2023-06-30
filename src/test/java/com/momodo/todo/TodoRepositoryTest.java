@@ -64,11 +64,11 @@ public class TodoRepositoryTest {
         List<Todo> createdTodoList = todoRepository.saveAll(createTodoList());
 
         // when
-        List<TodoResponseDto.Info> todoInfoList = todoRepository.findAllByDueDate(LocalDate.now());
+        List<Todo> todoList = todoRepository.findAllByDueDate(LocalDate.now());
 
         // then
-        assertThat(todoInfoList.size()).isEqualTo(2);
-        assertThat(todoInfoList.get(0).getDueDate()).isEqualTo(LocalDate.now());
+        assertThat(todoList.size()).isEqualTo(2);
+        assertThat(todoList.get(0).getDueDate()).isEqualTo(LocalDate.now());
     }
 
     @Test

@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
@@ -37,13 +36,11 @@ public class UserAppController {
      * Account 엔티티에 대한 정보를 알고 싶으면 디비 조회를 별도로 해야 한다.
      */
     @GetMapping
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public ResponseEntity<ResponseUserApp.Info> getMyUserAppInfo(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(userAppService.getMyUserAppAuthorities());
     }
 
     @GetMapping("/{userId}")
-    @PreAuthorize("hasAnyRole('MEMBER')")
     public ResponseEntity<ResponseUserApp.Info> getUserAppInfo(@PathVariable String userId) {
         return ResponseEntity.ok(userAppService.getUserAppWithAuthorities(userId));
     }
