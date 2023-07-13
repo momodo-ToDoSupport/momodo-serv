@@ -17,8 +17,8 @@ public class RequestCreateUserApp {
     @Schema(description = "아이디")
     private String userId;
 
-    @Schema(description = "계정구분")
-    private UserType type;
+//    @Schema(description = "계정구분")
+//    private UserType type;
 
     @Schema(description = "비밀번호")
     private String password;
