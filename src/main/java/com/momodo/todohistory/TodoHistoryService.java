@@ -1,7 +1,5 @@
 package com.momodo.todohistory;
 
-import com.momodo.todo.Todo;
-import com.momodo.todohistory.dto.TodoHistoryRequestDto;
 import com.momodo.todohistory.dto.TodoHistoryResponseDto;
 import com.momodo.todohistory.repository.TodoHistoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,19 +19,9 @@ public class TodoHistoryService {
     private float[] stepRatios = {30.0f, 70.0f, 100.0f};
 
     @Transactional
-    public void create(TodoHistoryRequestDto.Create requestDto){
+    public void createAll(List<TodoHistory> saveList){
 
-        int step = calculateStep(requestDto.getCount(), requestDto.getCompletedCount());
-
-        TodoHistory todoHistory = TodoHistory.builder()
-                .memberId(requestDto.getMemberId())
-                .count(requestDto.getCount())
-                .completedCount(requestDto.getCompletedCount())
-                .step(step)
-                .dueDate(requestDto.getDueDate())
-                .build();
-
-        todoHistoryRepository.save(todoHistory);
+        todoHistoryRepository.saveAll(saveList);
     }
 
     public TodoHistoryResponseDto.Info findByDueDate(String memberId, LocalDate dueDate) {
@@ -49,7 +37,7 @@ public class TodoHistoryService {
         return todoHistoryRepository.findAllByYearMonth(memberId, firstDate, lastDate);
     }
 
-    private int calculateStep(long todoCount, long todoCompletedCount){
+    public int calculateStep(long todoCount, long todoCompletedCount){
 
         float ratio = ((float)todoCompletedCount / todoCount) * 100;
         int step = 0;
