@@ -4,6 +4,7 @@ import com.momodo.jwt.dto.CommonResponse;
 import com.momodo.jwt.exception.error.DuplicateMemberException;
 import com.momodo.jwt.security.util.SecurityUtil;
 import com.momodo.userApp.domain.UserApp;
+import com.momodo.userApp.domain.UserType;
 import com.momodo.userApp.dto.RequestCreateUserApp;
 import com.momodo.userApp.dto.ResponseUserApp;
 import com.momodo.userApp.repository.UserAppRepository;
@@ -33,7 +34,7 @@ public class UserAppService {
         UserApp userApp = UserApp.builder()
                 .userId(createUserApp.getUserId())
                 .password(createUserApp.getPassword())
-                .type(createUserApp.getType())
+                .type(UserType.MOMODO)
                 .name(createUserApp.getName())
                 .phone(createUserApp.getPhone())
                 .email(createUserApp.getEmail())

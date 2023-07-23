@@ -127,8 +127,6 @@ public class SocialLoginService {
                 Long id = (Long) jsonMap.get("id");
                 String nickname = (String) properties.get("nickname");
                 String email = (String) kakaoAccount.get("email");
-                String birthday = (String) kakaoAccount.get("birthday");
-                String gender = (String) kakaoAccount.get("gender");
 
                 userInfo.put("id", id);
                 userInfo.put("nickname", nickname);

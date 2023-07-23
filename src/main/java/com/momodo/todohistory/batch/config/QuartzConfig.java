@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
-import org.springframework.scheduling.support.CronTrigger;
 
 @Configuration
 public class QuartzConfig {
@@ -46,12 +45,16 @@ public class QuartzConfig {
 
     @Bean
     public Trigger todoHistoryJobTrigger(){
+        SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder
+                .simpleSchedule()
+                .withIntervalInHours(1)
+                .repeatForever();
 
         return TriggerBuilder
                 .newTrigger()
                 .forJob(todoHistoryJobDetail())
                 .withIdentity("todoHistoryJobTrigger")
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 0 * * *"))
+                .withSchedule(scheduleBuilder)
                 .build();
     }
 
