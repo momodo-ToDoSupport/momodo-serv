@@ -13,7 +13,7 @@ public class TodoCreateEventListener {
     private final EmojiHistoryService emojiHistoryService;
 
     @EventListener
-    public void createEmojiHistory(TodoCreatedEvent event){
-        emojiHistoryService.create(event.getMemberId(), event.getEmoji());
+    public void addEmoji(TodoCreatedEvent event){
+        emojiHistoryService.addEmoji(event.getMemberId(), event.getEmoji());
     }
 }
