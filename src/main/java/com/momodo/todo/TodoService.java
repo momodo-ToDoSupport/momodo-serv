@@ -46,6 +46,14 @@ public class TodoService {
         return todoList;
     }
 
+    public List<TodoResponseDto.Info> findNotCompleteInYearMonth(String memberId, String yearMonth){
+
+        LocalDate firstDate = LocalDate.parse(yearMonth + "-01");
+        LocalDate lastDate = firstDate.withDayOfMonth(firstDate.lengthOfMonth());
+
+        return todoRepository.findNotCompleteInYearMonth(memberId, firstDate, lastDate);
+    }
+
     @Transactional
     public void updateCompleted(Long id){
         Todo todo = todoRepository.findById(id)
@@ -63,7 +71,7 @@ public class TodoService {
             publisher.publishEvent(new TodoCreatedEvent(todo.getMemberId(), request.getEmoji()));
         }
 
-        todo.update(request.getTitle(), request.getEmoji(), request.getRepeatDays());
+        todo.update(request.getTitle(), request.getEmoji());
     }
 
     @Transactional

@@ -9,4 +9,6 @@ import java.util.List;
 public interface TodoRepositoryCustom {
 
     List<Todo> findAllByDueDate(LocalDate dueDate);
+
+    List<TodoResponseDto.Info> findNotCompleteInYearMonth(String memberId, LocalDate from, LocalDate to);
 }

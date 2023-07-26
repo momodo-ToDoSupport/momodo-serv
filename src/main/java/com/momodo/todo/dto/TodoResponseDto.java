@@ -16,16 +16,13 @@ public class TodoResponseDto {
         private LocalDate dueDate;
         private boolean isCompleted;
 
-        private String repeatDays;
-
         @Builder
-        public Info(Long id, String title, String emoji, LocalDate dueDate, boolean isCompleted, String repeatDays) {
+        public Info(Long id, String title, String emoji, LocalDate dueDate, boolean isCompleted) {
             this.id = id;
             this.title = title;
             this.emoji = emoji;
             this.dueDate = dueDate;
             this.isCompleted = isCompleted;
-            this.repeatDays = repeatDays;
         }
     }
 }

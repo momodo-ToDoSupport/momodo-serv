@@ -39,7 +39,6 @@ public class TodoRequestDto {
                     .emoji(emoji)
                     .dueDate(dueDate)
                     .isCompleted(false) // 새로 생성한 Todo이기 때문에 false
-                    .repeatDays(repeatDays)
                     .build();
         }
     }
