@@ -47,7 +47,16 @@ public class TodoController {
         return ResponseEntity.ok(todoService.findById(id));
     }
 
-    @Operation(summary = "Find Not-Complete In YearMonth", description = "년/월에 완료하지 못한 Todo들의 정보 조회")
+    @Operation(summary = "Find By DueDate", description = "날짜에 해당하는 Todo 정보 조회")
+    @PreAuthorize("hasAnyRole('MEMBER')")
+    @GetMapping("/date")
+    public ResponseEntity<List<TodoResponseDto.Info>> findByMemberAndDueDate(@RequestParam LocalDate dueDate
+            , @AuthenticationPrincipal User user){
+        String memberId = user.getUsername();
+        return ResponseEntity.ok(todoService.findByMemberAndDueDate(memberId, dueDate));
+    }
+
+    @Operation(summary = "Find Not-Complete In YearMonth", description = "년/월에 완료하지 못한 Todo 정보 조회")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @GetMapping("/not-complete")
     public ResponseEntity<List<TodoResponseDto.Info>> findNotCompleteInYearMonth(@RequestParam String yearMonth

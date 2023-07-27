@@ -46,6 +46,11 @@ public class TodoService {
         return todoList;
     }
 
+    public List<TodoResponseDto.Info> findByMemberAndDueDate(String memberId, LocalDate dueDate){
+        return todoRepository.findByMemberAndDueDate(memberId, dueDate);
+    }
+
+    @Transactional(readOnly = true)
     public List<TodoResponseDto.Info> findNotCompleteInYearMonth(String memberId, String yearMonth){
 
         LocalDate firstDate = LocalDate.parse(yearMonth + "-01");

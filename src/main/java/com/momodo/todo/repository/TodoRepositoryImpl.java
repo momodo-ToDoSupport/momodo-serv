@@ -27,6 +27,22 @@ public class TodoRepositoryImpl implements TodoRepositoryCustom{
     }
 
     @Override
+    public List<TodoResponseDto.Info> findByMemberAndDueDate(String memberId, LocalDate dueDate) {
+        return queryFactory
+                .select(Projections.constructor(TodoResponseDto.Info.class,
+                        todo.id,
+                        todo.title,
+                        todo.emoji,
+                        todo.dueDate,
+                        todo.isCompleted
+                ))
+                .from(todo)
+                .where(todo.memberId.eq(memberId)
+                        .and(todo.dueDate.eq(dueDate)))
+                .fetch();
+    }
+
+    @Override
     public List<TodoResponseDto.Info> findNotCompleteInYearMonth(String memberId, LocalDate from, LocalDate to) {
         return queryFactory
                 .select(Projections.constructor(TodoResponseDto.Info.class,

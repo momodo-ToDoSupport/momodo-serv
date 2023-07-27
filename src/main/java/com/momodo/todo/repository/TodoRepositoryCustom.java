@@ -10,5 +10,7 @@ public interface TodoRepositoryCustom {
 
     List<Todo> findAllByDueDate(LocalDate dueDate);
 
+    List<TodoResponseDto.Info> findByMemberAndDueDate(String memberId, LocalDate dueDate);
+
     List<TodoResponseDto.Info> findNotCompleteInYearMonth(String memberId, LocalDate from, LocalDate to);
 }
