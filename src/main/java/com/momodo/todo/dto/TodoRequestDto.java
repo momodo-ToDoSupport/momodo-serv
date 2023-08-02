@@ -21,16 +21,20 @@ public class TodoRequestDto {
         @NotBlank(message = "이모지는 필수 입력 값입니다.")
         private String emoji;
 
+        @NotNull(message = "실행일은 필수 입력 값입니다.")
         private LocalDate dueDate;
 
         private String repeatDays;
 
+        private Integer duration;
+
         @Builder
-        public Create(String title, String emoji, LocalDate dueDate, String repeatDays) {
+        public Create(String title, String emoji, LocalDate dueDate, String repeatDays, Integer duration) {
             this.title = title;
             this.emoji = emoji;
             this.dueDate = dueDate;
             this.repeatDays = repeatDays;
+            this.duration = duration;
         }
 
         public Todo toEntity(){
@@ -55,11 +59,14 @@ public class TodoRequestDto {
 
         private String repeatDays;
 
+        private Integer duration;
+
         @Builder
-        public Edit(String title, String emoji, String repeatDays) {
+        public Edit(String title, String emoji, String repeatDays, Integer duration) {
             this.title = title;
             this.emoji = emoji;
             this.repeatDays = repeatDays;
+            this.duration = duration;
         }
     }
 }

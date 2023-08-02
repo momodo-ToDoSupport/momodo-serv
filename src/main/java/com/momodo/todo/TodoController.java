@@ -34,7 +34,7 @@ public class TodoController {
             , @AuthenticationPrincipal User user){
 
         String memberId = user.getUsername();
-        todoService.createTodo(requestDto, memberId);
+        todoService.create(requestDto, memberId);
 
         return ResponseEntity.ok().build();
     }
