@@ -4,18 +4,18 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 public class EmojiHistoryResponseDto {
 
     @Getter
     @Builder
-    public static class Info {
+    public static class UsedEmojis {
 
-        private Long id;
-        private String emoji;
+        private List<String> emojis;
 
-        public Info(Long id, String emoji) {
-            this.id = id;
-            this.emoji = emoji;
+        public UsedEmojis(List<String> emojis) {
+            this.emojis = emojis;
         }
     }
 }

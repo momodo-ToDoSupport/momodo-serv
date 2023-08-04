@@ -22,15 +22,15 @@ public class EmojiHistory extends BaseEntity {
     private String memberId;
 
     @Column(nullable = false)
-    private String emoji;
+    private String emojis;
 
     @Builder
-    public EmojiHistory(String memberId, String emoji) {
+    public EmojiHistory(String memberId, String emojis) {
         this.memberId = memberId;
-        this.emoji = emoji;
+        this.emojis = emojis;
     }
 
-    public void updateCreatedDate(LocalDateTime date){
-        setCreatedDate(date);
+    public void update(String emojis){
+        this.emojis = emojis;
     }
 }

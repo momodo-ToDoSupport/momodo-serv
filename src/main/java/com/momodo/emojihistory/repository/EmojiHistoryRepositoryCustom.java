@@ -4,12 +4,9 @@ import com.momodo.emojihistory.EmojiHistory;
 import com.momodo.emojihistory.dto.EmojiHistoryResponseDto;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EmojiHistoryRepositoryCustom {
 
-    EmojiHistory findByEmoji(String memberId, String emoji);
-
-    List<EmojiHistoryResponseDto.Info> findAllByMember(String memberId);
-
-    void deleteOldest(String memberId);
+    String findUsedEmojis(String memberId);
 }

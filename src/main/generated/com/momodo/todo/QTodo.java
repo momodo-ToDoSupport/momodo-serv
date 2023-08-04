@@ -43,8 +43,6 @@ public class QTodo extends EntityPathBase<Todo> {
 
     public final StringPath memberId = createString("memberId");
 
-    public final StringPath repeatDays = createString("repeatDays");
-
     public final StringPath title = createString("title");
 
     public QTodo(String variable) {

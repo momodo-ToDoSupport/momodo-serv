@@ -35,7 +35,6 @@ public class TodoServiceTest {
 
     private String memberId = "Test";
 
-
     @Test
     @DisplayName("Todo Id로 조회")
     public void findById(){

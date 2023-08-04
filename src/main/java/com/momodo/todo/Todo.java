@@ -34,9 +34,6 @@ public class Todo extends BaseEntity {
     @Column(name = "is_completed", nullable = false)
     private boolean isCompleted;
 
-    @Column(name = "repeat_days")
-    private String repeatDays;
-
     @Builder
     public Todo(Long id, String memberId, String title, String emoji, LocalDate dueDate, boolean isCompleted, String repeatDays) {
         this.id = id;
@@ -45,7 +42,6 @@ public class Todo extends BaseEntity {
         this.emoji = emoji;
         this.dueDate = dueDate;
         this.isCompleted = isCompleted;
-        this.repeatDays = repeatDays;
     }
 
     public TodoResponseDto.Info toInfo(){
@@ -55,7 +51,6 @@ public class Todo extends BaseEntity {
                 .emoji(emoji)
                 .dueDate(dueDate)
                 .isCompleted(isCompleted)
-                .repeatDays(repeatDays)
                 .build();
     }
 
@@ -67,9 +62,8 @@ public class Todo extends BaseEntity {
         isCompleted = !isCompleted;
     }
 
-    public void update(String title, String emoji, String repeatDays){
+    public void update(String title, String emoji){
         this.title = title;
         this.emoji = emoji;
-        this.repeatDays = repeatDays;
     }
 }

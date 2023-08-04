@@ -27,7 +27,7 @@ public class QEmojiHistory extends EntityPathBase<EmojiHistory> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
-    public final StringPath emoji = createString("emoji");
+    public final StringPath emojis = createString("emojis");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
