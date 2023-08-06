@@ -123,7 +123,6 @@ public class TodoServiceTest {
     private List<Todo> createInfoList() {
 
         Todo todo1 = Todo.builder()
-                .id(1L)
                 .title("todo1")
                 .emoji("emoji1")
                 .memberId(memberId)
@@ -132,7 +131,6 @@ public class TodoServiceTest {
                 .repeatDays(null)
                 .build();
         Todo todo2 = Todo.builder()
-                .id(1L)
                 .title("todo2")
                 .emoji("emoji2")
                 .memberId(memberId)

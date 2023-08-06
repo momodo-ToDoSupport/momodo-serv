@@ -35,8 +35,7 @@ public class Todo extends BaseEntity {
     private boolean isCompleted;
 
     @Builder
-    public Todo(Long id, String memberId, String title, String emoji, LocalDate dueDate, boolean isCompleted, String repeatDays) {
-        this.id = id;
+    public Todo(String memberId, String title, String emoji, LocalDate dueDate, boolean isCompleted, String repeatDays) {
         this.memberId = memberId;
         this.title = title;
         this.emoji = emoji;
