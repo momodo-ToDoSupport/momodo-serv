@@ -45,10 +45,9 @@ public class QuartzConfig {
 
     @Bean
     public Trigger todoHistoryJobTrigger(){
-        SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder
-                .simpleSchedule()
-                .withIntervalInHours(1)
-                .repeatForever();
+        // 매일 자정에 실행
+        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder
+                .cronSchedule("0 0 0 * * ?");
 
         return TriggerBuilder
                 .newTrigger()
