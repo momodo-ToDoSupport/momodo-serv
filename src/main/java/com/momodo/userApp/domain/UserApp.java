@@ -40,6 +40,10 @@ public class UserApp extends BaseTimeEntity {
     @Column(name = "phone")
     private String phone;  //전화번호
 
+    @Column(name = "tier")
+    @Enumerated(EnumType.STRING)
+    private TodoTier tier;
+
     @Column(name = "is_push")
     private Boolean isPush = Boolean.TRUE;  //알림동의
 
@@ -58,13 +62,13 @@ public class UserApp extends BaseTimeEntity {
     @Column(name = "token_weight")
     private Long tokenWeight;
 
-
     @Builder
     public UserApp(String userId, UserType type, String password, String name, String email, boolean isPush, boolean isActive, String accessToken, String refreshToken, String phone) {
         this.userId = userId;
         this.type = type;
         this.password = password;
         this.name = name;
+        this.tier = TodoTier.RED;
         this.roles = Role.MEMBER;
         this.phone = phone;
         this.email = email;

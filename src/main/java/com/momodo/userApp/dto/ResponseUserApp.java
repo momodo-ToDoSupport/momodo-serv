@@ -1,6 +1,7 @@
 package com.momodo.userApp.dto;
 
 import com.momodo.userApp.domain.Role;
+import com.momodo.userApp.domain.TodoTier;
 import com.momodo.userApp.domain.UserApp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +18,7 @@ public class ResponseUserApp {
         private String userId;
         private String name;
         private String phone;
+        private TodoTier tier;
         private Long tokenWeight;
         private Role roles;
 
@@ -27,12 +29,10 @@ public class ResponseUserApp {
                     .userId(userApp.getUserId())
                     .name(userApp.getName())
                     .phone(userApp.getPhone())
+                    .tier(userApp.getTier())
                     .tokenWeight(userApp.getTokenWeight())
                     .roles(userApp.getRoles())
                     .build();
         }
-
-
     }
-
 }

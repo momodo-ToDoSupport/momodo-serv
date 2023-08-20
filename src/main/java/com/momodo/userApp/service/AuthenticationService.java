@@ -4,6 +4,7 @@ package com.momodo.userApp.service;
 import com.momodo.jwt.exception.error.InvalidRefreshTokenException;
 import com.momodo.jwt.security.RefreshTokenProvider;
 import com.momodo.jwt.security.TokenProvider;
+import com.momodo.userApp.domain.TodoTier;
 import com.momodo.userApp.domain.UserApp;
 import com.momodo.userApp.domain.UserType;
 import com.momodo.userApp.dto.ResponseAuthentication;

@@ -15,5 +15,4 @@ public class ResponseAuthentication {
         private String accessToken;
         private String refreshToken;
     }
-
 }
