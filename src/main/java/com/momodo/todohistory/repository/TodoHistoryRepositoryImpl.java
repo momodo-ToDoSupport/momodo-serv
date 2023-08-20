@@ -1,6 +1,6 @@
 package com.momodo.todohistory.repository;
 
-import com.momodo.todohistory.TodoHistory;
+import com.momodo.todohistory.domain.TodoHistory;
 import com.momodo.todohistory.dto.TodoHistoryResponseDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -71,5 +71,16 @@ public class TodoHistoryRepositoryImpl implements TodoHistoryRepositoryCustom {
                 .where(todoHistory.memberId.eq(memberId)
                         .and(todoHistory.dueDate.between(from, to)))
                 .fetch();
+    }
+
+    @Override
+    public Long countBySecondStepAchievement(String memberId, LocalDate from, LocalDate to) {
+        return queryFactory
+                .select(todoHistory.count())
+                .from(todoHistory)
+                .where(todoHistory.memberId.eq(memberId)
+                        .and(todoHistory.dueDate.between(from, to))
+                        .and(todoHistory.step.goe(2)))
+                .fetchOne();
     }
 }

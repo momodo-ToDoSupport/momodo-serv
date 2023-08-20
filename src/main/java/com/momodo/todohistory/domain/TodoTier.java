@@ -1,13 +1,13 @@
-package com.momodo.userApp.domain;
+package com.momodo.todohistory.domain;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum TodoTier {
     RED(0),
-    GREEN(1),
-    BLUE(2),
-    RAINBOW(3);
+    GREEN(3),
+    BLUE(10),
+    RAINBOW(20);
 
     private final Integer tier;
 

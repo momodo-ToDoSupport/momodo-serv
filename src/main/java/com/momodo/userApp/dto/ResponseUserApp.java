@@ -1,7 +1,7 @@
 package com.momodo.userApp.dto;
 
 import com.momodo.userApp.domain.Role;
-import com.momodo.userApp.domain.TodoTier;
+import com.momodo.todohistory.domain.TodoTier;
 import com.momodo.userApp.domain.UserApp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

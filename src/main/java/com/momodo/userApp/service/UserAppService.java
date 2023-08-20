@@ -3,6 +3,7 @@ package com.momodo.userApp.service;
 import com.momodo.jwt.dto.CommonResponse;
 import com.momodo.jwt.exception.error.DuplicateMemberException;
 import com.momodo.jwt.security.util.SecurityUtil;
+import com.momodo.todohistory.domain.TodoTier;
 import com.momodo.userApp.domain.UserApp;
 import com.momodo.userApp.domain.UserType;
 import com.momodo.userApp.dto.RequestCreateUserApp;
@@ -65,5 +66,16 @@ public class UserAppService {
                         .orElseGet(() -> null));
     }
 
+    @Transactional
+    public CommonResponse updateTier(String userId, TodoTier tier) {
+        UserApp getUserApp = userAppRepository.findOneWithAuthoritiesByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 userId입니다."));
 
+        getUserApp.setTodoTier(tier);
+
+        return CommonResponse.builder()
+                .success(true)
+                .response(null)
+                .build();
+    }
 }

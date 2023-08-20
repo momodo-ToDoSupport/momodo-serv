@@ -2,6 +2,7 @@ package com.momodo.todohistory;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
+import com.momodo.todohistory.domain.TodoHistory;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;

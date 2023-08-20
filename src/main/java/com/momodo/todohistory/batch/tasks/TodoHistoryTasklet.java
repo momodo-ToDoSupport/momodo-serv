@@ -2,8 +2,8 @@ package com.momodo.todohistory.batch.tasks;
 
 import com.momodo.todo.Todo;
 import com.momodo.todo.repository.TodoRepository;
-import com.momodo.todohistory.TodoHistory;
 import com.momodo.todohistory.TodoHistoryService;
+import com.momodo.todohistory.domain.TodoHistory;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.StepExecution;

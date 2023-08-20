@@ -1,4 +1,4 @@
-package com.momodo.todohistory;
+package com.momodo.todohistory.domain;
 
 import com.momodo.commons.BaseEntity;
 import com.momodo.todohistory.dto.TodoHistoryResponseDto;

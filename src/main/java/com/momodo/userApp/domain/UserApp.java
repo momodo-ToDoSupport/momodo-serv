@@ -1,6 +1,7 @@
 package com.momodo.userApp.domain;
 
 import com.momodo.commons.BaseTimeEntity;
+import com.momodo.todohistory.domain.TodoTier;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -77,6 +78,10 @@ public class UserApp extends BaseTimeEntity {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.tokenWeight = 1L;
+    }
+
+    public void setTodoTier(TodoTier tier){
+        this.tier = tier;
     }
 
     public void userAppWithdrawal() {

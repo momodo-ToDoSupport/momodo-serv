@@ -1,5 +1,6 @@
 package com.momodo.todohistory;
 
+import com.momodo.todohistory.domain.TodoHistory;
 import com.momodo.todohistory.dto.TodoHistoryResponseDto;
 import com.momodo.todohistory.repository.TodoHistoryRepository;
 import org.junit.jupiter.api.DisplayName;

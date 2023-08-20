@@ -35,10 +35,7 @@ public class TodoService {
 
             List<Todo> createTodos = createTodosByDates(todo, request.getRepeatDays(), request.getDuration(), memberId);
             createTodos.add(0, todo);
-            long startTime = System.currentTimeMillis();
             todoRepository.saveTodos(createTodos);
-            long endTime = System.currentTimeMillis();
-            log.info("수행 시간 : " + (endTime - startTime));
         }
         // 단일 저장
         else{

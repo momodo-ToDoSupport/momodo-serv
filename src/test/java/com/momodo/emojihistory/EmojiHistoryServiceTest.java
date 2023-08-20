@@ -1,8 +1,6 @@
 package com.momodo.emojihistory;
 
-import com.momodo.emojihistory.dto.EmojiHistoryResponseDto;
 import com.momodo.emojihistory.repository.EmojiHistoryRepository;
-import com.momodo.todohistory.TodoHistory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
