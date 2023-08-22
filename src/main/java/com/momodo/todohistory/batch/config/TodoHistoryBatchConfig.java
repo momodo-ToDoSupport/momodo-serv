@@ -1,6 +1,7 @@
 package com.momodo.todohistory.batch.config;
 
 import com.momodo.todohistory.batch.tasks.TodoHistoryTasklet;
+import com.momodo.todohistory.batch.tasks.TodoTierTasklet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -24,9 +25,10 @@ public class TodoHistoryBatchConfig {
     }
 
     @Bean
-    public Job todoHistoryJob(JobRepository jobRepository, Step todoHistoryStep) {
+    public Job todoHistoryJob(JobRepository jobRepository, Step todoHistoryStep, Step todoTierStep) {
         return new JobBuilder("todoHistoryJob", jobRepository)
                 .start(todoHistoryStep)
+                .next(todoTierStep)
                 .build();
     }
 
@@ -35,6 +37,14 @@ public class TodoHistoryBatchConfig {
             , PlatformTransactionManager platformTransactionManager){
         return new StepBuilder("todoHistoryStep", jobRepository)
                 .tasklet(todoHistoryTasklet, platformTransactionManager)
+                .build();
+    }
+
+    @Bean
+    public Step todoTierStep(JobRepository jobRepository, TodoTierTasklet todoTierTasklet
+            , PlatformTransactionManager platformTransactionManager){
+        return new StepBuilder("todoTierStep", jobRepository)
+                .tasklet(todoTierTasklet, platformTransactionManager)
                 .build();
     }
 }
