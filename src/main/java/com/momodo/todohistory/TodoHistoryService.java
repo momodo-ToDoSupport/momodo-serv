@@ -4,12 +4,14 @@ import com.momodo.todohistory.domain.TodoHistory;
 import com.momodo.todohistory.domain.TodoTier;
 import com.momodo.todohistory.dto.TodoHistoryResponseDto;
 import com.momodo.todohistory.repository.TodoHistoryRepository;
+import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import static com.momodo.todohistory.domain.TodoTier.*;
 
@@ -61,23 +63,26 @@ public class TodoHistoryService {
         return step;
     }
 
-    // 매개변수로 넘어온 date의 년/월의 1일부터 date까지 2단계 이상 달성한 TodoHistory 개수로 TodoTier 계산
-    public TodoTier calculateTodoTier(String memberId, LocalDate date){
+    /**
+     * 월 1일 부터 beforeDate까지
+     * 유저별 2단계 이상 달성한 TodoHistory 개수 반환
+     */
+    public Map<String, Integer> countBySecondStepAchievement(LocalDate date){
         LocalDate firstDate = LocalDate.of(date.getYear(), date.getMonth(), 1);
-        long count = countBySecondStepAchievement(memberId, firstDate, date);
+
+        return todoHistoryRepository.countBySecondStepAchievement(firstDate, date);
+    }
+
+    public TodoTier calculateTodoTier(int countBySecondStepAchievement) {
 
         // 반환된 개수에 따라 티어 반환
-        if(count < GREEN.getTier())
+        if (countBySecondStepAchievement < GREEN.getTier())
             return RED;
-        else if(count < BLUE.getTier())
+        else if (countBySecondStepAchievement < BLUE.getTier())
             return GREEN;
-        else if(count < RAINBOW.getTier())
+        else if (countBySecondStepAchievement < RAINBOW.getTier())
             return BLUE;
         else
             return RAINBOW;
-    }
-
-    private long countBySecondStepAchievement(String memberId, LocalDate from, LocalDate to){
-        return todoHistoryRepository.countBySecondStepAchievement(memberId, from, to);
     }
 }

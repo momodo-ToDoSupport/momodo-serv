@@ -2,6 +2,7 @@ package com.momodo.todohistory.repository;
 
 import com.momodo.todohistory.domain.TodoHistory;
 import com.momodo.todohistory.dto.TodoHistoryResponseDto;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,10 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.momodo.todohistory.QTodoHistory.todoHistory;
 
@@ -74,13 +78,18 @@ public class TodoHistoryRepositoryImpl implements TodoHistoryRepositoryCustom {
     }
 
     @Override
-    public Long countBySecondStepAchievement(String memberId, LocalDate from, LocalDate to) {
-        return queryFactory
-                .select(todoHistory.count())
+    public Map<String, Integer> countBySecondStepAchievement(LocalDate from, LocalDate to) {
+        List<Tuple> result = queryFactory
+                .select(todoHistory.memberId, todoHistory.count())
                 .from(todoHistory)
-                .where(todoHistory.memberId.eq(memberId)
-                        .and(todoHistory.dueDate.between(from, to))
+                .where(todoHistory.dueDate.between(from, to)
                         .and(todoHistory.step.goe(2)))
-                .fetchOne();
+                .groupBy(todoHistory.memberId)
+                .fetch();
+
+        return result.stream()
+                .collect(Collectors.toMap(
+                        t -> t.get(0, String.class),
+                        t -> t.get(1, Integer.class)));
     }
 }
