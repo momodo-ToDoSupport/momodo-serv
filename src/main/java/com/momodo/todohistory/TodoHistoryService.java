@@ -67,13 +67,13 @@ public class TodoHistoryService {
      * 월 1일 부터 beforeDate까지
      * 유저별 2단계 이상 달성한 TodoHistory 개수 반환
      */
-    public Map<String, Integer> countBySecondStepAchievement(LocalDate date){
+    public Map<String, Long> countBySecondStepAchievement(LocalDate date){
         LocalDate firstDate = LocalDate.of(date.getYear(), date.getMonth(), 1);
 
         return todoHistoryRepository.countBySecondStepAchievement(firstDate, date);
     }
 
-    public TodoTier calculateTodoTier(int countBySecondStepAchievement) {
+    public TodoTier calculateTodoTier(long countBySecondStepAchievement) {
 
         // 반환된 개수에 따라 티어 반환
         if (countBySecondStepAchievement < GREEN.getTier())

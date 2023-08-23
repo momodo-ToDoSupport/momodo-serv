@@ -1,8 +1,7 @@
-package com.momodo.todohistory;
+package com.momodo.todohistory.domain;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import com.momodo.todohistory.domain.TodoHistory;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
@@ -16,7 +15,7 @@ import com.querydsl.core.types.Path;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QTodoHistory extends EntityPathBase<TodoHistory> {
 
-    private static final long serialVersionUID = -957402020L;
+    private static final long serialVersionUID = 1142319190L;
 
     public static final QTodoHistory todoHistory = new QTodoHistory("todoHistory");
 

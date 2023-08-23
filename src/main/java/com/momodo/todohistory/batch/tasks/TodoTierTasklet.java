@@ -27,7 +27,7 @@ public class TodoTierTasklet implements Tasklet, StepExecutionListener {
 
     // 전날
     private LocalDate beforeDate;
-    private Map<String, Integer> groupingByMember;
+    private Map<String, Long> groupingByMember;
 
     @Override
     public void beforeStep(StepExecution stepExecution) {

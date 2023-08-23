@@ -20,5 +20,5 @@ public interface TodoHistoryRepositoryCustom {
      * 2단계를 달성한 TodoHistory 개수 계산
      *
      */
-    Map<String, Integer> countBySecondStepAchievement(LocalDate from, LocalDate to);
+    Map<String, Long> countBySecondStepAchievement(LocalDate from, LocalDate to);
 }

@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.momodo.todohistory.QTodoHistory.todoHistory;
+import static com.momodo.todohistory.domain.QTodoHistory.todoHistory;
 
 @Repository
 @RequiredArgsConstructor
@@ -78,7 +78,7 @@ public class TodoHistoryRepositoryImpl implements TodoHistoryRepositoryCustom {
     }
 
     @Override
-    public Map<String, Integer> countBySecondStepAchievement(LocalDate from, LocalDate to) {
+    public Map<String, Long> countBySecondStepAchievement(LocalDate from, LocalDate to) {
         List<Tuple> result = queryFactory
                 .select(todoHistory.memberId, todoHistory.count())
                 .from(todoHistory)
@@ -90,6 +90,6 @@ public class TodoHistoryRepositoryImpl implements TodoHistoryRepositoryCustom {
         return result.stream()
                 .collect(Collectors.toMap(
                         t -> t.get(0, String.class),
-                        t -> t.get(1, Integer.class)));
+                        t -> t.get(1, Long.class)));
     }
 }

@@ -49,6 +49,8 @@ public class QUserApp extends EntityPathBase<UserApp> {
 
     public final EnumPath<Role> roles = createEnum("roles", Role.class);
 
+    public final EnumPath<com.momodo.todohistory.domain.TodoTier> tier = createEnum("tier", com.momodo.todohistory.domain.TodoTier.class);
+
     public final NumberPath<Long> tokenWeight = createNumber("tokenWeight", Long.class);
 
     public final EnumPath<UserType> type = createEnum("type", UserType.class);

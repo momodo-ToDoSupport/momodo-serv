@@ -25,6 +25,11 @@ public class TodoHistoryBatchConfig {
     }
 
     @Bean
+    public Tasklet todoTierTasklet(){
+        return new TodoTierTasklet();
+    }
+
+    @Bean
     public Job todoHistoryJob(JobRepository jobRepository, Step todoHistoryStep, Step todoTierStep) {
         return new JobBuilder("todoHistoryJob", jobRepository)
                 .start(todoHistoryStep)
