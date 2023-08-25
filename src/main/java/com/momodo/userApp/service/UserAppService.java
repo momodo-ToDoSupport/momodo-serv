@@ -78,4 +78,9 @@ public class UserAppService {
                 .response(null)
                 .build();
     }
+
+    @Transactional
+    public void resetAllUserTiers(){
+        userAppRepository.resetAllUserTiers();
+    }
 }
