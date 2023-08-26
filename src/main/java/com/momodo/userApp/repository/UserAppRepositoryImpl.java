@@ -1,6 +1,6 @@
 package com.momodo.userApp.repository;
 
-import com.momodo.todohistory.domain.TodoTier;
+import com.momodo.userApp.domain.Tier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -16,7 +16,7 @@ public class UserAppRepositoryImpl implements UserAppRepositoryCustom{
     @Override
     public void resetAllUserTiers() {
         queryFactory.update(userApp)
-                .set(userApp.tier, TodoTier.RED)
+                .set(userApp.tier, Tier.RED.name())
                 .execute();
     }
 }

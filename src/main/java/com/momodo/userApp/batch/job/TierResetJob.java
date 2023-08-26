@@ -1,4 +1,4 @@
-package com.momodo.todohistory.batch.job;
+package com.momodo.userApp.batch.job;
 
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -9,7 +9,7 @@ import org.springframework.batch.core.configuration.JobLocator;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
-public class TodoHistoryQuartzJob extends QuartzJobBean {
+public class TierResetJob extends QuartzJobBean {
 
     private String jobName;
     private JobLauncher jobLauncher;

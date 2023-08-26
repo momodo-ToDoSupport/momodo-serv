@@ -1,9 +1,9 @@
 package com.momodo.todohistory;
 
 import com.momodo.todohistory.domain.TodoHistory;
-import com.momodo.todohistory.domain.TodoTier;
 import com.momodo.todohistory.dto.TodoHistoryResponseDto;
 import com.momodo.todohistory.repository.TodoHistoryRepository;
+import com.momodo.userApp.domain.Tier;
 import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-import static com.momodo.todohistory.domain.TodoTier.*;
+import static com.momodo.userApp.domain.Tier.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -73,7 +73,7 @@ public class TodoHistoryService {
         return todoHistoryRepository.countBySecondStepAchievement(firstDate, date);
     }
 
-    public TodoTier calculateTodoTier(long countBySecondStepAchievement) {
+    public Tier calculateTodoTier(long countBySecondStepAchievement) {
 
         // 반환된 개수에 따라 티어 반환
         if (countBySecondStepAchievement < GREEN.getTier())

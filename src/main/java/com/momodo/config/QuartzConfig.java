@@ -1,6 +1,8 @@
-package com.momodo.todohistory.batch.config;
+package com.momodo.config;
 
-import com.momodo.todohistory.batch.job.TodoHistoryQuartzJob;
+import com.momodo.todohistory.batch.job.TodoHistoryCreateJob;
+import com.momodo.userApp.batch.job.TierResetJob;
+import com.momodo.userApp.domain.Tier;
 import org.quartz.*;
 import org.springframework.batch.core.configuration.JobLocator;
 import org.springframework.batch.core.configuration.JobRegistry;
@@ -29,22 +31,22 @@ public class QuartzConfig {
     }
 
     @Bean
-    public JobDetail todoHistoryJobDetail(){
+    public JobDetail todoHistoryCreateJobDetail(){
         // Set Job Data Map
         JobDataMap jobDataMap = new JobDataMap();
-        jobDataMap.put("jobName", "todoHistoryJob");
+        jobDataMap.put("jobName", "todoHistoryCreateJob");
         jobDataMap.put("jobLauncher", jobLauncher);
         jobDataMap.put("jobLocator", jobLocator);
 
-        return JobBuilder.newJob(TodoHistoryQuartzJob.class)
-                .withIdentity("todoHistoryJob")
+        return JobBuilder.newJob(TodoHistoryCreateJob.class)
+                .withIdentity("todoHistoryCreateJob")
                 .setJobData(jobDataMap)
                 .storeDurably()
                 .build();
     }
 
     @Bean
-    public Trigger todoHistoryJobTrigger(){
+    public Trigger todoHistoryCreateJobTrigger(){
         /*
         // 매일 자정에 실행
         CronScheduleBuilder scheduleBuilder = CronScheduleBuilder
@@ -57,17 +59,52 @@ public class QuartzConfig {
 
         return TriggerBuilder
                 .newTrigger()
-                .forJob(todoHistoryJobDetail())
-                .withIdentity("todoHistoryJobTrigger")
+                .forJob(todoHistoryCreateJobDetail())
+                .withIdentity("todoHistoryCreateJobTrigger")
                 .withSchedule(scheduleBuilder)
                 .build();
     }
 
     @Bean
-    public SchedulerFactoryBean schedulerFactoryBean(){
+    public JobDetail tierResetJobDetail(){
+        // Set Job Data Map
+        JobDataMap jobDataMap = new JobDataMap();
+        jobDataMap.put("jobName", "tierResetJob");
+        jobDataMap.put("jobLauncher", jobLauncher);
+        jobDataMap.put("jobLocator", jobLocator);
+
+        return JobBuilder.newJob(TierResetJob.class)
+                .withIdentity("tierResetJob")
+                .setJobData(jobDataMap)
+                .storeDurably()
+                .build();
+    }
+
+    @Bean
+    public Trigger tierResetJobTrigger(){
+        /*
+        // 매일 자정에 실행
+        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder
+                .cronSchedule("0 0 0 * * ?");*/
+
+        SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder
+                .simpleSchedule()
+                .withIntervalInHours(1)
+                .repeatForever();
+
+        return TriggerBuilder
+                .newTrigger()
+                .forJob(tierResetJobDetail())
+                .withIdentity("tierResetJobTrigger")
+                .withSchedule(scheduleBuilder)
+                .build();
+    }
+
+    @Bean
+    public SchedulerFactoryBean schedulerFactoryBean() throws SchedulerException {
         SchedulerFactoryBean scheduler = new SchedulerFactoryBean();
-        scheduler.setTriggers(todoHistoryJobTrigger());
-        scheduler.setJobDetails(todoHistoryJobDetail());
+        scheduler.setTriggers(tierResetJobTrigger());
+        scheduler.setJobDetails(tierResetJobDetail());
 
         return scheduler;
     }

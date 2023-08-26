@@ -1,9 +1,9 @@
-package com.momodo.todohistory.domain;
+package com.momodo.userApp.domain;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public enum TodoTier {
+public enum Tier {
     RED(0),
     GREEN(3),
     BLUE(10),

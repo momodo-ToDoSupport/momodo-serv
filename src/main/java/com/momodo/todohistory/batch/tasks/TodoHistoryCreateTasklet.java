@@ -4,7 +4,6 @@ import com.momodo.todo.Todo;
 import com.momodo.todo.repository.TodoRepository;
 import com.momodo.todohistory.TodoHistoryService;
 import com.momodo.todohistory.domain.TodoHistory;
-import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.StepExecution;
@@ -20,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class TodoHistoryTasklet implements Tasklet, StepExecutionListener {
+public class TodoHistoryCreateTasklet implements Tasklet, StepExecutionListener {
 
     @Autowired
     private TodoRepository todoRepository;

@@ -1,7 +1,6 @@
 package com.momodo.userApp.domain;
 
 import com.momodo.commons.BaseTimeEntity;
-import com.momodo.todohistory.domain.TodoTier;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,8 +41,7 @@ public class UserApp extends BaseTimeEntity {
     private String phone;  //전화번호
 
     @Column(name = "tier")
-    @Enumerated(EnumType.STRING)
-    private TodoTier tier;
+    private String tier;
 
     @Column(name = "is_push")
     private Boolean isPush = Boolean.TRUE;  //알림동의
@@ -69,7 +67,7 @@ public class UserApp extends BaseTimeEntity {
         this.type = type;
         this.password = password;
         this.name = name;
-        this.tier = TodoTier.RED;
+        this.tier = Tier.RED.name();
         this.roles = Role.MEMBER;
         this.phone = phone;
         this.email = email;
@@ -80,8 +78,8 @@ public class UserApp extends BaseTimeEntity {
         this.tokenWeight = 1L;
     }
 
-    public void setTodoTier(TodoTier tier){
-        this.tier = tier;
+    public void setTodoTier(Tier todoTier){
+        this.tier = todoTier.name();
     }
 
     public void userAppWithdrawal() {
