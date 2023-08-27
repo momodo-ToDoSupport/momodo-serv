@@ -1,5 +1,7 @@
 package com.momodo.userApp.batch.job;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.batch.core.Job;
@@ -8,8 +10,9 @@ import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.configuration.JobLocator;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.scheduling.quartz.QuartzJobBean;
+import org.springframework.stereotype.Component;
 
-public class TierResetJob extends QuartzJobBean {
+public class TierResetScheduledJob extends QuartzJobBean {
 
     private String jobName;
     private JobLauncher jobLauncher;

@@ -1,12 +1,9 @@
-package com.momodo.config;
+package com.momodo.quartz;
 
 import com.momodo.todohistory.batch.job.TodoHistoryCreateJob;
-import com.momodo.userApp.batch.job.TierResetJob;
-import com.momodo.userApp.domain.Tier;
+import com.momodo.userApp.batch.job.TierResetScheduledJob;
 import org.quartz.*;
 import org.springframework.batch.core.configuration.JobLocator;
-import org.springframework.batch.core.configuration.JobRegistry;
-import org.springframework.batch.core.configuration.support.JobRegistryBeanPostProcessor;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,14 +18,6 @@ public class QuartzConfig {
 
     @Autowired
     private JobLocator jobLocator;
-
-    @Bean
-    public JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor(JobRegistry jobRegistry){
-        JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor = new JobRegistryBeanPostProcessor();
-        jobRegistryBeanPostProcessor.setJobRegistry(jobRegistry);
-
-        return  jobRegistryBeanPostProcessor;
-    }
 
     @Bean
     public JobDetail todoHistoryCreateJobDetail(){
@@ -47,15 +36,15 @@ public class QuartzConfig {
 
     @Bean
     public Trigger todoHistoryCreateJobTrigger(){
-        /*
-        // 매일 자정에 실행
-        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder
-                .cronSchedule("0 0 0 * * ?");*/
 
-        SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder
-                .simpleSchedule()
-                .withIntervalInHours(1)
-                .repeatForever();
+        // 매일 00시 00분 01초에 실행
+        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder
+                .cronSchedule("1 0 0 * * ?");
+
+//        SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder
+//                .simpleSchedule()
+//                .withIntervalInHours(1)
+//                .repeatForever();
 
         return TriggerBuilder
                 .newTrigger()
@@ -73,7 +62,7 @@ public class QuartzConfig {
         jobDataMap.put("jobLauncher", jobLauncher);
         jobDataMap.put("jobLocator", jobLocator);
 
-        return JobBuilder.newJob(TierResetJob.class)
+        return JobBuilder.newJob(TierResetScheduledJob.class)
                 .withIdentity("tierResetJob")
                 .setJobData(jobDataMap)
                 .storeDurably()
@@ -82,15 +71,15 @@ public class QuartzConfig {
 
     @Bean
     public Trigger tierResetJobTrigger(){
-        /*
-        // 매일 자정에 실행
+        // 매월 1일 자정에 실행
         CronScheduleBuilder scheduleBuilder = CronScheduleBuilder
-                .cronSchedule("0 0 0 * * ?");*/
+                .cronSchedule("0 0 0 1 * ?");
 
+        /*
         SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder
                 .simpleSchedule()
                 .withIntervalInHours(1)
-                .repeatForever();
+                .repeatForever();*/
 
         return TriggerBuilder
                 .newTrigger()
@@ -103,9 +92,8 @@ public class QuartzConfig {
     @Bean
     public SchedulerFactoryBean schedulerFactoryBean() throws SchedulerException {
         SchedulerFactoryBean scheduler = new SchedulerFactoryBean();
-        scheduler.setTriggers(tierResetJobTrigger());
-        scheduler.setJobDetails(tierResetJobDetail());
-
+        scheduler.setJobDetails(tierResetJobDetail(), todoHistoryCreateJobDetail());
+        scheduler.setTriggers(tierResetJobTrigger(), todoHistoryCreateJobTrigger());
         return scheduler;
     }
 }

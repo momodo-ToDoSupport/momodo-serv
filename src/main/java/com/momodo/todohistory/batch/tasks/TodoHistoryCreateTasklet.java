@@ -39,7 +39,6 @@ public class TodoHistoryCreateTasklet implements Tasklet, StepExecutionListener 
         // memberId를 기준으로 그룹화
         groupingByMember = todos.stream()
                 .collect(Collectors.groupingBy(t -> t.getMemberId()));
-        System.out.println("beforeStep");
     }
 
     @Override
@@ -76,10 +75,5 @@ public class TodoHistoryCreateTasklet implements Tasklet, StepExecutionListener 
         todoHistoryService.createAll(saveList);
 
         return RepeatStatus.FINISHED;
-    }
-
-    @Override
-    public ExitStatus afterStep(StepExecution stepExecution) {
-        return ExitStatus.COMPLETED;
     }
 }

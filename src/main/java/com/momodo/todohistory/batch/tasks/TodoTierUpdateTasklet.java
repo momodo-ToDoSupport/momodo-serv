@@ -23,6 +23,7 @@ public class TodoTierUpdateTasklet implements Tasklet, StepExecutionListener {
 
     // 전날
     private LocalDate beforeDate;
+    private boolean isLastDate;
     private Map<String, Long> groupingByMember;
 
     @Override
@@ -30,11 +31,22 @@ public class TodoTierUpdateTasklet implements Tasklet, StepExecutionListener {
         // StepExecutionListener.super.beforeStep(stepExecution);
         beforeDate = LocalDate.now().minusDays(1);
 
+        // 전날이 달의 마지막 날이였다면 실행 X
+        isLastDate = beforeDate.isEqual(beforeDate.withDayOfMonth(beforeDate.lengthOfMonth()));
+
+        if(isLastDate){
+            return;
+        }
+
         groupingByMember = todoHistoryService.countBySecondStepAchievement(beforeDate);
     }
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+        if(isLastDate){
+            return RepeatStatus.FINISHED;
+        }
+
         if(groupingByMember.isEmpty()) {
             return RepeatStatus.FINISHED;
         }
