@@ -1,0 +1,3 @@
+[submodule "momodo-serv-data"]
+	path = momodo-serv-data
+	url = https://github.com/momodo-ToDoSupport/momodo-serv-data.git
