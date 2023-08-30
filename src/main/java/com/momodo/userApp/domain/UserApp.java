@@ -1,6 +1,7 @@
 package com.momodo.userApp.domain;
 
 import com.momodo.commons.BaseTimeEntity;
+import com.momodo.userApp.dto.RequestUpdateUserProfile;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -61,6 +62,12 @@ public class UserApp extends BaseTimeEntity {
     @Column(name = "token_weight")
     private Long tokenWeight;
 
+    @Column(name = "profile_image")
+    private String profileImage;
+
+    @Column(name = "introduce")
+    private String introduce;
+
     @Builder
     public UserApp(String userId, UserType type, String password, String name, String email, boolean isPush, boolean isActive, String accessToken, String refreshToken, String phone) {
         this.userId = userId;
@@ -76,10 +83,18 @@ public class UserApp extends BaseTimeEntity {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.tokenWeight = 1L;
+        this.profileImage = "default.png";
+        this.introduce = "";
     }
 
     public void setTodoTier(Tier todoTier){
         this.tier = todoTier.name();
+    }
+
+    public void updateProfile(String profileImage, RequestUpdateUserProfile updateUserProfile){
+        this.profileImage = profileImage;
+        this.name = updateUserProfile.getName();
+        this.introduce = updateUserProfile.getIntroduce();
     }
 
     public void userAppWithdrawal() {

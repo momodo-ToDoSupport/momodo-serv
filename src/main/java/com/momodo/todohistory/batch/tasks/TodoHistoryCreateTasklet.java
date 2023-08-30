@@ -27,23 +27,23 @@ public class TodoHistoryCreateTasklet implements Tasklet, StepExecutionListener 
     private TodoHistoryService todoHistoryService;
 
     private LocalDate dueDate;
-    private List<Todo> todos;
+    private List<Todo> todosOfBeforeDate;
     private Map<String, List<Todo>> groupingByMember;
 
     @Override
     public void beforeStep(StepExecution stepExecution) {
         // 이전 날에 해당하는 Todo들을 모두 조회하여 사용자마다 TodoHistory를 생성
         dueDate = LocalDate.now().minusDays(1);
-        todos = todoRepository.findAllByDueDate(dueDate);
+        todosOfBeforeDate = todoRepository.findAllByDueDate(dueDate);
 
         // memberId를 기준으로 그룹화
-        groupingByMember = todos.stream()
+        groupingByMember = todosOfBeforeDate.stream()
                 .collect(Collectors.groupingBy(t -> t.getMemberId()));
     }
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-        if(todos.isEmpty()){
+        if(todosOfBeforeDate.isEmpty()){
             return RepeatStatus.FINISHED;
         }
 

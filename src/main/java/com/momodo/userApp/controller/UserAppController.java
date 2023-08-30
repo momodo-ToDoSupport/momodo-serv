@@ -3,6 +3,7 @@ package com.momodo.userApp.controller;
 
 import com.momodo.jwt.dto.CommonResponse;
 import com.momodo.userApp.dto.RequestCreateUserApp;
+import com.momodo.userApp.dto.RequestUpdateUserProfile;
 import com.momodo.userApp.dto.ResponseUserApp;
 import com.momodo.userApp.service.UserAppService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name="App 회원", description = "APP 사용자에 관한 API 입니다.")
 @RestController
@@ -23,8 +25,8 @@ public class UserAppController {
 
     @PostMapping
     public ResponseEntity<CommonResponse> signup(@Valid @RequestBody RequestCreateUserApp registerDto) {
-        CommonResponse data = userAppService.signup(registerDto);
-        return ResponseEntity.ok(data);
+        CommonResponse response = userAppService.signup(registerDto);
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -45,4 +47,10 @@ public class UserAppController {
         return ResponseEntity.ok(userAppService.getUserAppWithAuthorities(userId));
     }
 
+    @PutMapping
+    public ResponseEntity<CommonResponse> updateProfile(@AuthenticationPrincipal User user,
+        @RequestPart MultipartFile file, @RequestPart RequestUpdateUserProfile updateDto)  {
+        CommonResponse response = userAppService.updateProfile(user.getUsername(), file, updateDto);
+        return ResponseEntity.ok(response);
+    }
 }

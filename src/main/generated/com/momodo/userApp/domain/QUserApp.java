@@ -30,6 +30,8 @@ public class QUserApp extends EntityPathBase<UserApp> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final StringPath introduce = createString("introduce");
+
     public final BooleanPath isActive = createBoolean("isActive");
 
     public final BooleanPath isMarketing = createBoolean("isMarketing");
@@ -44,6 +46,8 @@ public class QUserApp extends EntityPathBase<UserApp> {
     public final StringPath password = createString("password");
 
     public final StringPath phone = createString("phone");
+
+    public final StringPath profileImage = createString("profileImage");
 
     public final StringPath refreshToken = createString("refreshToken");
 

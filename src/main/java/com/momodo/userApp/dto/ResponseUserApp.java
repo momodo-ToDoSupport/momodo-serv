@@ -20,8 +20,10 @@ public class ResponseUserApp {
         private String tier;
         private Long tokenWeight;
         private Role roles;
+        private String profileImage;
+        private String introduce;
 
-        public static ResponseUserApp.Info of(UserApp userApp) {
+        public static ResponseUserApp.Info of(UserApp userApp, String imageUrl) {
             if(userApp == null) return null;
 
             return Info.builder()
@@ -31,6 +33,8 @@ public class ResponseUserApp {
                     .tier(userApp.getTier())
                     .tokenWeight(userApp.getTokenWeight())
                     .roles(userApp.getRoles())
+                    .profileImage(imageUrl)
+                    .introduce(userApp.getIntroduce())
                     .build();
         }
     }

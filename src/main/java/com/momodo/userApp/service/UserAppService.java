@@ -1,5 +1,6 @@
 package com.momodo.userApp.service;
 
+import com.momodo.aws.S3UploadService;
 import com.momodo.jwt.dto.CommonResponse;
 import com.momodo.jwt.exception.error.DuplicateMemberException;
 import com.momodo.jwt.security.util.SecurityUtil;
@@ -7,11 +8,15 @@ import com.momodo.userApp.domain.Tier;
 import com.momodo.userApp.domain.UserApp;
 import com.momodo.userApp.domain.UserType;
 import com.momodo.userApp.dto.RequestCreateUserApp;
+import com.momodo.userApp.dto.RequestUpdateUserProfile;
 import com.momodo.userApp.dto.ResponseUserApp;
 import com.momodo.userApp.repository.UserAppRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Service
 public class UserAppService {
@@ -19,11 +24,13 @@ public class UserAppService {
     private final UserAppRepository userAppRepository;
     private final PasswordEncoder passwordEncoder;
     private final SecurityUtil securityUtil;
+    private final S3UploadService s3UploadService;
 
-    public UserAppService(UserAppRepository userAppRepository, PasswordEncoder passwordEncoder, SecurityUtil securityUtil) {
+    public UserAppService(UserAppRepository userAppRepository, PasswordEncoder passwordEncoder, SecurityUtil securityUtil, S3UploadService s3UploadService) {
         this.userAppRepository = userAppRepository;
         this.passwordEncoder = passwordEncoder;
         this.securityUtil = securityUtil;
+        this.s3UploadService = s3UploadService;
     }
 
     @Transactional
@@ -55,15 +62,47 @@ public class UserAppService {
     //userId를 파라미터로 받아 해당 유저의 정보를 가져온다.
     @Transactional(readOnly = true)
     public ResponseUserApp.Info getUserAppWithAuthorities(String userId) {
-        return ResponseUserApp.Info.of(userAppRepository.findOneWithAuthoritiesByUserId(userId).orElseGet(() -> null));
+        UserApp getUserApp = userAppRepository.findOneWithAuthoritiesByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 userId입니다."));
+
+        String imageUrl = s3UploadService.getS3Url(getUserApp.getProfileImage());
+        return ResponseUserApp.Info.of(getUserApp, imageUrl);
     }
 
     @Transactional(readOnly = true)
     public ResponseUserApp.Info getMyUserAppAuthorities() {
-        return ResponseUserApp.Info.of(
-                securityUtil.getCurrentUsername()
-                        .flatMap(userAppRepository::findOneWithAuthoritiesByUserId)
-                        .orElseGet(() -> null));
+        UserApp getUserApp = securityUtil.getCurrentUsername()
+                .flatMap(userAppRepository::findOneWithAuthoritiesByUserId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 userId입니다."));
+
+        String imageUrl = s3UploadService.getS3Url(getUserApp.getProfileImage());
+        return ResponseUserApp.Info.of(getUserApp, imageUrl);
+    }
+
+    @Transactional
+    public CommonResponse updateProfile(String userId, MultipartFile file, RequestUpdateUserProfile updateDto) {
+        UserApp getUserApp = userAppRepository.findOneWithAuthoritiesByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 userId입니다."));
+
+        if(file.isEmpty()){
+            getUserApp.updateProfile(getUserApp.getProfileImage(), updateDto);
+        }else{
+            try{
+                String updateFileName = s3UploadService.uploadFile(file);
+                getUserApp.updateProfile(updateFileName, updateDto);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return CommonResponse.builder()
+                        .success(false)
+                        .response(null)
+                        .build();
+            }
+        }
+
+        return CommonResponse.builder()
+                .success(true)
+                .response(null)
+                .build();
     }
 
     @Transactional
