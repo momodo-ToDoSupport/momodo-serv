@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static com.momodo.aws.S3UploadService.DEFAULT_IMAGE_NAME;
+
 
 @Entity
 @Getter
@@ -83,7 +85,7 @@ public class UserApp extends BaseTimeEntity {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.tokenWeight = 1L;
-        this.profileImage = "default.png";
+        this.profileImage = DEFAULT_IMAGE_NAME;
         this.introduce = "";
     }
 

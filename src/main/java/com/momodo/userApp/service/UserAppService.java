@@ -88,6 +88,10 @@ public class UserAppService {
             getUserApp.updateProfile(getUserApp.getProfileImage(), updateDto);
         }else{
             try{
+                // 기존 프로필 이미지는 버킷에서 제거
+                s3UploadService.deleteFile(getUserApp.getProfileImage());
+
+                // 매개변수로 넘어온 이미지를 버킷에 추가
                 String updateFileName = s3UploadService.uploadFile(file);
                 getUserApp.updateProfile(updateFileName, updateDto);
             } catch (IOException e) {
