@@ -32,7 +32,8 @@ public class TodoHistoryService {
 
     public TodoHistoryResponseDto.Info findByDueDate(String memberId, LocalDate dueDate) {
 
-        return todoHistoryRepository.findByDueDate(memberId, dueDate).toInfo();
+        return todoHistoryRepository.findByDueDate(memberId, dueDate)
+                .orElseGet(() -> null);
     }
 
     public List<TodoHistoryResponseDto.Info> findAllByYearMonth(String memberId, String yearMonth) {

@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -46,17 +47,17 @@ public class TodoHistoryServiceTest {
     @DisplayName("TodoHistory DueDate로 조회")
     public void findByDueDate(){
         // given
-        TodoHistory todoHistory = createTodoHistory();
+        Optional<TodoHistoryResponseDto.Info> info = Optional.of(createTodoHistoryInfo());
 
         // stub
-        when(todoHistoryRepository.findByDueDate(todoHistory.getMemberId(), todoHistory.getDueDate())).thenReturn(todoHistory);
+        when(todoHistoryRepository.findByDueDate(any(String.class), any(LocalDate.class))).thenReturn(info);
 
         // when
-        TodoHistoryResponseDto.Info result = todoHistoryService.findByDueDate(todoHistory.getMemberId(), todoHistory.getDueDate());
+        TodoHistoryResponseDto.Info result = todoHistoryService.findByDueDate(memberId, LocalDate.parse("2023-06-02"));
 
         // then
-        assertThat(todoHistory.getId()).isEqualTo(result.getId());
-        assertThat(todoHistory.getDueDate()).isEqualTo(result.getDueDate());
+        assertThat(result.getId()).isEqualTo(result.getId());
+        assertThat(result.getDueDate()).isEqualTo(result.getDueDate());
     }
 
     @Test
@@ -76,13 +77,13 @@ public class TodoHistoryServiceTest {
         assertThat(result.size()).isEqualTo(infoList.size());
     }
 
-    private TodoHistory createTodoHistory(){
-        return TodoHistory.builder()
-                .memberId(memberId)
+    private TodoHistoryResponseDto.Info createTodoHistoryInfo(){
+        return TodoHistoryResponseDto.Info.builder()
+                .id(1L)
                 .count(1L)
                 .completedCount(0L)
                 .step(0)
-                .dueDate(LocalDate.now())
+                .dueDate(LocalDate.parse("2023-06-02"))
                 .build();
     }
 

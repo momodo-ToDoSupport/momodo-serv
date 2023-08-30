@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.momodo.todohistory.domain.QTodoHistory.todoHistory;
@@ -53,12 +54,19 @@ public class TodoHistoryRepositoryImpl implements TodoHistoryRepositoryCustom {
     }
 
     @Override
-    public TodoHistory findByDueDate(String memberId, LocalDate dueDate) {
-        return queryFactory
-                .selectFrom(todoHistory)
+    public Optional<TodoHistoryResponseDto.Info> findByDueDate(String memberId, LocalDate dueDate) {
+        return Optional.ofNullable(queryFactory
+                .select(Projections.constructor(TodoHistoryResponseDto.Info.class,
+                        todoHistory.id,
+                        todoHistory.count,
+                        todoHistory.completedCount,
+                        todoHistory.step,
+                        todoHistory.dueDate
+                ))
+                .from(todoHistory)
                 .where(todoHistory.memberId.eq(memberId)
                         .and(todoHistory.dueDate.eq(dueDate)))
-                .fetchOne();
+                .fetchOne());
     }
 
     @Override

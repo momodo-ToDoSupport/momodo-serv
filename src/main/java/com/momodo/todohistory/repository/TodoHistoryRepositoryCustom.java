@@ -7,12 +7,13 @@ import com.querydsl.core.Tuple;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public interface TodoHistoryRepositoryCustom {
 
     void createAll(List<TodoHistory> todoHistories);
 
-    TodoHistory findByDueDate(String memberId, LocalDate dueDate);
+    Optional<TodoHistoryResponseDto.Info> findByDueDate(String memberId, LocalDate dueDate);
 
     List<TodoHistoryResponseDto.Info> findAllByYearMonth(String memberId, LocalDate from, LocalDate to);
 
