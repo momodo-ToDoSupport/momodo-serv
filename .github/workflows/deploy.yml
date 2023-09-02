@@ -7,7 +7,7 @@ on:
       - develop
 
 env:
-  AWS_REGION: ap-northeast-2
+  AWS_REGION: us-east-1
   AWS_S3_BUCKET: momodo-cicd-bucket
   AWS_CODE_DEPLOY_APPLICATION: momodo-back-cicd
   AWS_CODE_DEPLOY_GROUP: momodo-back-cicd-group
