@@ -24,7 +24,7 @@ public class S3UploadService {
 
     public String uploadFile(MultipartFile file) throws IOException {
         String fileName = file.getOriginalFilename();
-        String uploadFileName = UUID.randomUUID() + "-" + fileName.substring(fileName.indexOf('.') + 1);
+        String uploadFileName = UUID.randomUUID() + "-" + fileName.substring(0, fileName.indexOf('.'));
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(file.getSize());
