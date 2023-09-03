@@ -41,7 +41,7 @@ public class UserAppController {
     public ResponseEntity<ResponseUserApp.Info> getMyUserAppInfo(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(userAppService.getMyUserAppAuthorities());
     }
-    
+
     @GetMapping("/{userId}")
     public ResponseEntity<ResponseUserApp.Info> getUserAppInfo(@PathVariable String userId) {
         return ResponseEntity.ok(userAppService.getUserAppWithAuthorities(userId));
