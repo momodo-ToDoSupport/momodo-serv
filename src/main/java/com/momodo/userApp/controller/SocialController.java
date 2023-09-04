@@ -29,7 +29,7 @@ public class SocialController {
     private final SocialLoginService socialLoginService;
     private final ConfigUtils configUtils;
 
-    @Operation(summary = "카카오 소셜 로그인", description = "카카오 로그인 기능입니다.")
+    @Operation(summary = "카카오 소셜 로그인")
     @PostMapping("/kakao")
     public DataResponse<ResponseAuthentication.Token> socialLogin(@RequestBody RequestLogin requestLogin) throws Exception {
 

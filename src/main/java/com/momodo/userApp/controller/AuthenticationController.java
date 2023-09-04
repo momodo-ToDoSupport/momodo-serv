@@ -7,6 +7,7 @@ import com.momodo.jwt.security.JwtFilter;
 import com.momodo.userApp.dto.RequestUserApp;
 import com.momodo.userApp.dto.ResponseAuthentication;
 import com.momodo.userApp.service.AuthenticationService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
@@ -26,6 +27,7 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
 
+    @Operation(summary = "모모두 로그인")
     @PostMapping("/token")  // UserAdmin 인증 API
     public ResponseEntity<DataResponse<ResponseAuthentication.Token>> authorize(@Valid @RequestBody RequestUserApp.Login loginDto) {
 
@@ -38,7 +40,8 @@ public class AuthenticationController {
         return new ResponseEntity<>(DataResponse.of(token), httpHeaders, HttpStatus.OK);
     }
 
-    @PutMapping("/token")  // 리프레시 토큰을 활용한 액세스 토큰 갱신
+    @Operation(summary = "리프레시 토큰을 활용한 액세스 토큰 갱신")
+    @PutMapping("/token")
     public ResponseEntity<DataResponse<ResponseAuthentication.Token>> refreshToken(@Valid @RequestBody RequestUserApp.Refresh refreshDto) {
 
         ResponseAuthentication.Token token = authenticationService.refreshToken(refreshDto.getToken());
@@ -52,8 +55,9 @@ public class AuthenticationController {
 
     // 리프레시토큰 만료 API
     // -> 해당 계정의 가중치를 1 올린다. 그럼 나중에 해당 리프레시 토큰으로 갱신 요청이 들어와도 받아들여지지 않는다.
-    @DeleteMapping("/{userId}/token")
+    @Operation(summary = "리프레시토큰 만료", description = "해당 계정의 가중치를 1 올린다. 그럼 나중에 해당 리프레시 토큰으로 갱신 요청이 들어와도 받아들여지지 않는다.")
     @PreAuthorize("hasAnyRole('SUPER')")  // SUPER 권한만 호출 가능
+    @DeleteMapping("/{userId}/token")
     public BasicResponse authorize(@PathVariable String userId) {
         authenticationService.invalidateRefreshTokenByUsername(userId);
 

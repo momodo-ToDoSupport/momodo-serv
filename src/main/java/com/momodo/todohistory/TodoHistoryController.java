@@ -5,7 +5,6 @@ import com.momodo.todohistory.dto.TodoHistoryResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -25,7 +24,7 @@ public class TodoHistoryController {
 
     private final TodoHistoryService todoHistoryService;
 
-    @Operation(summary = "Find By DueDate", description = "마감 날짜로 TodoHistory 정보 가져오기")
+    @Operation(summary = "마감 날짜로 TodoHistory 정보 가져오기")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @GetMapping("/dueDate")
     public DataResponse<TodoHistoryResponseDto.Info> findByDueDate(@RequestParam LocalDate dueDate
@@ -37,7 +36,7 @@ public class TodoHistoryController {
         return DataResponse.of(info);
     }
 
-    @Operation(summary = "FindAll By YearMonth", description = "년월에 해당하는 TodoHistory들 정보 가져오기")
+    @Operation(summary = "년월에 해당하는 TodoHistory들 정보 가져오기")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @GetMapping("/yearMonth")
     public DataResponse<List<TodoHistoryResponseDto.Info>> findAllByYearMonth(@RequestParam String yearMonth

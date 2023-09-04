@@ -7,11 +7,11 @@ import com.momodo.userApp.dto.RequestCreateUserApp;
 import com.momodo.userApp.dto.RequestUpdateUserProfile;
 import com.momodo.userApp.dto.ResponseUserApp;
 import com.momodo.userApp.service.UserAppService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -26,6 +26,7 @@ public class UserAppController {
 
     private final UserAppService userAppService;
 
+    @Operation(summary = "회원 가입")
     @PostMapping
     public BasicResponse signup(@Valid @RequestBody RequestCreateUserApp registerDto) {
         userAppService.signup(registerDto);
@@ -41,6 +42,7 @@ public class UserAppController {
      * JwtFilter는 디비 조회를 하지 않기에 유저네임, 권한만 알 수 있음
      * Account 엔티티에 대한 정보를 알고 싶으면 디비 조회를 별도로 해야 한다.
      */
+    @Operation(summary = "현재 로그인한 User 정보 조회")
     @GetMapping
     public DataResponse<ResponseUserApp.Info> getMyUserAppInfo(@AuthenticationPrincipal User user) {
         ResponseUserApp.Info info = userAppService.getMyUserAppAuthorities();
@@ -48,6 +50,7 @@ public class UserAppController {
         return DataResponse.of(info);
     }
 
+    @Operation(summary = "Id로 User 정보 조회")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @GetMapping("/{userId}")
     public DataResponse<ResponseUserApp.Info> getUserAppInfo(@PathVariable String userId) {
@@ -56,6 +59,8 @@ public class UserAppController {
         return DataResponse.of(info);
     }
 
+    @Operation(summary = "User 프로필 수정")
+    @PreAuthorize("hasAnyRole('MEMBER')")
     @PutMapping
     public BasicResponse updateProfile(@AuthenticationPrincipal User user,
                                                        @RequestPart MultipartFile file, @RequestPart RequestUpdateUserProfile updateDto)  {

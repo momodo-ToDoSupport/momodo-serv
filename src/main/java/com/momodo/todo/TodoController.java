@@ -26,7 +26,7 @@ public class TodoController {
 
     private final TodoService todoService;
 
-    @Operation(summary = "Create Todo", description = "Todo 생성하기")
+    @Operation(summary = "Todo 생성하기")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @PostMapping
     public ResponseEntity<BasicResponse> createTodo(@RequestBody @Valid TodoRequestDto.Create requestDto
@@ -38,7 +38,7 @@ public class TodoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(BasicResponse.of(HttpStatus.CREATED));
     }
 
-    @Operation(summary = "Find By Id", description = "Id로 Todo 정보 조회")
+    @Operation(summary = "Id로 Todo 정보 조회")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @GetMapping("/{id}")
     public DataResponse<TodoResponseDto.Info> findById(@PathVariable Long id){
@@ -47,7 +47,7 @@ public class TodoController {
         return DataResponse.of(info);
     }
 
-    @Operation(summary = "Find By DueDate", description = "날짜에 해당하는 Todo 정보 조회")
+    @Operation(summary = "날짜에 해당하는 Todo 정보 조회")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @GetMapping("/date")
     public DataResponse<List<TodoResponseDto.Info>> findByMemberAndDueDate(@RequestParam LocalDate dueDate
@@ -58,7 +58,7 @@ public class TodoController {
         return DataResponse.of(infos);
     }
 
-    @Operation(summary = "Find Not-Complete In YearMonth", description = "년/월에 완료하지 못한 Todo 정보 조회")
+    @Operation(summary = "년/월에 완료하지 못한 Todo 정보 조회")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @GetMapping("/not-complete")
     public DataResponse<List<TodoResponseDto.Info>> findNotCompleteInYearMonth(@RequestParam String yearMonth
@@ -69,7 +69,7 @@ public class TodoController {
         return DataResponse.of(infos);
     }
 
-    @Operation(summary = "Update Completed", description = "Todo 완료 여부 수정")
+    @Operation(summary = "Todo 완료 여부 수정")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @PutMapping("/{id}/complete")
     public BasicResponse updateCompleted(@PathVariable Long id){
@@ -78,7 +78,7 @@ public class TodoController {
         return BasicResponse.of(HttpStatus.OK);
     }
 
-    @Operation(summary = "Update", description = "Todo 정보 수정")
+    @Operation(summary = "Todo 정보 수정")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @PutMapping("/{id}")
     public BasicResponse update(@PathVariable Long id, @RequestBody TodoRequestDto.Edit request){
@@ -87,7 +87,7 @@ public class TodoController {
         return BasicResponse.of(HttpStatus.OK);
     }
 
-    @Operation(summary = "Delete", description = "Todo 삭제")
+    @Operation(summary = "Todo 삭제")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @DeleteMapping("/{id}")
     public BasicResponse deleteById(@PathVariable Long id){
