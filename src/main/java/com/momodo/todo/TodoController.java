@@ -71,7 +71,7 @@ public class TodoController {
 
     @Operation(summary = "Update Completed", description = "Todo 완료 여부 수정")
     @PreAuthorize("hasAnyRole('MEMBER')")
-    @PatchMapping("/{id}/complete")
+    @PutMapping("/{id}/complete")
     public BasicResponse updateCompleted(@PathVariable Long id){
         todoService.updateCompleted(id);
 
@@ -80,7 +80,7 @@ public class TodoController {
 
     @Operation(summary = "Update", description = "Todo 정보 수정")
     @PreAuthorize("hasAnyRole('MEMBER')")
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public BasicResponse update(@PathVariable Long id, @RequestBody TodoRequestDto.Edit request){
         todoService.update(id, request);
 
