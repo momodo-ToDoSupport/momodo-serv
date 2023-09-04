@@ -1,7 +1,7 @@
 package com.momodo.userApp.service;
 
 import com.momodo.aws.S3UploadService;
-import com.momodo.jwt.dto.CommonResponse;
+import com.momodo.jwt.dto.BasicResponse;
 import com.momodo.jwt.exception.error.DuplicateMemberException;
 import com.momodo.jwt.security.util.SecurityUtil;
 import com.momodo.userApp.domain.Tier;
@@ -34,7 +34,7 @@ public class UserAppService {
     }
 
     @Transactional
-    public CommonResponse signup(RequestCreateUserApp createUserApp) {
+    public void signup(RequestCreateUserApp createUserApp) {
         if (userAppRepository.findOneWithAuthoritiesByUserId(createUserApp.getUserId()).orElseGet(() -> null) != null) {
             throw new DuplicateMemberException("이미 가입되어 있는 유저입니다.");
         }
@@ -52,11 +52,6 @@ public class UserAppService {
                 .build();
 
         userAppRepository.save(userApp);
-
-        return CommonResponse.builder()
-                .success(true)
-                .response(null)
-                .build();
     }
 
     //userId를 파라미터로 받아 해당 유저의 정보를 가져온다.
@@ -80,7 +75,7 @@ public class UserAppService {
     }
 
     @Transactional
-    public CommonResponse updateProfile(String userId, MultipartFile file, RequestUpdateUserProfile updateDto) {
+    public void updateProfile(String userId, MultipartFile file, RequestUpdateUserProfile updateDto) {
         UserApp getUserApp = userAppRepository.findOneWithAuthoritiesByUserId(userId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 userId입니다."));
 
@@ -96,30 +91,16 @@ public class UserAppService {
                 getUserApp.updateProfile(updateFileName, updateDto);
             } catch (IOException e) {
                 e.printStackTrace();
-                return CommonResponse.builder()
-                        .success(false)
-                        .response(null)
-                        .build();
             }
         }
-
-        return CommonResponse.builder()
-                .success(true)
-                .response(null)
-                .build();
     }
 
     @Transactional
-    public CommonResponse updateTier(String userId, Tier tier) {
+    public void updateTier(String userId, Tier tier) {
         UserApp getUserApp = userAppRepository.findOneWithAuthoritiesByUserId(userId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 userId입니다."));
 
         getUserApp.setTodoTier(tier);
-
-        return CommonResponse.builder()
-                .success(true)
-                .response(null)
-                .build();
     }
 
     @Transactional

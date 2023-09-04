@@ -1,7 +1,7 @@
 package com.momodo.jwt.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.momodo.jwt.dto.CommonResponse;
+import com.momodo.jwt.dto.BasicResponse;
 import com.momodo.jwt.dto.ErrorResponse;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,17 +26,10 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
         // 필요한 권한이 없이 접근하려 할때 403
-        ErrorResponse error = ErrorResponse.builder()
-                .status(HttpStatus.FORBIDDEN.value())
-                .message("FORBIDDEN")
-                .code("AUTH")
-                .build();
+        ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.FORBIDDEN.value(), "AUTH", "FORBIDDEN");
 
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        response.getOutputStream().println(objectMapper.writeValueAsString(CommonResponse.builder()
-                .success(false)
-                .error(error)
-                .build()));
+        response.getOutputStream().println(objectMapper.writeValueAsString(errorResponse));
     }
 }

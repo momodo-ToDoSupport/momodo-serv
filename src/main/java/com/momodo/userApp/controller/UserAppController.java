@@ -1,7 +1,8 @@
 package com.momodo.userApp.controller;
 
 
-import com.momodo.jwt.dto.CommonResponse;
+import com.momodo.jwt.dto.BasicResponse;
+import com.momodo.jwt.dto.DataResponse;
 import com.momodo.userApp.dto.RequestCreateUserApp;
 import com.momodo.userApp.dto.RequestUpdateUserProfile;
 import com.momodo.userApp.dto.ResponseUserApp;
@@ -9,7 +10,9 @@ import com.momodo.userApp.service.UserAppService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
@@ -24,9 +27,10 @@ public class UserAppController {
     private final UserAppService userAppService;
 
     @PostMapping
-    public ResponseEntity<CommonResponse> signup(@Valid @RequestBody RequestCreateUserApp registerDto) {
-        CommonResponse response = userAppService.signup(registerDto);
-        return ResponseEntity.ok(response);
+    public BasicResponse signup(@Valid @RequestBody RequestCreateUserApp registerDto) {
+        userAppService.signup(registerDto);
+
+        return BasicResponse.of(HttpStatus.OK);
     }
 
     /**
@@ -38,19 +42,25 @@ public class UserAppController {
      * Account 엔티티에 대한 정보를 알고 싶으면 디비 조회를 별도로 해야 한다.
      */
     @GetMapping
-    public ResponseEntity<ResponseUserApp.Info> getMyUserAppInfo(@AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(userAppService.getMyUserAppAuthorities());
+    public DataResponse<ResponseUserApp.Info> getMyUserAppInfo(@AuthenticationPrincipal User user) {
+        ResponseUserApp.Info info = userAppService.getMyUserAppAuthorities();
+
+        return DataResponse.of(info);
     }
 
+    @PreAuthorize("hasAnyRole('MEMBER')")
     @GetMapping("/{userId}")
-    public ResponseEntity<ResponseUserApp.Info> getUserAppInfo(@PathVariable String userId) {
-        return ResponseEntity.ok(userAppService.getUserAppWithAuthorities(userId));
+    public DataResponse<ResponseUserApp.Info> getUserAppInfo(@PathVariable String userId) {
+        ResponseUserApp.Info info = userAppService.getUserAppWithAuthorities(userId);
+
+        return DataResponse.of(info);
     }
 
     @PutMapping
-    public ResponseEntity<CommonResponse> updateProfile(@AuthenticationPrincipal User user,
-        @RequestPart MultipartFile file, @RequestPart RequestUpdateUserProfile updateDto)  {
-        CommonResponse response = userAppService.updateProfile(user.getUsername(), file, updateDto);
-        return ResponseEntity.ok(response);
+    public BasicResponse updateProfile(@AuthenticationPrincipal User user,
+                                                       @RequestPart MultipartFile file, @RequestPart RequestUpdateUserProfile updateDto)  {
+        userAppService.updateProfile(user.getUsername(), file, updateDto);
+
+        return BasicResponse.of(HttpStatus.OK);
     }
 }

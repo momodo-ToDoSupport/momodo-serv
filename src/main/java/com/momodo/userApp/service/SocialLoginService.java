@@ -5,7 +5,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.momodo.jwt.dto.CommonResponse;
+import com.momodo.jwt.dto.BasicResponse;
+import com.momodo.jwt.dto.DataResponse;
 import com.momodo.jwt.security.JwtFilter;
 import com.momodo.userApp.domain.UserType;
 import com.momodo.userApp.dto.RequestLogin;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.sql.DataSource;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -44,7 +46,7 @@ public class SocialLoginService {
     private final AuthenticationService authenticationService;
     private final ConfigUtils configUtils;
 
-    public CommonResponse socialLogin(RequestLogin requestLogin) throws Exception {
+    public DataResponse<ResponseAuthentication.Token> socialLogin(RequestLogin requestLogin) throws Exception {
 
         UserType loginType = requestLogin.getLoginType();
         ResponseAuthentication.Token token = new ResponseAuthentication.Token();
@@ -77,10 +79,7 @@ public class SocialLoginService {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token.getAccessToken());
 
-        return CommonResponse.builder()
-                .success(true)
-                .response(token)
-                .build();
+        return DataResponse.of(token);
     }
 
     public HashMap<String, Object> getKakaoUserInfo(String accessToken) {

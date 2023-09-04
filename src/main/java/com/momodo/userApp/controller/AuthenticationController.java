@@ -1,7 +1,8 @@
 package com.momodo.userApp.controller;
 
 
-import com.momodo.jwt.dto.CommonResponse;
+import com.momodo.jwt.dto.BasicResponse;
+import com.momodo.jwt.dto.DataResponse;
 import com.momodo.jwt.security.JwtFilter;
 import com.momodo.userApp.dto.RequestUserApp;
 import com.momodo.userApp.dto.ResponseAuthentication;
@@ -26,7 +27,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/token")  // UserAdmin 인증 API
-    public ResponseEntity<CommonResponse> authorize(@Valid @RequestBody RequestUserApp.Login loginDto) {
+    public ResponseEntity<DataResponse<ResponseAuthentication.Token>> authorize(@Valid @RequestBody RequestUserApp.Login loginDto) {
 
         ResponseAuthentication.Token token = authenticationService.authenticateMomodo(loginDto.getUserId(), loginDto.getPassword());
 
@@ -34,17 +35,11 @@ public class AuthenticationController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token.getAccessToken());
 
-        // 응답
-        CommonResponse response = CommonResponse.builder()
-                .success(true)
-                .response(token)
-                .build();
-
-        return new ResponseEntity<>(response, httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(DataResponse.of(token), httpHeaders, HttpStatus.OK);
     }
 
     @PutMapping("/token")  // 리프레시 토큰을 활용한 액세스 토큰 갱신
-    public ResponseEntity<CommonResponse> refreshToken(@Valid @RequestBody RequestUserApp.Refresh refreshDto) {
+    public ResponseEntity<DataResponse<ResponseAuthentication.Token>> refreshToken(@Valid @RequestBody RequestUserApp.Refresh refreshDto) {
 
         ResponseAuthentication.Token token = authenticationService.refreshToken(refreshDto.getToken());
 
@@ -52,28 +47,17 @@ public class AuthenticationController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token.getAccessToken());
 
-        // 응답
-        CommonResponse response = CommonResponse.builder()
-                .success(true)
-                .response(token)
-                .build();
-
-        return new ResponseEntity<>(response, httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(DataResponse.of(token), httpHeaders, HttpStatus.OK);
     }
 
     // 리프레시토큰 만료 API
     // -> 해당 계정의 가중치를 1 올린다. 그럼 나중에 해당 리프레시 토큰으로 갱신 요청이 들어와도 받아들여지지 않는다.
     @DeleteMapping("/{userId}/token")
     @PreAuthorize("hasAnyRole('SUPER')")  // SUPER 권한만 호출 가능
-    public ResponseEntity<CommonResponse> authorize(@PathVariable String userId) {
+    public BasicResponse authorize(@PathVariable String userId) {
         authenticationService.invalidateRefreshTokenByUsername(userId);
 
-        // 응답
-        CommonResponse response = CommonResponse.builder()
-                .success(true)
-                .build();
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return BasicResponse.of(HttpStatus.OK);
     }
 
     // 계정 탈퇴 구현 시 계정을 삭제하지 않고 비활성화 시켜야한다. field activated

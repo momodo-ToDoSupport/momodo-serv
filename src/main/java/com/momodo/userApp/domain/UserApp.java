@@ -77,7 +77,7 @@ public class UserApp extends BaseTimeEntity {
         this.password = password;
         this.name = name;
         this.tier = Tier.RED.name();
-        this.roles = Role.MEMBER;
+        this.roles = Role.ROLE_MEMBER;
         this.phone = phone;
         this.email = email;
         this.isPush = isPush;

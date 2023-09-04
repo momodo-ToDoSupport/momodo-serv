@@ -1,9 +1,11 @@
 package com.momodo.userApp.controller;
 
 
-import com.momodo.jwt.dto.CommonResponse;
+import com.momodo.jwt.dto.BasicResponse;
+import com.momodo.jwt.dto.DataResponse;
 import com.momodo.userApp.domain.UserType;
 import com.momodo.userApp.dto.RequestLogin;
+import com.momodo.userApp.dto.ResponseAuthentication;
 import com.momodo.userApp.dto.google.ConfigUtils;
 import com.momodo.userApp.service.SocialLoginService;
 import io.swagger.v3.oas.annotations.Hidden;
@@ -29,12 +31,12 @@ public class SocialController {
 
     @Operation(summary = "카카오 소셜 로그인", description = "카카오 로그인 기능입니다.")
     @PostMapping("/kakao")
-    public ResponseEntity<CommonResponse> socialLogin(@RequestBody RequestLogin requestLogin) throws Exception {
+    public DataResponse<ResponseAuthentication.Token> socialLogin(@RequestBody RequestLogin requestLogin) throws Exception {
 
-        CommonResponse data = socialLoginService.socialLogin(requestLogin);
-        return ResponseEntity.ok(data);
+        return socialLoginService.socialLogin(requestLogin);
     }
 
+    /**
     @Hidden
     @GetMapping(value = "/login")
     public ResponseEntity<Object> moveGoogleInitUrl() {
@@ -54,7 +56,7 @@ public class SocialController {
 
     @Operation(summary = "구글 소셜 로그인", description = "구글 로그인 기능입니다.")
     @GetMapping(value = "/google")
-    public ResponseEntity<CommonResponse> redirectGoogleLogin1(
+    public ResponseEntity<BasicResponse> redirectGoogleLogin1(
             @RequestParam(value = "code") String authCode
     ) throws Exception {
         RequestLogin requestLogin = RequestLogin.builder()
@@ -62,9 +64,7 @@ public class SocialController {
                 .accessToken(authCode)
                 .build();
 
-        CommonResponse data = socialLoginService.socialLogin(requestLogin);
+        BasicResponse data = socialLoginService.socialLogin(requestLogin);
         return ResponseEntity.ok(data);
-    }
-
-
+    }**/
 }
