@@ -4,6 +4,7 @@ import com.momodo.jwt.dto.BasicResponse;
 import com.momodo.jwt.dto.ErrorResponse;
 import com.momodo.jwt.exception.error.DuplicateMemberException;
 import com.momodo.jwt.exception.error.InvalidRefreshTokenException;
+import com.momodo.jwt.exception.error.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -29,6 +30,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DuplicateMemberException.class)
     protected ResponseEntity<ErrorResponse> handleDuplicateMemberException(DuplicateMemberException ex) {
         ErrorCode errorCode = ErrorCode.DUPLICATE_MEMBER_EXCEPTION;
+
+        ErrorResponse response = ErrorResponse.of(errorCode);
+
+        return new ResponseEntity<>(response, errorCode.getStatus());
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    protected ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException e){
+        ErrorCode errorCode = ErrorCode.RESOURCE_NOT_FOUND;
 
         ErrorResponse response = ErrorResponse.of(errorCode);
 

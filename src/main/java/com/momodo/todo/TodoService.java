@@ -1,6 +1,7 @@
 package com.momodo.todo;
 
 import com.momodo.emojihistory.EmojiHistoryService;
+import com.momodo.jwt.exception.error.NotFoundException;
 import com.momodo.todo.Todo;
 import com.momodo.todo.dto.TodoRequestDto;
 import com.momodo.todo.dto.TodoResponseDto;
@@ -65,7 +66,7 @@ public class TodoService {
     @Transactional(readOnly = true)
     public TodoResponseDto.Info findById(Long id){
         Todo todo = todoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException());
+                .orElseThrow(() -> new NotFoundException());
 
         return todo.toInfo();
     }
@@ -93,7 +94,7 @@ public class TodoService {
     @Transactional
     public void updateCompleted(Long id){
         Todo todo = todoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException());
+                .orElseThrow(() -> new NotFoundException());
 
         todo.updateCompleted();
     }
@@ -101,7 +102,7 @@ public class TodoService {
     @Transactional
     public void update(Long id, TodoRequestDto.Edit request){
         Todo todo = todoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException());
+                .orElseThrow(() -> new NotFoundException());
 
         if(request.getEmoji() != todo.getEmoji()){
             publisher.publishEvent(new TodoCreatedEvent(todo.getMemberId(), request.getEmoji()));
@@ -119,7 +120,7 @@ public class TodoService {
     @Transactional
     public void deleteById(Long id){
         Todo todo = todoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException());
+                .orElseThrow(() -> new NotFoundException());
 
         todoRepository.delete(todo);
     }

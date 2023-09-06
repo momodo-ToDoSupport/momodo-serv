@@ -3,6 +3,7 @@ package com.momodo.emojihistory;
 import com.momodo.emojihistory.dto.EmojiHistoryResponseDto;
 import com.momodo.emojihistory.repository.EmojiHistoryRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,8 +61,8 @@ public class EmojiHistoryService {
                 // 가장 오래된 Emoji 제거
                 emojiList.remove(emojiList.size() - 1);
             }
+
             // 첫 번째 index에 추가
-            System.out.println("addEmoji : " + addEmoji);
             emojiList.add(0, addEmoji);
         }
 
