@@ -64,7 +64,7 @@ public class UserAppController {
     @Operation(summary = "User 프로필 수정")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @PutMapping
-    public BasicResponse updateProfile(@NotBlank @RequestPart MultipartFile file, @Valid @RequestPart RequestUpdateUserProfile updateDto,
+    public BasicResponse updateProfile(@NotNull @RequestPart MultipartFile file, @Valid @RequestPart RequestUpdateUserProfile updateDto,
                                        @AuthenticationPrincipal User user)  {
         userAppService.updateProfile(user.getUsername(), file, updateDto);
 
