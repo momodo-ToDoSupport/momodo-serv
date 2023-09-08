@@ -10,16 +10,22 @@ import com.momodo.userApp.service.UserAppService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name="App 회원", description = "APP 사용자에 관한 API 입니다.")
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/user-app")
@@ -58,8 +64,8 @@ public class UserAppController {
     @Operation(summary = "User 프로필 수정")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @PutMapping
-    public BasicResponse updateProfile(@AuthenticationPrincipal User user,
-                                                       @RequestPart MultipartFile file, @RequestPart RequestUpdateUserProfile updateDto)  {
+    public BasicResponse updateProfile(@NotBlank @RequestPart MultipartFile file, @Valid @RequestPart RequestUpdateUserProfile updateDto,
+                                       @AuthenticationPrincipal User user)  {
         userAppService.updateProfile(user.getUsername(), file, updateDto);
 
         return BasicResponse.of(HttpStatus.OK);
